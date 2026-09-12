@@ -1,0 +1,9 @@
+services:
+  - type: web
+    name: pop-avto-makon
+    env: static
+    staticPublishPath: ./
+    routes:
+      - type: rewrite
+        source: /*
+        destination: /index.html
