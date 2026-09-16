@@ -1,1827 +1,1490 @@
 <!DOCTYPE html>
 <html lang="uz">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
-    <meta name="theme-color" content="#0a0a0f">
-    <meta name="apple-mobile-web-app-capable" content="yes">
-    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-    <title>POP-AVTO-MAKON</title>
-    <style>
-        :root {
-            --primary-red: #e31e24;
-            --primary-black: #1a1a1a;
-            --safe-bottom: env(safe-area-inset-bottom, 0px);
-            --safe-top: env(safe-area-inset-top, 0px);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-            -webkit-tap-highlight-color: transparent;
-            -webkit-font-smoothing: antialiased;
-        }
-
-        html, body { min-height: 100vh; }
-
-        body {
-            color: #333;
-            padding-bottom: calc(90px + var(--safe-bottom));
-            position: relative;
-            overflow-x: hidden;
-            background: #0a0a0f;
-            overscroll-behavior-y: none;
-        }
-
-        .real-background {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            z-index: -3;
-            overflow: hidden;
-        }
-
-        .bg-image {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background-image: url('https://images.unsplash.com/photo-1519003722824-194d4455a60c?w=1920&q=80');
-            background-size: cover;
-            background-position: center bottom;
-            filter: brightness(0.32) contrast(1.15) saturate(0.85);
-            animation: bgZoom 25s ease-in-out infinite alternate;
-        }
-
-        @keyframes bgZoom {
-            from { transform: scale(1); }
-            to { transform: scale(1.08); }
-        }
-
-        .bg-overlay {
-            position: absolute;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: linear-gradient(180deg, rgba(8,8,15,0.88) 0%, rgba(10,10,20,0.6) 45%, rgba(8,8,15,0.85) 100%);
-        }
-
-        .real-car {
-            position: absolute;
-            z-index: -2;
-            animation: realDrive linear infinite;
-            filter: drop-shadow(0 15px 25px rgba(0,0,0,0.8));
-            will-change: transform;
-        }
-        .real-car img { width: 100%; height: auto; display: block; }
-
-        @keyframes realDrive {
-            from { transform: translateX(-450px); }
-            to { transform: translateX(calc(100vw + 450px)); }
-        }
-        @keyframes realDriveReverse {
-            from { transform: translateX(calc(100vw + 450px)) scaleX(-1); }
-            to { transform: translateX(-450px) scaleX(-1); }
-        }
-
-        .car-real-1 { bottom: 20px; width: 240px; animation-duration: 16s; }
-        .car-real-2 { bottom: 75px; width: 200px; animation-duration: 21s; animation-delay: 5s; }
-        .car-real-3 { bottom: 140px; width: 220px; animation-name: realDriveReverse; animation-duration: 18s; animation-delay: 3s; }
-        .car-real-4 { bottom: 200px; width: 260px; animation-duration: 24s; animation-delay: 8s; }
-        .car-real-5 { bottom: 260px; width: 230px; animation-name: realDriveReverse; animation-duration: 20s; animation-delay: 11s; }
-
-        .road-light {
-            position: absolute;
-            bottom: 0; left: 0;
-            width: 100%; height: 3px;
-            background: linear-gradient(90deg, transparent 0%, rgba(255,200,100,0.7) 20%, rgba(255,255,255,0.95) 50%, rgba(255,200,100,0.7) 80%, transparent 100%);
-            animation: lightPulse 3s ease-in-out infinite;
-            box-shadow: 0 0 40px rgba(255,200,100,0.6);
-        }
-        @keyframes lightPulse {
-            0%, 100% { opacity: 0.5; }
-            50% { opacity: 1; }
-        }
-
-        header {
-            background: linear-gradient(135deg, rgba(12,12,20,0.95) 0%, rgba(26,26,36,0.95) 100%);
-            backdrop-filter: blur(20px) saturate(180%);
-            color: white;
-            padding: calc(14px + var(--safe-top)) 15px 14px;
-            text-align: center;
-            position: sticky;
-            top: 0;
-            z-index: 100;
-            box-shadow: 0 4px 30px rgba(227,30,36,0.35);
-            border-bottom: 2px solid var(--primary-red);
-        }
-
-        .logo-text {
-            font-size: 20px;
-            font-weight: 900;
-            letter-spacing: 1.5px;
-            font-style: italic;
-            text-shadow: 0 0 20px rgba(227,30,36,0.8), 0 2px 4px rgba(0,0,0,0.9);
-        }
-
-        .logo-text span { color: var(--primary-red); }
-        .sub-text {
-            font-size: 9px;
-            color: #ccc;
-            letter-spacing: 3px;
-            margin-top: 3px;
-        }
-
-        nav {
-            display: flex;
-            background: rgba(12,12,20,0.98);
-            backdrop-filter: blur(20px) saturate(180%);
-            position: fixed;
-            bottom: 0;
-            width: 100%;
-            box-shadow: 0 -4px 30px rgba(227,30,36,0.4);
-            z-index: 100;
-            border-top: 2px solid var(--primary-red);
-            padding-bottom: var(--safe-bottom);
-        }
-
-        nav button {
-            flex: 1;
-            min-width: 50px;
-            min-height: 68px;
-            padding: 8px 2px;
-            border: none;
-            background: none;
-            font-size: 9px;
-            font-weight: 700;
-            color: #999;
-            cursor: pointer;
-            transition: all 0.3s;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            gap: 4px;
-            position: relative;
-        }
-
-        nav button .nav-icon { font-size: 20px; transition: transform 0.3s; }
-
-        nav button.active {
-            color: var(--primary-red);
-            background: rgba(227,30,36,0.12);
-        }
-
-        nav button.active .nav-icon {
-            transform: scale(1.15) translateY(-2px);
-            filter: drop-shadow(0 0 8px rgba(227,30,36,0.8));
-        }
-
-        nav button.active::after {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 20%;
-            width: 60%;
-            height: 3px;
-            background: var(--primary-red);
-            border-radius: 0 0 5px 5px;
-            box-shadow: 0 0 12px rgba(227,30,36,1);
-        }
-
-        nav button:active { transform: scale(0.95); }
-
-        .section {
-            display: none;
-            padding: 16px;
-            max-width: 800px;
-            margin: 0 auto;
-            position: relative;
-            z-index: 1;
-        }
-        .section.active {
-            display: block;
-            animation: sectionSlideIn 0.5s;
-        }
-
-        @keyframes sectionSlideIn {
-            from { opacity: 0; transform: translateY(20px) scale(0.98); }
-            to { opacity: 1; transform: translateY(0) scale(1); }
-        }
-
-        h2 {
-            font-size: 17px;
-            margin-bottom: 12px;
-            color: white;
-            border-left: 4px solid var(--primary-red);
-            padding-left: 12px;
-            text-shadow: 0 2px 8px rgba(0,0,0,0.9);
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .input-group { margin-bottom: 14px; }
-
-        .input-group label {
-            display: block;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 6px;
-            color: #444;
-        }
-
-        .input-group input, .input-group select {
-            width: 100%;
-            padding: 14px 16px;
-            border: 2px solid rgba(227,30,36,0.2);
-            border-radius: 12px;
-            font-size: 16px;
-            outline: none;
-            background: #fff;
-            color: #222;
-            transition: all 0.3s;
-            font-weight: 500;
-            -webkit-appearance: none;
-            appearance: none;
-        }
-
-        .input-group select {
-            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e31e24' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right 14px center;
-            background-size: 18px;
-            padding-right: 45px;
-        }
-
-        .input-group input:focus, .input-group select:focus {
-            border-color: var(--primary-red);
-            box-shadow: 0 0 0 4px rgba(227,30,36,0.15);
-        }
-
-        .btn {
-            background: linear-gradient(135deg, var(--primary-red) 0%, #a0161b 100%);
-            color: white;
-            border: none;
-            padding: 16px 24px;
-            border-radius: 14px;
-            font-size: 16px;
-            font-weight: 800;
-            cursor: pointer;
-            width: 100%;
-            transition: all 0.2s;
-            margin-top: 8px;
-            box-shadow: 0 6px 20px rgba(227,30,36,0.45);
-            min-height: 54px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            gap: 6px;
-            position: relative;
-            overflow: hidden;
-            user-select: none;
-            -webkit-user-select: none;
-        }
-
-        .btn::before {
-            content: '';
-            position: absolute;
-            top: 50%; left: 50%;
-            width: 0; height: 0;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.35);
-            transform: translate(-50%, -50%);
-            transition: width 0.6s, height 0.6s;
-        }
-
-        .btn:active::before {
-            width: 300px;
-            height: 300px;
-            transition: width 0s, height 0s;
-        }
-
-        .btn:active { transform: scale(0.96); }
-
-        .btn-black { background: linear-gradient(135deg, #333 0%, #0a0a0a 100%); }
-        .btn-green { background: linear-gradient(135deg, #2ecc71 0%, #1a7a30 100%); }
-        .btn-blue { background: linear-gradient(135deg, #3498db 0%, #003d7a 100%); }
-        .btn-orange { background: linear-gradient(135deg, #f39c12 0%, #b9770e 100%); }
-        .btn-purple { background: linear-gradient(135deg, #9b59b6 0%, #5b2c6f 100%); }
-
-        .card {
-            background: rgba(255,255,255,0.98);
-            backdrop-filter: blur(20px);
-            padding: 16px;
-            border-radius: 16px;
-            box-shadow: 0 10px 40px rgba(0,0,0,0.5), 0 0 0 1px rgba(227,30,36,0.15);
-            margin-bottom: 14px;
-            animation: cardFadeIn 0.4s;
-        }
-
-        @keyframes cardFadeIn {
-            from { opacity: 0; transform: translateY(8px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .dash-header {
-            background: linear-gradient(135deg, #e31e24 0%, #8a0e12 100%);
-            color: white;
-            padding: 20px;
-            border-radius: 18px;
-            margin-bottom: 14px;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 10px 40px rgba(227,30,36,0.5);
-        }
-
-        .dash-header::before {
-            content: '';
-            position: absolute;
-            top: -50%; right: -20%;
-            width: 200px; height: 200px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.1);
-        }
-
-        .dash-header::after {
-            content: '';
-            position: absolute;
-            bottom: -40%; left: -10%;
-            width: 150px; height: 150px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.08);
-        }
-
-        .dash-title {
-            font-size: 12px;
-            opacity: 0.9;
-            letter-spacing: 2px;
-            text-transform: uppercase;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dash-total {
-            font-size: 32px;
-            font-weight: 900;
-            margin-top: 5px;
-            text-shadow: 0 2px 6px rgba(0,0,0,0.3);
-            position: relative;
-            z-index: 1;
-            word-break: break-all;
-        }
-
-        .dash-sub {
-            font-size: 12px;
-            opacity: 0.95;
-            margin-top: 5px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .dash-people {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 12px;
-            margin-bottom: 14px;
-        }
-
-        .dash-person {
-            padding: 16px;
-            border-radius: 16px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-            animation: personFade 0.6s backwards;
-        }
-
-        @keyframes personFade {
-            from { opacity: 0; transform: scale(0.9); }
-            to { opacity: 1; transform: scale(1); }
-        }
-
-        .dash-person.manager { background: linear-gradient(135deg, #3498db 0%, #003d7a 100%); }
-        .dash-person.usta { background: linear-gradient(135deg, #2ecc71 0%, #1a7a30 100%); }
-
-        .dash-person-icon { font-size: 32px; margin-bottom: 8px; }
-        .dash-person-label { font-size: 11px; opacity: 0.9; letter-spacing: 1px; text-transform: uppercase; font-weight: 700; }
-        .dash-person-value { font-size: 20px; font-weight: 900; margin-top: 5px; word-break: break-all; }
-        .dash-person-sub { font-size: 11px; opacity: 0.85; margin-top: 4px; }
-
-        .dash-mini {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .dash-mini-card {
-            padding: 12px 8px;
-            border-radius: 12px;
-            color: white;
-            text-align: center;
-            box-shadow: 0 6px 20px rgba(0,0,0,0.3);
-        }
-
-        .dash-mini-card.orange { background: linear-gradient(135deg, #f39c12 0%, #b9770e 100%); }
-        .dash-mini-card.purple { background: linear-gradient(135deg, #9b59b6 0%, #5b2c6f 100%); }
-        .dash-mini-card.teal { background: linear-gradient(135deg, #1abc9c 0%, #0e6655 100%); }
-        .dash-mini-card.red { background: linear-gradient(135deg, #e31e24 0%, #8a0e12 100%); }
-
-        .dash-mini-value { font-size: 18px; font-weight: 900; word-break: break-all; }
-        .dash-mini-label { font-size: 9px; opacity: 0.9; letter-spacing: 0.8px; text-transform: uppercase; margin-top: 4px; font-weight: 700; }
-
-        .service-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 12px 0;
-            border-bottom: 1px solid #f0f0f0;
-        }
-        .service-item:last-child { border-bottom: none; }
-
-        .service-info { flex: 1; min-width: 0; }
-        .service-name { font-weight: 700; font-size: 15px; }
-        .service-price { color: var(--primary-red); font-weight: 800; font-size: 14px; margin-top: 2px; }
-        .service-usta { color: #0066cc; font-size: 12px; margin-top: 2px; }
-
-        .delete-btn {
-            background: rgba(227,30,36,0.1);
-            border: none;
-            color: var(--primary-red);
-            font-size: 18px;
-            width: 40px;
-            height: 40px;
-            border-radius: 50%;
-            cursor: pointer;
-            transition: all 0.2s;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .delete-btn:active {
-            background: rgba(227,30,36,0.3);
-            transform: scale(0.9);
-        }
-
-        .spec-tag {
-            display: inline-flex;
-            align-items: center;
-            gap: 6px;
-            padding: 8px 14px;
-            background: linear-gradient(135deg, rgba(227,30,36,0.1) 0%, rgba(227,30,36,0.05) 100%);
-            border: 2px solid rgba(227,30,36,0.3);
-            border-radius: 25px;
-            font-size: 13px;
-            font-weight: 700;
-            color: var(--primary-red);
-            margin: 4px 4px 4px 0;
-        }
-
-        .spec-tags-container {
-            display: flex;
-            flex-wrap: wrap;
-            gap: 4px;
-            margin-top: 8px;
-        }
-
-        .checkbox-group {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            padding: 14px;
-            border: 2px solid #eee;
-            border-radius: 12px;
-            margin-bottom: 10px;
-            cursor: pointer;
-            transition: all 0.3s;
-            background: #fff;
-            min-height: 70px;
-        }
-
-        .checkbox-group.selected {
-            background: linear-gradient(135deg, #fff5f5 0%, #ffe8e8 100%);
-            border-color: var(--primary-red);
-            box-shadow: 0 0 0 3px rgba(227,30,36,0.15);
-            transform: translateY(-2px);
-        }
-
-        .checkbox-group:active { transform: scale(0.98); }
-
-        .checkbox-group input[type="checkbox"] {
-            width: 26px;
-            height: 26px;
-            accent-color: var(--primary-red);
-            flex-shrink: 0;
-        }
-
-        .result-box {
-            background: linear-gradient(135deg, #1a1a2e 0%, #0a0a0a 100%);
-            color: white;
-            padding: 22px;
-            border-radius: 16px;
-            margin-top: 20px;
-            border: 2px solid var(--primary-red);
-            box-shadow: 0 0 60px rgba(227,30,36,0.6);
-            animation: resultAppear 0.6s;
-        }
-
-        @keyframes resultAppear {
-            from { opacity: 0; transform: scale(0.9) translateY(20px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        .result-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 10px;
-            font-size: 15px;
-        }
-        .result-row.total {
-            font-size: 21px;
-            font-weight: 900;
-            border-top: 2px solid #444;
-            padding-top: 14px;
-            margin-top: 14px;
-            color: var(--primary-red);
-        }
-        .result-row.manager { color: #4da6ff; font-weight: 700; }
-        .result-row.usta { color: #4dff88; font-weight: 700; }
-
-        .period-selector {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 14px;
-        }
-
-        .period-btn {
-            padding: 14px 8px;
-            border-radius: 12px;
-            font-size: 13px;
-            font-weight: 700;
-            min-height: 50px;
-            border: none;
-            background: linear-gradient(135deg, #f39c12 0%, #b9770e 100%);
-            color: white;
-            cursor: pointer;
-            transition: all 0.2s;
-            box-shadow: 0 4px 15px rgba(243,156,18,0.4);
-        }
-
-        .period-btn:active { transform: scale(0.95); }
-
-        .spec-card {
-            padding: 14px;
-            border-radius: 14px;
-            margin-bottom: 10px;
-            color: white;
-            position: relative;
-            overflow: hidden;
-            animation: specSlide 0.5s backwards;
-            box-shadow: 0 8px 25px rgba(0,0,0,0.3);
-        }
-
-        @keyframes specSlide {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
-
-        .spec-card::before {
-            content: '';
-            position: absolute;
-            top: -60%; right: -25%;
-            width: 150px; height: 150px;
-            border-radius: 50%;
-            background: rgba(255,255,255,0.12);
-        }
-
-        .spec-card.motor { background: linear-gradient(135deg, #e31e24 0%, #8a0e12 100%); }
-        .spec-card.xodovoy { background: linear-gradient(135deg, #e74c3c 0%, #922b21 100%); }
-        .spec-card.kuzov { background: linear-gradient(135deg, #9b59b6 0%, #5b2c6f 100%); }
-        .spec-card.vakum { background: linear-gradient(135deg, #1abc9c 0%, #0e6655 100%); }
-        .spec-card.elektrik { background: linear-gradient(135deg, #f39c12 0%, #b9770e 100%); }
-        .spec-card.diagnostika { background: linear-gradient(135deg, #2ecc71 0%, #1a7a30 100%); }
-        .spec-card.mexanik { background: linear-gradient(135deg, #3498db 0%, #003d7a 100%); }
-        .spec-card.boshqa { background: linear-gradient(135deg, #7f8c8d 0%, #34495e 100%); }
-
-        .spec-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            gap: 10px;
-            margin-bottom: 10px;
-            position: relative;
-            z-index: 1;
-        }
-
-        .spec-icon-name { display: flex; align-items: center; gap: 10px; flex: 1; min-width: 0; }
-
-        .spec-icon {
-            font-size: 22px;
-            background: rgba(255,255,255,0.25);
-            width: 42px; height: 42px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-        }
-
-        .spec-name { font-size: 15px; font-weight: 900; }
-        .spec-count { font-size: 11px; opacity: 0.95; margin-top: 2px; }
-        .spec-amount { text-align: right; flex-shrink: 0; }
-        .spec-total { font-size: 16px; font-weight: 900; white-space: nowrap; }
-        .spec-label { font-size: 10px; opacity: 0.95; }
-
-        .progress-bar {
-            height: 5px;
-            background: rgba(255,255,255,0.25);
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-            z-index: 1;
-        }
-
-        .progress-fill {
-            height: 100%;
-            background: rgba(255,255,255,0.9);
-            border-radius: 3px;
-            transition: width 1s cubic-bezier(0.4, 0, 0.2, 1);
-        }
-
-        .history-card { border-left: 5px solid var(--primary-red); }
-        .history-date { font-size: 11px; color: #888; margin-top: 4px; }
-        .history-details { margin-top: 12px; font-size: 14px; }
-
-        .badge {
-            display: inline-block;
-            padding: 5px 10px;
-            border-radius: 6px;
-            font-size: 11px;
-            font-weight: 800;
-            margin-right: 5px;
-            margin-top: 4px;
-        }
-        .badge-m { background: #e6f2ff; color: #0066cc; }
-        .badge-u { background: #e6ffe6; color: #009933; }
-        .badge-nasiya { background: #fff3cd; color: #856404; }
-
-        .empty-state {
-            text-align: center;
-            color: #888;
-            padding: 45px 20px;
-            font-style: italic;
-            font-size: 14px;
-        }
-
-        .info-line { font-size: 13px; color: #666; margin-bottom: 5px; }
-        .info-line strong { color: #222; }
-
-        .section-title {
-            font-size: 15px;
-            font-weight: 800;
-            color: var(--primary-red);
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .inline-form {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-bottom: 8px;
-        }
-
-        .inline-form .btn { margin-top: 0; }
-
-        .nasiya-card { border-left: 5px solid #f39c12; }
-        .nasiya-card.muddati-otgan { border-left-color: #e31e24; }
-        .nasiya-card.qaytarilgan { border-left-color: #2ecc71; opacity: 0.85; }
-        .mijoz-card { border-left: 5px solid #3498db; }
-
-        .search-box {
-            position: relative;
-            margin-bottom: 14px;
-        }
-
-        .search-box input {
-            width: 100%;
-            padding: 14px 16px 14px 45px;
-            border: 2px solid rgba(227,30,36,0.2);
-            border-radius: 12px;
-            font-size: 15px;
-            outline: none;
-            background: rgba(255,255,255,0.98);
-            color: #222;
-            font-weight: 500;
-        }
-
-        .search-box input:focus {
-            border-color: var(--primary-red);
-            box-shadow: 0 0 0 4px rgba(227,30,36,0.15);
-        }
-
-        .search-box::before {
-            content: '🔍';
-            position: absolute;
-            left: 15px;
-            top: 50%;
-            transform: translateY(-50%);
-            font-size: 18px;
-            z-index: 1;
-        }
-
-        .toast {
-            position: fixed;
-            top: calc(80px + var(--safe-top));
-            left: 50%;
-            transform: translateX(-50%) translateY(-120px);
-            background: linear-gradient(135deg, #2ecc71, #1a7a30);
-            color: white;
-            padding: 14px 28px;
-            border-radius: 30px;
-            font-weight: 800;
-            font-size: 14px;
-            box-shadow: 0 10px 35px rgba(46,204,113,0.7);
-            z-index: 9999;
-            opacity: 0;
-            transition: all 0.4s;
-            pointer-events: none;
-            max-width: 90vw;
-            text-align: center;
-        }
-        .toast.show {
-            transform: translateX(-50%) translateY(0);
-            opacity: 1;
-        }
-        .toast.error { background: linear-gradient(135deg, #e31e24, #8a0e12); }
-
-        .modal-overlay {
-            position: fixed;
-            top: 0; left: 0;
-            width: 100%; height: 100%;
-            background: rgba(0,0,0,0.85);
-            display: none;
-            justify-content: center;
-            align-items: center;
-            z-index: 1000;
-            padding: 20px;
-            backdrop-filter: blur(8px);
-        }
-        .modal-overlay.show { display: flex; }
-
-        .modal-box {
-            background: white;
-            border-radius: 20px;
-            max-width: 420px;
-            width: 100%;
-            padding: 25px;
-            box-shadow: 0 25px 80px rgba(0,0,0,0.7);
-            animation: modalIn 0.4s;
-            max-height: 90vh;
-            overflow-y: auto;
-        }
-        @keyframes modalIn {
-            from { transform: scale(0.85) translateY(30px); opacity: 0; }
-            to { transform: scale(1) translateY(0); opacity: 1; }
-        }
-
-        .modal-title {
-            font-size: 19px;
-            font-weight: 900;
-            color: var(--primary-black);
-            margin-bottom: 18px;
-            text-align: center;
-        }
-
-        .sms-preview {
-            background: linear-gradient(135deg, #f5f5f5 0%, #ececec 100%);
-            padding: 16px;
-            border-radius: 12px;
-            font-size: 13px;
-            line-height: 1.7;
-            margin: 15px 0;
-            border-left: 5px solid var(--primary-red);
-            color: #333;
-            white-space: pre-line;
-            font-weight: 500;
-        }
-
-        .modal-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 15px;
-        }
-
-        .modal-buttons .btn { margin-top: 0; }
-
-        @media (max-width: 480px) {
-            .logo-text { font-size: 17px; letter-spacing: 1px; }
-            .btn { font-size: 15px; padding: 15px 20px; }
-            h2 { font-size: 16px; }
-            .section { padding: 14px; }
-            nav button { font-size: 8px; min-width: 48px; }
-            nav button .nav-icon { font-size: 18px; }
-            .dash-total { font-size: 26px; }
-            .dash-person-value { font-size: 17px; }
-            .dash-mini-value { font-size: 15px; }
-        }
-
-        @media (max-width: 360px) {
-            .logo-text { font-size: 15px; }
-            nav button { font-size: 7px; min-width: 44px; }
-            .dash-person-icon { font-size: 26px; }
-        }
-
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: transparent; }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(227,30,36,0.5);
-            border-radius: 3px;
-        }
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<meta name="theme-color" content="#0a0a0f">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<title>POP-AVTO-MAKON</title>
+<style>
+:root {
+    --red: #e31e24;
+    --red-dark: #8a0e12;
+    --black: #0a0a0f;
+    --card: #ffffff;
+    --text: #1a1a1a;
+    --muted: #666;
+    --border: #e5e5e5;
+    --green: #16a34a;
+    --blue: #2563eb;
+    --orange: #ea580c;
+    --purple: #9333ea;
+    --safe-top: env(safe-area-inset-top, 0px);
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+}
+
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-font-smoothing: antialiased;
+}
+
+html, body { min-height: 100vh; }
+
+body {
+    color: var(--text);
+    padding-bottom: calc(80px + var(--safe-bottom));
+    background: var(--black);
+    overflow-x: hidden;
+    overscroll-behavior-y: none;
+}
+
+/* ============ FON ============ */
+.bg {
+    position: fixed;
+    inset: 0;
+    z-index: -1;
+    background: 
+        radial-gradient(circle at 20% 10%, rgba(227,30,36,0.15) 0%, transparent 40%),
+        radial-gradient(circle at 80% 80%, rgba(37,99,235,0.1) 0%, transparent 40%),
+        linear-gradient(180deg, #0a0a0f 0%, #1a1a2e 100%);
+}
+.bg::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background-image: url('https://images.unsplash.com/photo-1492144534655-ae79c964c9d7?w=1200&q=80');
+    background-size: cover;
+    background-position: center;
+    opacity: 0.15;
+    filter: blur(2px);
+}
+
+/* ============ HEADER ============ */
+header {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.95);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-bottom: 2px solid var(--red);
+    padding: calc(10px + var(--safe-top)) 14px 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    box-shadow: 0 4px 25px rgba(227,30,36,0.3);
+}
+
+.logo-wrap {
+    width: 100%;
+    max-width: 340px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.logo-svg {
+    width: 110px;
+    height: auto;
+    flex-shrink: 0;
+    filter: drop-shadow(0 0 12px rgba(227,30,36,0.4));
+    animation: logoGlow 3s ease-in-out infinite alternate;
+}
+
+@keyframes logoGlow {
+    from { filter: drop-shadow(0 0 8px rgba(227,30,36,0.3)); }
+    to { filter: drop-shadow(0 0 18px rgba(227,30,36,0.7)); }
+}
+
+.logo-text {
+    flex: 1;
+    min-width: 0;
+}
+
+.logo-text h1 {
+    color: white;
+    font-size: 14px;
+    font-weight: 900;
+    letter-spacing: 0.5px;
+    font-style: italic;
+    white-space: nowrap;
+}
+.logo-text h1 span { color: var(--red); }
+.logo-text p {
+    color: #888;
+    font-size: 8px;
+    letter-spacing: 2px;
+    margin-top: 2px;
+}
+
+@media (max-width: 380px) {
+    .logo-svg { width: 90px; }
+    .logo-text h1 { font-size: 12px; }
+}
+
+/* ============ NAV ============ */
+nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 100;
+    background: rgba(10,10,15,0.98);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-bottom: var(--safe-bottom);
+    display: flex;
+    box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+}
+nav button {
+    flex: 1;
+    min-height: 64px;
+    background: none;
+    border: none;
+    color: #888;
+    font-size: 10px;
+    font-weight: 700;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    padding: 8px 2px;
+    transition: all 0.25s;
+    position: relative;
+}
+nav button svg {
+    width: 22px;
+    height: 22px;
+    stroke-width: 2;
+    transition: all 0.25s;
+}
+nav button.active {
+    color: var(--red);
+}
+nav button.active svg {
+    transform: scale(1.1) translateY(-2px);
+    filter: drop-shadow(0 0 8px rgba(227,30,36,0.6));
+}
+nav button.active::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 25%;
+    right: 25%;
+    height: 2px;
+    background: var(--red);
+    border-radius: 0 0 3px 3px;
+    box-shadow: 0 0 8px var(--red);
+}
+nav button:active { transform: scale(0.95); }
+
+/* ============ SECTION ============ */
+.section {
+    display: none;
+    padding: 16px;
+    max-width: 700px;
+    margin: 0 auto;
+    animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
+}
+.section.active { display: block; }
+@keyframes slideIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* ============ TYPOGRAPHY ============ */
+h2 {
+    color: white;
+    font-size: 15px;
+    font-weight: 800;
+    margin: 20px 0 12px;
+    padding-left: 12px;
+    position: relative;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 3px;
+    height: 18px;
+    background: var(--red);
+    border-radius: 2px;
+    box-shadow: 0 0 8px var(--red);
+}
+h2 svg { width: 18px; height: 18px; color: var(--red); }
+
+/* ============ CARD ============ */
+.card {
+    background: rgba(255,255,255,0.98);
+    backdrop-filter: blur(20px);
+    border-radius: 14px;
+    padding: 16px;
+    margin-bottom: 12px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.4);
+    border: 1px solid rgba(255,255,255,0.1);
+}
+
+/* ============ INPUT ============ */
+.field {
+    margin-bottom: 12px;
+}
+.field label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 6px;
+    text-transform: uppercase;
+    letter-spacing: 0.3px;
+}
+.field label svg { width: 14px; height: 14px; color: var(--red); }
+.field input,
+.field select,
+.field textarea {
+    width: 100%;
+    padding: 13px 14px;
+    border: 2px solid var(--border);
+    border-radius: 10px;
+    font-size: 15px;
+    font-weight: 500;
+    background: #fff;
+    color: var(--text);
+    outline: none;
+    transition: all 0.2s;
+    font-family: inherit;
+    -webkit-appearance: none;
+    appearance: none;
+}
+.field select {
+    background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23e31e24' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6 9 12 15 18 9'%3e%3c/polyline%3e%3c/svg%3e");
+    background-repeat: no-repeat;
+    background-position: right 14px center;
+    background-size: 16px;
+    padding-right: 40px;
+}
+.field input:focus,
+.field select:focus,
+.field textarea:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 3px rgba(227,30,36,0.12);
+}
+
+/* ============ BUTTON ============ */
+.btn {
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 20px;
+    border: none;
+    border-radius: 12px;
+    font-size: 15px;
+    font-weight: 800;
+    color: white;
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    transition: all 0.2s;
+    box-shadow: 0 4px 15px rgba(227,30,36,0.4);
+    letter-spacing: 0.3px;
+    margin-top: 8px;
+}
+.btn svg { width: 18px; height: 18px; }
+.btn:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(227,30,36,0.6); }
+.btn.black { background: linear-gradient(135deg, #2a2a2a, #000); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
+.btn.green { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 15px rgba(22,163,74,0.4); }
+.btn.blue { background: linear-gradient(135deg, #2563eb, #1e40af); box-shadow: 0 4px 15px rgba(37,99,235,0.4); }
+.btn.orange { background: linear-gradient(135deg, #ea580c, #c2410c); box-shadow: 0 4px 15px rgba(234,88,12,0.4); }
+.btn.gray { background: linear-gradient(135deg, #6b7280, #374151); box-shadow: 0 4px 15px rgba(107,114,128,0.4); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+
+/* ============ ITEM LIST ============ */
+.item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+}
+.item:last-child { border-bottom: none; }
+.item-icon {
+    width: 42px;
+    height: 42px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    flex-shrink: 0;
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+}
+.item-icon svg { width: 20px; height: 20px; }
+.item-icon.green { background: linear-gradient(135deg, #16a34a, #15803d); }
+.item-icon.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
+.item-icon.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
+.item-icon.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
+.item-body { flex: 1; min-width: 0; }
+.item-title {
+    font-size: 15px;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 2px;
+}
+.item-sub {
+    font-size: 12px;
+    color: var(--muted);
+    margin-top: 2px;
+}
+.item-price {
+    font-size: 14px;
+    font-weight: 800;
+    color: var(--red);
+    margin-top: 2px;
+}
+.item-del {
+    width: 34px;
+    height: 34px;
+    border-radius: 8px;
+    background: rgba(227,30,36,0.08);
+    border: none;
+    color: var(--red);
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+}
+.item-del svg { width: 16px; height: 16px; }
+.item-del:active { background: rgba(227,30,36,0.25); transform: scale(0.9); }
+
+/* ============ CHECKBOX ============ */
+.check {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px;
+    border: 2px solid var(--border);
+    border-radius: 12px;
+    margin-bottom: 8px;
+    cursor: pointer;
+    background: #fff;
+    transition: all 0.2s;
+}
+.check.on {
+    border-color: var(--red);
+    background: linear-gradient(135deg, #fff, #fff5f5);
+    box-shadow: 0 0 0 3px rgba(227,30,36,0.1);
+}
+.check-box {
+    width: 24px;
+    height: 24px;
+    border: 2px solid var(--border);
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+    background: #fff;
+}
+.check.on .check-box {
+    background: var(--red);
+    border-color: var(--red);
+}
+.check-box svg {
+    width: 14px;
+    height: 14px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+}
+.check.on .check-box svg { opacity: 1; }
+.check-body { flex: 1; min-width: 0; }
+.check-title { font-size: 14px; font-weight: 700; }
+.check-meta {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-top: 4px;
+    font-size: 12px;
+    color: var(--muted);
+    flex-wrap: wrap;
+}
+.check-price {
+    color: var(--red);
+    font-weight: 800;
+}
+.check-usta {
+    color: var(--blue);
+    font-weight: 600;
+}
+
+/* ============ RESULT ============ */
+.result {
+    background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
+    color: white;
+    padding: 20px;
+    border-radius: 14px;
+    margin-top: 16px;
+    border: 2px solid var(--red);
+    box-shadow: 0 0 40px rgba(227,30,36,0.4);
+    animation: pop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes pop {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+.result-title {
+    text-align: center;
+    font-size: 14px;
+    font-weight: 800;
+    letter-spacing: 1px;
+    color: #888;
+    margin-bottom: 14px;
+    text-transform: uppercase;
+}
+.result-info {
+    background: rgba(255,255,255,0.05);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 12px;
+    font-size: 13px;
+}
+.result-info div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 6px;
+    color: #ccc;
+}
+.result-info div:last-child { margin-bottom: 0; }
+.result-info strong { color: white; }
+.result-list {
+    border-top: 1px solid rgba(255,255,255,0.1);
+    padding-top: 12px;
+    margin-top: 12px;
+}
+.result-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 14px;
+}
+.result-row span:first-child { color: #ccc; }
+.result-row span:last-child { color: white; font-weight: 600; }
+.result-total {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 14px 0;
+    margin-top: 12px;
+    border-top: 2px solid var(--red);
+    font-size: 20px;
+    font-weight: 900;
+}
+.result-total span:last-child { color: var(--red); }
+.result-share {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-top: 12px;
+}
+.share-box {
+    padding: 12px;
+    border-radius: 10px;
+    text-align: center;
+}
+.share-box.m { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); }
+.share-box.u { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); }
+.share-label { font-size: 11px; color: #888; letter-spacing: 0.5px; margin-bottom: 4px; }
+.share-value { font-size: 16px; font-weight: 900; }
+.share-box.m .share-value { color: #60a5fa; }
+.share-box.u .share-value { color: #4ade80; }
+
+/* ============ STATS ============ */
+.stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
+    margin-bottom: 12px;
+}
+.stat {
+    padding: 14px;
+    border-radius: 14px;
+    color: white;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 6px 20px rgba(0,0,0,0.3);
+}
+.stat::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    right: -30%;
+    width: 120px;
+    height: 120px;
+    background: rgba(255,255,255,0.1);
+    border-radius: 50%;
+}
+.stat-label {
+    font-size: 10px;
+    font-weight: 700;
+    letter-spacing: 1px;
+    opacity: 0.9;
+    text-transform: uppercase;
+    position: relative;
+}
+.stat-value {
+    font-size: 20px;
+    font-weight: 900;
+    margin-top: 6px;
+    position: relative;
+    word-break: break-all;
+}
+.stat-sub {
+    font-size: 11px;
+    opacity: 0.85;
+    margin-top: 3px;
+    position: relative;
+}
+.stat.red { background: linear-gradient(135deg, #e31e24, #8a0e12); }
+.stat.green { background: linear-gradient(135deg, #16a34a, #15803d); }
+.stat.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
+.stat.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
+.stat.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
+.stat.dark { background: linear-gradient(135deg, #374151, #1f2937); }
+
+/* ============ EMPTY ============ */
+.empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: #999;
+    font-size: 13px;
+}
+.empty svg {
+    width: 50px;
+    height: 50px;
+    stroke-width: 1.5;
+    color: #ccc;
+    margin-bottom: 10px;
+}
+
+/* ============ TOAST ============ */
+.toast {
+    position: fixed;
+    top: calc(70px + var(--safe-top));
+    left: 50%;
+    transform: translateX(-50%) translateY(-100px);
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: white;
+    padding: 12px 24px;
+    border-radius: 30px;
+    font-weight: 800;
+    font-size: 13px;
+    box-shadow: 0 10px 30px rgba(22,163,74,0.5);
+    z-index: 9999;
+    opacity: 0;
+    transition: all 0.35s;
+    pointer-events: none;
+    max-width: 90vw;
+    text-align: center;
+}
+.toast.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+.toast.error { background: linear-gradient(135deg, #e31e24, #8a0e12); box-shadow: 0 10px 30px rgba(227,30,36,0.5); }
+
+/* ============ MODAL ============ */
+.modal-bg {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.85);
+    backdrop-filter: blur(8px);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    padding: 20px;
+}
+.modal-bg.show { display: flex; }
+.modal {
+    background: white;
+    border-radius: 18px;
+    padding: 22px;
+    max-width: 420px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: modalIn 0.3s;
+}
+@keyframes modalIn {
+    from { opacity: 0; transform: scale(0.9) translateY(20px); }
+    to { opacity: 1; transform: scale(1) translateY(0); }
+}
+.modal-title {
+    font-size: 17px;
+    font-weight: 900;
+    color: var(--text);
+    text-align: center;
+    margin-bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+}
+.modal-title svg { width: 20px; height: 20px; color: var(--red); }
+.sms-preview {
+    background: #f5f5f5;
+    padding: 14px;
+    border-radius: 12px;
+    font-size: 13px;
+    line-height: 1.6;
+    color: #333;
+    white-space: pre-line;
+    border-left: 4px solid var(--red);
+    font-weight: 500;
+    margin-bottom: 12px;
+}
+.modal-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+}
+.modal-actions .btn { margin-top: 0; }
+
+/* ============ SECTION HEADER ============ */
+.section-head {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 20px 0 12px;
+}
+.section-head h2 { margin: 0; }
+.badge {
+    padding: 4px 10px;
+    border-radius: 20px;
+    background: rgba(227,30,36,0.15);
+    color: var(--red);
+    font-size: 11px;
+    font-weight: 800;
+}
+
+/* ============ TABS (sub) ============ */
+.tabs {
+    display: flex;
+    gap: 6px;
+    background: rgba(255,255,255,0.05);
+    padding: 4px;
+    border-radius: 12px;
+    margin-bottom: 14px;
+}
+.tabs button {
+    flex: 1;
+    padding: 10px;
+    border: none;
+    background: transparent;
+    color: #888;
+    font-size: 13px;
+    font-weight: 700;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.tabs button.active {
+    background: linear-gradient(135deg, var(--red), var(--red-dark));
+    color: white;
+    box-shadow: 0 4px 12px rgba(227,30,36,0.4);
+}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width: 380px) {
+    .stats { grid-template-columns: 1fr; }
+    .result-share { grid-template-columns: 1fr; }
+    nav button { font-size: 9px; }
+}
+</style>
 </head>
 <body>
 
-    <div class="toast" id="toast">✅ Muvaffaqiyatli!</div>
+<div class="bg"></div>
+<div class="toast" id="toast">Muvaffaqiyat!</div>
 
-    <!-- SMS Modal -->
-    <div class="modal-overlay" id="smsModal">
-        <div class="modal-box">
-            <div class="modal-title">📱 SMS Yuborish</div>
-            <div class="info-line"><strong>Kimga:</strong> <span id="smsTo"></span></div>
-            <div class="info-line"><strong>Raqam:</strong> <span id="smsPhone"></span></div>
-            <div class="sms-preview" id="smsText"></div>
-            <div style="font-size:11px; color:#666; text-align:center; margin-bottom:10px;">
-                SMS telefon ilovasi orqali yuboriladi
-            </div>
-            <div class="modal-buttons">
-                <button class="btn btn-black" onclick="closeSmsModal()">❌ Bekor</button>
-                <button class="btn btn-green" onclick="sendSmsNow()">📤 Yuborish</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- FON -->
-    <div class="real-background">
-        <div class="bg-image"></div>
-        <div class="bg-overlay"></div>
-        <div class="real-car car-real-1"><img src="https://pngimg.com/uploads/car/car_PNG1017.png" alt="Malibu 2"></div>
-        <div class="real-car car-real-2"><img src="https://pngimg.com/uploads/car/car_PNG1014.png" alt="Cobalt"></div>
-        <div class="real-car car-real-3"><img src="https://pngimg.com/uploads/car/car_PNG1016.png" alt="Nexia 3"></div>
-        <div class="real-car car-real-4"><img src="https://pngimg.com/uploads/car/car_PNG1015.png" alt="Tracker"></div>
-        <div class="real-car car-real-5"><img src="https://pngimg.com/uploads/car/car_PNG1018.png" alt="Malibu 2"></div>
-        <div class="road-light"></div>
-    </div>
-
-    <header>
-        <div class="logo-text">POP<span>-</span>AVTO<span>-</span>MAKON</div>
-        <div class="sub-text">XIZMATLARNI AVTOMATLASHTIRISH</div>
-    </header>
-
-    <!-- 1. DASHBOARD -->
-    <div id="dashboard-section" class="section active">
-        <h2>📊 Boshqaruv Paneli</h2>
-
-        <div class="card" style="padding:12px;">
-            <div class="inline-form" style="margin-bottom:0;">
-                <button class="period-btn" onclick="setPeriod('today')">📆 Bugun</button>
-                <button class="period-btn" onclick="setPeriod('week')">📆 7 kun</button>
-                <button class="period-btn" onclick="setPeriod('month')">📆 30 kun</button>
-                <button class="period-btn" onclick="setPeriod('all')">📆 Hammasi</button>
-            </div>
-            <div style="text-align:center; margin-top:10px; font-size:12px; color:#666;" id="periodInfo"></div>
-        </div>
-
-        <div id="dashboardContent"></div>
-    </div>
-
-    <!-- 2. XIZMAT/USTA -->
-    <div id="services-section" class="section">
+<!-- ============ HEADER ============ -->
+<header>
+    <div class="logo-wrap">
+        <!-- PAM LOGO SVG -->
+        <svg class="logo-svg" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+            <!-- Mashina silueti (qizil) -->
+            <g fill="none" stroke="#e31e24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                <path d="M 100 52 Q 140 28 210 26 Q 280 28 320 52"/>
+                <path d="M 88 62 Q 140 56 210 54 Q 280 56 332 62"/>
+                <ellipse cx="98" cy="60" rx="7" ry="5" stroke-width="2.5"/>
+                <ellipse cx="322" cy="60" rx="7" ry="5" stroke-width="2.5"/>
+            </g>
+            
+            <!-- P harfi (qora) -->
+            <path d="M 65 90 L 82 90 Q 105 90 102 112 Q 100 130 82 130 L 76 130 L 79 112 L 85 112 Q 92 112 92 106 Q 92 100 85 100 L 72 100 Z" fill="#1a1a1a"/>
+            
+            <!-- A harfi (qizil) -->
+            <path d="M 118 145 L 135 88 L 158 88 L 175 145 L 158 145 L 154 128 L 138 128 L 135 145 Z" fill="#e31e24"/>
+            <path d="M 145 112 L 152 112 L 148 98 Z" fill="white"/>
+            
+            <!-- M harfi (qora) -->
+            <path d="M 188 88 L 205 88 L 222 122 L 239 88 L 256 88 L 244 145 L 228 145 L 238 112 L 222 138 L 206 112 L 216 145 L 200 145 Z" fill="#1a1a1a"/>
+            
+            <!-- POP AUTO MAKON yozuvi -->
+            <text x="65" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#1a1a1a" letter-spacing="0.5">POP AUTO</text>
+            <text x="215" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#e31e24" letter-spacing="0.5">MAKON</text>
+        </svg>
         
-        <h2>🔧 Mutaxassislik Qo'shish</h2>
-        <div class="card">
-            <div class="input-group">
-                <label>Yangi mutaxassislik nomi</label>
-                <input type="text" id="newSpecName" placeholder="Masalan: KONDITSIONER" style="text-transform: uppercase;">
-            </div>
-            <button class="btn btn-purple" onclick="addSpec()">➕ Mutaxassislik Qo'shish</button>
-            <div class="spec-tags-container" id="specTagsList"></div>
-        </div>
-
-        <h2>👨‍🔧 Usta Qo'shish</h2>
-        <div class="card">
-            <div class="input-group">
-                <label>Usta ismi</label>
-                <input type="text" id="ustaName" placeholder="Masalan: Akmal aka">
-            </div>
-            <div class="input-group">
-                <label>Mutaxassisligi</label>
-                <select id="ustaSpec">
-                    <option value="">-- Tanlang --</option>
-                </select>
-            </div>
-            <button class="btn btn-black" onclick="addUsta()">➕ Usta Qo'shish</button>
-        </div>
-
-        <h2>👥 Mavjud Ustalar</h2>
-        <div id="ustalarList" class="card"></div>
-
-        <h2>⚙️ Xizmat Qo'shish</h2>
-        <div class="card">
-            <div class="input-group">
-                <label>Xizmat nomi</label>
-                <input type="text" id="serviceName" placeholder="Masalan: Spark almashtirish">
-            </div>
-            <div class="input-group">
-                <label>Xizmat narxi (so'm)</label>
-                <input type="number" id="servicePrice" placeholder="Narxni kiriting...">
-            </div>
-            <div class="input-group">
-                <label>Qaysi usta bajaradi?</label>
-                <select id="serviceUsta">
-                    <option value="">-- Ustani tanlang --</option>
-                </select>
-            </div>
-            <button class="btn" onclick="addService()">➕ Xizmat Qo'shish</button>
-        </div>
-
-        <h2>📋 Mavjud Xizmatlar</h2>
-        <div id="servicesList" class="card"></div>
-    </div>
-
-    <!-- 3. BUYURTMA -->
-    <div id="order-section" class="section">
-        <h2>🚗 Yangi Buyurtma</h2>
-
-        <div class="card">
-            <div class="section-title">👤 Mijoz Ma'lumotlari</div>
-            <div class="input-group">
-                <label>Mijoz ismi (F.I.Sh.)</label>
-                <input type="text" id="clientName" placeholder="Masalan: Mahmudov Shoxrux">
-            </div>
-            <div class="input-group">
-                <label>Mijoz telefon raqami</label>
-                <input type="tel" id="clientPhone" placeholder="+998 90 123 45 67">
-            </div>
-            <div class="input-group">
-                <label>Mashina modeli</label>
-                <input type="text" id="carModel" placeholder="Masalan: Malibu 2">
-            </div>
-            <div class="input-group">
-                <label>Mashina davlat raqami</label>
-                <input type="text" id="carNumber" placeholder="Masalan: 50 A 555 AA">
-            </div>
-        </div>
-
-        <div class="card">
-            <div class="section-title">📋 Bajarilgan Xizmatlarni Tanlang</div>
-            <div id="orderServicesList"></div>
-            <button class="btn btn-black" style="margin-top: 20px;" onclick="calculateOrder()">🧮 Hisob-kitob qilish</button>
-        </div>
-
-        <div id="resultBox" class="result-box" style="display: none;">
-            <h3 style="text-align: center; margin-bottom: 15px; color: white;">💰 Hisob-kitob Natijasi</h3>
-            <div id="resultDetails"></div>
+        <div class="logo-text">
+            <h1>POP <span>AUTO</span> MAKON</h1>
+            <p>AVTOSERVIS TIZIMI</p>
         </div>
     </div>
+</header>
 
-    <!-- 4. MIJOZLAR -->
-    <div id="clients-section" class="section">
-        <h2>👥 Mijozlar</h2>
+<!-- ============ PANEL ============ -->
+<div class="section active" id="s-panel">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        Boshqaruv paneli
+    </h2>
 
-        <div class="search-box">
-            <input type="text" id="clientSearch" placeholder="Mijoz ismi yoki raqami..." oninput="renderClients()">
+    <div class="card" style="padding:12px;">
+        <div class="tabs">
+            <button onclick="setPeriod('today')" id="p-today">Bugun</button>
+            <button onclick="setPeriod('week')" id="p-week">7 kun</button>
+            <button onclick="setPeriod('month')" id="p-month" class="active">30 kun</button>
+            <button onclick="setPeriod('all')" id="p-all">Barchasi</button>
+        </div>
+        <div id="periodText" style="text-align:center; font-size:12px; color:#888; padding:4px;"></div>
+    </div>
+
+    <div id="dashStats"></div>
+    <div id="dashSpecs"></div>
+</div>
+
+<!-- ============ USTALAR ============ -->
+<div class="section" id="s-ustalar">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Ustalar
+    </h2>
+
+    <div class="card">
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Usta ismi
+            </label>
+            <input type="text" id="ustaName" placeholder="Masalan: Akmal aka">
         </div>
 
-        <div id="clientsStats" style="margin-bottom:14px;"></div>
-
-        <div id="clientsList"></div>
-    </div>
-
-    <!-- 5. NASIYA -->
-    <div id="nasiya-section" class="section">
-        <h2>💳 Nasiya / Qarzlar</h2>
-
-        <div class="card" style="background: linear-gradient(135deg, #fff8e1 0%, #ffecb3 100%);">
-            <div class="section-title">📊 Nasiya Statistikasi</div>
-            <div class="dash-mini" id="nasiyaStats"></div>
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                Mutaxassisligi
+            </label>
+            <select id="ustaSpec">
+                <option value="">Mutaxassislikni tanlang</option>
+            </select>
         </div>
 
-        <h2>📋 Faol Nasiyalar</h2>
-        <div id="nasiyaList"></div>
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                Qiladigan ishi
+            </label>
+            <input type="text" id="ustaWork" placeholder="Masalan: Motor ta'mirlash">
+        </div>
+
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Xizmat haqqi (so'm)
+            </label>
+            <input type="number" id="ustaRate" placeholder="Masalan: 50000">
+        </div>
+
+        <button class="btn black" onclick="addUsta()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Usta qo'shish
+        </button>
     </div>
 
-    <!-- 6. TARIX -->
-    <div id="history-section" class="section">
-        <h2>📋 Buyurtmalar Tarixi</h2>
-        <div id="historyList"></div>
+    <div class="section-head">
+        <h2>Ustalar ro'yxati</h2>
+        <span class="badge" id="ustalarCount">0 ta</span>
+    </div>
+    <div id="ustalarList" class="card"></div>
+</div>
+
+<!-- ============ XIZMATLAR ============ -->
+<div class="section" id="s-xizmatlar">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        Xizmatlar
+    </h2>
+
+    <div class="card">
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                Xizmat nomi
+            </label>
+            <input type="text" id="svcName" placeholder="Masalan: Spark almashtirish">
+        </div>
+
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                Xizmat narxi
+            </label>
+            <input type="number" id="svcPrice" placeholder="Masalan: 150000">
+        </div>
+
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Usta
+            </label>
+            <select id="svcUsta">
+                <option value="">Ustani tanlang</option>
+            </select>
+        </div>
+
+        <button class="btn" onclick="addSvc()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Xizmat qo'shish
+        </button>
     </div>
 
-    <nav>
-        <button class="active" onclick="switchTab('dashboard-section', this)">
-            <span class="nav-icon">📊</span>
-            <span>Panel</span>
-        </button>
-        <button onclick="switchTab('order-section', this)">
-            <span class="nav-icon">🚗</span>
-            <span>Buyurtma</span>
-        </button>
-        <button onclick="switchTab('clients-section', this)">
-            <span class="nav-icon">👥</span>
-            <span>Mijozlar</span>
-        </button>
-        <button onclick="switchTab('nasiya-section', this)">
-            <span class="nav-icon">💳</span>
-            <span>Nasiya</span>
-        </button>
-        <button onclick="switchTab('services-section', this)">
-            <span class="nav-icon">⚙️</span>
-            <span>Xizmat</span>
-        </button>
-        <button onclick="switchTab('history-section', this)">
-            <span class="nav-icon">📋</span>
-            <span>Tarix</span>
-        </button>
-    </nav>
+    <div class="section-head">
+        <h2>Xizmatlar ro'yxati</h2>
+        <span class="badge" id="svcsCount">0 ta</span>
+    </div>
+    <div id="svcsList" class="card"></div>
+</div>
 
-    <script>
-        let services = JSON.parse(localStorage.getItem('pam_services')) || [];
-        let orders = JSON.parse(localStorage.getItem('pam_orders')) || [];
-        let ustalar = JSON.parse(localStorage.getItem('pam_ustalar')) || [];
-        let nasiyalar = JSON.parse(localStorage.getItem('pam_nasiyalar')) || [];
-        
-        const defaultSpecs = ["MOTOR", "XODOVOY", "KUZOV", "VAKUM", "ELEKTRIK", "DIAGNOSTIKA", "MEXANIK", "BOSHQA"];
-        let specs = JSON.parse(localStorage.getItem('pam_specs')) || defaultSpecs;
-        
-        let lastSmsData = null;
-        let currentPeriod = 'month';
+<!-- ============ BUYURTMA ============ -->
+<div class="section" id="s-order">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+        Yangi buyurtma
+    </h2>
 
-        const specIcons = {
-            "MOTOR": "🔧", "XODOVOY": "🚙", "KUZOV": "🚗", "VAKUM": "💨",
-            "ELEKTRIK": "⚡", "DIAGNOSTIKA": "🔍", "MEXANIK": "⚙️", "BOSHQA": "🛠️"
-        };
+    <div class="card">
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                Mijoz ismi
+            </label>
+            <input type="text" id="oName" placeholder="Masalan: Mahmudov Shoxrux">
+        </div>
 
-        const specClasses = {
-            "MOTOR": "motor", "XODOVOY": "xodovoy", "KUZOV": "kuzov", "VAKUM": "vakum",
-            "ELEKTRIK": "elektrik", "DIAGNOSTIKA": "diagnostika", "MEXANIK": "mexanik", "BOSHQA": "boshqa"
-        };
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                Telefon raqami
+            </label>
+            <input type="tel" id="oPhone" placeholder="+998 90 123 45 67">
+        </div>
 
-        function getSpecIcon(spec) { return specIcons[spec.toUpperCase()] || "🔧"; }
-        function getSpecClass(spec) { return specClasses[spec.toUpperCase()] || "boshqa"; }
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+                Mashina modeli
+            </label>
+            <input type="text" id="oModel" placeholder="Masalan: Malibu 2">
+        </div>
 
-        function showToast(msg, type) {
-            const toast = document.getElementById('toast');
-            toast.textContent = msg;
-            toast.className = 'toast ' + (type === 'error' ? 'error' : '');
-            toast.classList.add('show');
-            setTimeout(() => toast.classList.remove('show'), 2500);
-        }
+        <div class="field">
+            <label>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
+                Mashina raqami
+            </label>
+            <input type="text" id="oNumber" placeholder="Masalan: 50 A 555 AA">
+        </div>
+    </div>
 
-        function switchTab(sectionId, btn) {
-            document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
-            document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
-            document.getElementById(sectionId).classList.add('active');
-            btn.classList.add('active');
-            
-            if(sectionId === 'order-section') {
-                renderOrderServices();
-                renderUstaDropdowns();
-            }
-            if(sectionId === 'history-section') renderHistory();
-            if(sectionId === 'nasiya-section') renderNasiya();
-            if(sectionId === 'clients-section') renderClients();
-            if(sectionId === 'dashboard-section') renderDashboard();
-            
-            window.scrollTo({ top: 0, behavior: 'smooth' });
-        }
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg>
+        Xizmatlarni tanlang
+    </h2>
+    <div class="card" style="padding:12px;">
+        <div id="orderChecks"></div>
+    </div>
 
-        function addSpec() {
-            const name = document.getElementById('newSpecName').value.trim().toUpperCase();
-            if (!name) { alert("Mutaxassislik nomini kiriting!"); return; }
-            if (specs.includes(name)) { alert("Bu mutaxassislik mavjud!"); return; }
-            specs.push(name);
-            localStorage.setItem('pam_specs', JSON.stringify(specs));
-            document.getElementById('newSpecName').value = '';
-            renderSpecTags();
-            renderUstaSpecDropdown();
-            showToast("✅ Mutaxassislik qo'shildi!");
-        }
+    <button class="btn black" onclick="calcOrder()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
+        Hisob-kitob qilish
+    </button>
 
-        function deleteSpec(name) {
-            if(confirm('"' + name + '" mutaxassisligini ochirmoqchimisiz?')) {
-                specs = specs.filter(s => s !== name);
-                localStorage.setItem('pam_specs', JSON.stringify(specs));
-                renderSpecTags();
-                renderUstaSpecDropdown();
-                showToast("🗑️ O'chirildi!");
-            }
-        }
+    <div id="orderResult"></div>
+</div>
 
-        function renderSpecTags() {
-            const container = document.getElementById('specTagsList');
-            if (!container) return;
-            container.innerHTML = specs.map(s => 
-                '<div class="spec-tag" onclick="deleteSpec(\'' + s + '\')">' +
-                    getSpecIcon(s) + ' ' + s + ' <span style="opacity:0.6; margin-left:4px;">✕</span>' +
-                '</div>'
-            ).join('');
-        }
+<!-- ============ TARIX ============ -->
+<div class="section" id="s-history">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+        Buyurtmalar tarixi
+    </h2>
+    <div id="historyList"></div>
+</div>
 
-        function renderUstaSpecDropdown() {
-            const select = document.getElementById('ustaSpec');
-            if (!select) return;
-            select.innerHTML = '<option value="">-- Tanlang --</option>' + 
-                specs.map(s => '<option value="' + s + '">' + getSpecIcon(s) + ' ' + s + '</option>').join('');
-        }
+<!-- ============ NAV ============ -->
+<nav>
+    <button class="active" onclick="go('s-panel', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+        <span>Panel</span>
+    </button>
+    <button onclick="go('s-order', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+        <span>Buyurtma</span>
+    </button>
+    <button onclick="go('s-ustalar', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        <span>Ustalar</span>
+    </button>
+    <button onclick="go('s-xizmatlar', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+        <span>Xizmatlar</span>
+    </button>
+    <button onclick="go('s-history', this)">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+        <span>Tarix</span>
+    </button>
+</nav>
 
-        function addUsta() {
-            const name = document.getElementById('ustaName').value.trim();
-            const spec = document.getElementById('ustaSpec').value;
-            if (!name) { alert("Usta ismini kiriting!"); return; }
-            if (!spec) { alert("Mutaxassislikni tanlang!"); return; }
-            ustalar.push({ id: Date.now(), name: name, spec: spec });
-            localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
-            document.getElementById('ustaName').value = '';
-            document.getElementById('ustaSpec').value = '';
-            renderUstalar();
-            renderUstaDropdowns();
-            showToast("✅ Usta qo'shildi!");
-        }
+<!-- ============ MODAL ============ -->
+<div class="modal-bg" id="smsModal">
+    <div class="modal">
+        <div class="modal-title">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+            SMS yuborish
+        </div>
+        <div style="font-size:12px; color:#666; margin-bottom:10px; text-align:center;">
+            <strong id="smsTo"></strong> — <span id="smsPhone"></span>
+        </div>
+        <div class="sms-preview" id="smsText"></div>
+        <div class="modal-actions">
+            <button class="btn gray" onclick="closeSms()">Bekor</button>
+            <button class="btn green" onclick="sendSms()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                Yuborish
+            </button>
+        </div>
+    </div>
+</div>
 
-        function deleteUsta(id) {
-            if(confirm("Bu ustani o'chirmoqchisiz?")) {
-                ustalar = ustalar.filter(u => u.id !== id);
-                localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
-                renderUstalar();
-                renderUstaDropdowns();
-            }
-        }
+<script>
+/* ============ DATA ============ */
+let ustalar = JSON.parse(localStorage.getItem('pam_ustalar')) || [];
+let services = JSON.parse(localStorage.getItem('pam_services')) || [];
+let orders = JSON.parse(localStorage.getItem('pam_orders')) || [];
+let specs = JSON.parse(localStorage.getItem('pam_specs')) || [
+    "MOTOR", "XODOVOY", "KUZOV", "VAKUM",
+    "ELEKTRIK", "DIAGNOSTIKA", "MEXANIK", "BOSHQA"
+];
+let period = 'month';
+let lastSms = null;
 
-        function renderUstalar() {
-            const list = document.getElementById('ustalarList');
-            if (ustalar.length === 0) {
-                list.innerHTML = '<div class="empty-state">Hozircha ustalar yo\'q.</div>';
-                return;
-            }
-            list.innerHTML = ustalar.map(u => 
-                '<div class="service-item">' +
-                    '<div class="service-info">' +
-                        '<div class="service-name">' + u.name + '</div>' +
-                        '<div class="service-usta">' + getSpecIcon(u.spec) + ' ' + u.spec + '</div>' +
-                    '</div>' +
-                    '<button class="delete-btn" onclick="deleteUsta(' + u.id + ')">✕</button>' +
-                '</div>'
-            ).join('');
-        }
+/* ============ HELPERS ============ */
+const $ = id => document.getElementById(id);
+const money = n => Math.round(n).toLocaleString('uz-UZ');
 
-        function renderUstaDropdowns() {
-            const options = '<option value="">-- Ustani tanlang --</option>' + 
-                ustalar.map(u => '<option value="' + u.name + ' (' + u.spec + ')">' + u.name + ' - ' + u.spec + '</option>').join('');
-            const s1 = document.getElementById('serviceUsta');
-            if (s1) s1.innerHTML = options;
-        }
+function toast(msg, isError) {
+    const t = $('toast');
+    t.textContent = msg;
+    t.className = 'toast' + (isError ? ' error' : '');
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2200);
+}
 
-        function addService() {
-            const name = document.getElementById('serviceName').value.trim();
-            const price = document.getElementById('servicePrice').value;
-            const usta = document.getElementById('serviceUsta').value;
-            if (!name || !price) { alert("Xizmat nomi va narxini kiriting!"); return; }
-            services.push({ id: Date.now(), name: name, price: Number(price), usta: usta || "Belgilanmagan" });
-            localStorage.setItem('pam_services', JSON.stringify(services));
-            document.getElementById('serviceName').value = '';
-            document.getElementById('servicePrice').value = '';
-            document.getElementById('serviceUsta').value = '';
-            renderServices();
-            showToast("✅ Xizmat qo'shildi!");
-        }
+/* ============ NAV ============ */
+function go(id, btn) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
+    $(id).classList.add('active');
+    btn.classList.add('active');
+    
+    if (id === 's-panel') renderDash();
+    if (id === 's-ustalar') { renderUstalar(); renderUstaSpecSelect(); }
+    if (id === 's-xizmatlar') { renderSvcs(); renderSvcUstaSelect(); }
+    if (id === 's-order') { renderOrderChecks(); renderSvcUstaSelect(); }
+    if (id === 's-history') renderHistory();
+    
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+}
 
-        function deleteService(id) {
-            if(confirm("Bu xizmatni o'chirmoqchisiz?")) {
-                services = services.filter(s => s.id !== id);
-                localStorage.setItem('pam_services', JSON.stringify(services));
-                renderServices();
-                renderOrderServices();
-            }
-        }
+/* ============ SPEC SELECT ============ */
+function renderUstaSpecSelect() {
+    $('ustaSpec').innerHTML = '<option value="">Mutaxassislikni tanlang</option>' +
+        specs.map(s => `<option value="${s}">${s}</option>`).join('');
+}
 
-        function renderServices() {
-            const list = document.getElementById('servicesList');
-            if (services.length === 0) {
-                list.innerHTML = '<div class="empty-state">Hozircha xizmatlar yo\'q.</div>';
-                return;
-            }
-            list.innerHTML = services.map(s => 
-                '<div class="service-item">' +
-                    '<div class="service-info">' +
-                        '<div class="service-name">' + s.name + '</div>' +
-                        '<div class="service-price">' + s.price.toLocaleString() + ' so\'m</div>' +
-                        '<div class="service-usta">👨‍🔧 ' + s.usta + '</div>' +
-                    '</div>' +
-                    '<button class="delete-btn" onclick="deleteService(' + s.id + ')">✕</button>' +
-                '</div>'
-            ).join('');
-        }
+/* ============ USTALAR ============ */
+function addUsta() {
+    const name = $('ustaName').value.trim();
+    const spec = $('ustaSpec').value;
+    const work = $('ustaWork').value.trim();
+    const rate = $('ustaRate').value;
+    
+    if (!name) return toast('Usta ismini kiriting', true);
+    if (!spec) return toast('Mutaxassislikni tanlang', true);
+    
+    ustalar.push({
+        id: Date.now(),
+        name, spec,
+        work: work || spec,
+        rate: Number(rate) || 0
+    });
+    localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
+    
+    $('ustaName').value = '';
+    $('ustaSpec').value = '';
+    $('ustaWork').value = '';
+    $('ustaRate').value = '';
+    
+    renderUstalar();
+    renderSvcUstaSelect();
+    toast('Usta qo\'shildi');
+}
 
-        function renderOrderServices() {
-            const container = document.getElementById('orderServicesList');
-            if (services.length === 0) {
-                container.innerHTML = '<div class="empty-state">Hozircha xizmatlar yo\'q.</div>';
-                return;
-            }
-            container.innerHTML = services.map(s => 
-                '<label class="checkbox-group" onclick="toggleCheckbox(this)">' +
-                    '<input type="checkbox" value="' + s.id + '" data-price="' + s.price + '" data-name="' + s.name + '" data-usta="' + s.usta + '">' +
-                    '<div style="flex:1;">' +
-                        '<div style="font-weight:bold; font-size:15px;">' + s.name + '</div>' +
-                        '<div style="color:var(--primary-red); font-size:13px; font-weight:700; margin-top:2px;">' + s.price.toLocaleString() + ' so\'m</div>' +
-                        '<div style="color:#0066cc; font-size:12px; margin-top:2px;">👨‍🔧 ' + s.usta + '</div>' +
-                    '</div>' +
-                '</label>'
-            ).join('');
-        }
+function delUsta(id) {
+    if (!confirm('Ustani o\'chirmoqchimisiz?')) return;
+    ustalar = ustalar.filter(u => u.id !== id);
+    localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
+    renderUstalar();
+    renderSvcUstaSelect();
+    toast('O\'chirildi');
+}
 
-        function toggleCheckbox(label) {
-            const checkbox = label.querySelector('input[type="checkbox"]');
-            if (checkbox.checked) label.classList.add('selected');
-            else label.classList.remove('selected');
-        }
+function renderUstalar() {
+    const el = $('ustalarList');
+    $('ustalarCount').textContent = ustalar.length + ' ta';
+    
+    if (ustalar.length === 0) {
+        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div>Ustalar yo\'q</div></div>';
+        return;
+    }
+    
+    el.innerHTML = ustalar.map(u => `
+        <div class="item">
+            <div class="item-icon">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            </div>
+            <div class="item-body">
+                <div class="item-title">${u.name}</div>
+                <div class="item-sub">${u.spec} • ${u.work}</div>
+                ${u.rate ? `<div class="item-price">${money(u.rate)} so'm</div>` : ''}
+            </div>
+            <button class="item-del" onclick="delUsta(${u.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+        </div>
+    `).join('');
+}
 
-        function calculateOrder() {
-            const checkboxes = document.querySelectorAll('#orderServicesList input[type="checkbox"]:checked');
-            const client = document.getElementById('clientName').value.trim() || "Noma'lum mijoz";
-            const phone = document.getElementById('clientPhone').value.trim() || "Noma'lum";
-            const model = document.getElementById('carModel').value.trim() || "Noma'lum";
-            const number = document.getElementById('carNumber').value.trim() || "Noma'lum";
+/* ============ XIZMATLAR ============ */
+function renderSvcUstaSelect() {
+    const el = $('svcUsta');
+    if (!el) return;
+    el.innerHTML = '<option value="">Ustani tanlang</option>' +
+        ustalar.map(u => `<option value="${u.name} (${u.spec})">${u.name} — ${u.spec}</option>`).join('');
+}
 
-            if (checkboxes.length === 0) { alert("Kamida bitta xizmatni tanlang!"); return; }
+function addSvc() {
+    const name = $('svcName').value.trim();
+    const price = $('svcPrice').value;
+    const usta = $('svcUsta').value;
+    
+    if (!name) return toast('Xizmat nomini kiriting', true);
+    if (!price) return toast('Xizmat narxini kiriting', true);
+    
+    services.push({
+        id: Date.now(),
+        name,
+        price: Number(price),
+        usta: usta || 'Belgilanmagan'
+    });
+    localStorage.setItem('pam_services', JSON.stringify(services));
+    
+    $('svcName').value = '';
+    $('svcPrice').value = '';
+    $('svcUsta').value = '';
+    
+    renderSvcs();
+    renderOrderChecks();
+    toast('Xizmat qo\'shildi');
+}
 
-            let total = 0;
-            let selectedServices = [];
-            checkboxes.forEach(cb => {
-                const price = Number(cb.getAttribute('data-price'));
-                const name = cb.getAttribute('data-name');
-                const usta = cb.getAttribute('data-usta');
-                total += price;
-                selectedServices.push({ name: name, price: price, usta: usta });
-            });
+function delSvc(id) {
+    if (!confirm('Xizmatni o\'chirmoqchimisiz?')) return;
+    services = services.filter(s => s.id !== id);
+    localStorage.setItem('pam_services', JSON.stringify(services));
+    renderSvcs();
+    renderOrderChecks();
+    toast('O\'chirildi');
+}
 
-            const managerShare = total * 0.30;
-            const ustaShare = total * 0.70;
+function renderSvcs() {
+    const el = $('svcsList');
+    $('svcsCount').textContent = services.length + ' ta';
+    
+    if (services.length === 0) {
+        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><div>Xizmatlar yo\'q</div></div>';
+        return;
+    }
+    
+    el.innerHTML = services.map(s => `
+        <div class="item">
+            <div class="item-icon green">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            </div>
+            <div class="item-body">
+                <div class="item-title">${s.name}</div>
+                <div class="item-price">${money(s.price)} so'm</div>
+                <div class="item-sub">${s.usta}</div>
+            </div>
+            <button class="item-del" onclick="delSvc(${s.id})">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+            </button>
+        </div>
+    `).join('');
+}
 
-            const resultBox = document.getElementById('resultBox');
-            const resultDetails = document.getElementById('resultDetails');
-            resultBox.style.display = 'block';
-            
-            let servicesHtml = '';
-            selectedServices.forEach(s => {
-                servicesHtml += '<div class="result-row"><span>' + s.name + ' <span style="font-size:11px; color:#4da6ff;">(' + s.usta + ')</span></span><span>' + s.price.toLocaleString() + '</span></div>';
-            });
-            
-            resultDetails.innerHTML = 
-                '<div style="margin-bottom: 14px; font-size: 13px;">' +
-                    '<div class="info-line" style="color:#ddd;"><strong style="color:#fff;">👤 Mijoz:</strong> ' + client + '</div>' +
-                    '<div class="info-line" style="color:#ddd;"><strong style="color:#fff;">📞 Tel:</strong> ' + phone + '</div>' +
-                    '<div class="info-line" style="color:#ddd;"><strong style="color:#fff;">🚗 Mashina:</strong> ' + model + '</div>' +
-                    '<div class="info-line" style="color:#ddd;"><strong style="color:#fff;">🔢 Raqam:</strong> ' + number + '</div>' +
-                '</div>' +
-                '<div style="border-bottom: 1px solid #444; padding-bottom: 12px; margin-bottom: 12px;">' +
-                    servicesHtml +
-                '</div>' +
-                '<div class="result-row total"><span>💰 JAMI:</span><span>' + total.toLocaleString() + '</span></div>' +
-                '<div class="result-row manager"><span>Menejer (30%):</span><span>' + managerShare.toLocaleString() + '</span></div>' +
-                '<div class="result-row usta"><span>Ustalar (70%):</span><span>' + ustaShare.toLocaleString() + '</span></div>' +
-                '<div style="margin-top:15px; padding-top:15px; border-top:1px solid #444;">' +
-                    '<label style="display:flex; align-items:center; gap:8px; font-size:14px; cursor:pointer;">' +
-                        '<input type="checkbox" id="isNasiya" style="width:20px; height:20px; accent-color:#f39c12;">' +
-                        '<span style="color:#f39c12; font-weight:700;">💳 Nasiyaga berish</span>' +
-                    '</label>' +
-                    '<div id="nasiyaFields" style="display:none; margin-top:12px;">' +
-                        '<div class="input-group">' +
-                            '<label style="color:#ddd;">Yashash joyi</label>' +
-                            '<input type="text" id="nasiyaAddress" placeholder="Toshkent, Chilonzor 5">' +
-                        '</div>' +
-                        '<div class="input-group">' +
-                            '<label style="color:#ddd;">Qaytarish muddati</label>' +
-                            '<input type="date" id="nasiyaDeadline">' +
-                        '</div>' +
-                    '</div>' +
-                '</div>' +
-                '<button class="btn btn-green" style="margin-top:15px;" onclick="saveOrder(\'' + client.replace(/'/g, "") + '\', \'' + phone.replace(/'/g, "") + '\', \'' + model.replace(/'/g, "") + '\', \'' + number.replace(/'/g, "") + '\', ' + total + ', ' + managerShare + ', ' + ustaShare + ', ' + JSON.stringify(selectedServices).replace(/"/g, '&quot;') + ')">✅ Saqlash va SMS Yuborish</button>';
-            
-            document.getElementById('isNasiya').addEventListener('change', function() {
-                document.getElementById('nasiyaFields').style.display = this.checked ? 'block' : 'none';
-            });
-            
-            setTimeout(() => resultBox.scrollIntoView({ behavior: 'smooth', block: 'start' }), 100);
-        }
+/* ============ BUYURTMA ============ */
+function renderOrderChecks() {
+    const el = $('orderChecks');
+    if (services.length === 0) {
+        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg><div>Xizmatlar yo\'q</div></div>';
+        return;
+    }
+    
+    el.innerHTML = services.map(s => `
+        <label class="check" onclick="toggleCheck(this)">
+            <div class="check-box">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+            </div>
+            <input type="checkbox" value="${s.id}" data-price="${s.price}" data-name="${s.name}" data-usta="${s.usta}" style="display:none">
+            <div class="check-body">
+                <div class="check-title">${s.name}</div>
+                <div class="check-meta">
+                    <span class="check-price">${money(s.price)} so'm</span>
+                    <span class="check-usta">${s.usta}</span>
+                </div>
+            </div>
+        </label>
+    `).join('');
+}
 
-        function saveOrder(client, phone, model, number, total, managerShare, ustaShare, servicesList) {
-            const now = new Date();
-            const isNasiya = document.getElementById('isNasiya')?.checked || false;
-            
-            const order = {
-                id: Date.now(),
-                date: now.toLocaleString('uz-UZ'),
-                timestamp: now.getTime(),
-                dateStr: now.toISOString().split('T')[0],
-                client: client, phone: phone, model: model, number: number,
-                total: total, managerShare: managerShare, ustaShare: ustaShare,
-                services: servicesList,
-                isNasiya: isNasiya
-            };
-            orders.unshift(order);
-            localStorage.setItem('pam_orders', JSON.stringify(orders));
+function toggleCheck(label) {
+    const cb = label.querySelector('input[type="checkbox"]');
+    cb.checked = !cb.checked;
+    label.classList.toggle('on', cb.checked);
+}
 
-            if (isNasiya) {
-                const address = document.getElementById('nasiyaAddress').value.trim() || "Ko'rsatilmagan";
-                const deadline = document.getElementById('nasiyaDeadline').value;
-                if (!deadline) {
-                    alert("Qarz qaytarish muddatini tanlang!");
-                    return;
-                }
-                nasiyalar.unshift({
-                    id: Date.now(),
-                    orderId: order.id,
-                    client: client, phone: phone, model: model, number: number,
-                    address: address, total: total,
-                    deadlineStr: deadline,
-                    createdDate: now.toLocaleString('uz-UZ'),
-                    paid: false,
-                    paidDate: null,
-                    reminderSent: false
-                });
-                localStorage.setItem('pam_nasiyalar', JSON.stringify(nasiyalar));
-            }
+function calcOrder() {
+    const name = $('oName').value.trim();
+    const phone = $('oPhone').value.trim();
+    const model = $('oModel').value.trim();
+    const number = $('oNumber').value.trim();
+    
+    const checked = document.querySelectorAll('#orderChecks input:checked');
+    if (checked.length === 0) return toast('Xizmat tanlang', true);
+    
+    let total = 0;
+    let items = [];
+    checked.forEach(cb => {
+        const p = Number(cb.dataset.price);
+        const n = cb.dataset.name;
+        const u = cb.dataset.usta;
+        total += p;
+        items.push({ name: n, price: p, usta: u });
+    });
+    
+    const mgr = total * 0.30;
+    const ust = total * 0.70;
+    
+    const el = $('orderResult');
+    el.innerHTML = `
+        <div class="result">
+            <div class="result-title">Hisob-kitob</div>
+            <div class="result-info">
+                <div><span>Mijoz</span><strong>${name || 'Noma\'lum'}</strong></div>
+                <div><span>Telefon</span><strong>${phone || 'Noma\'lum'}</strong></div>
+                <div><span>Mashina</span><strong>${model || 'Noma\'lum'}</strong></div>
+                <div><span>Raqam</span><strong>${number || 'Noma\'lum'}</strong></div>
+            </div>
+            <div class="result-list">
+                ${items.map(i => `
+                    <div class="result-row">
+                        <span>${i.name} <small style="color:#60a5fa">(${i.usta})</small></span>
+                        <span>${money(i.price)}</span>
+                    </div>
+                `).join('')}
+            </div>
+            <div class="result-total">
+                <span>JAMI</span>
+                <span>${money(total)} so'm</span>
+            </div>
+            <div class="result-share">
+                <div class="share-box m">
+                    <div class="share-label">MENEJER 30%</div>
+                    <div class="share-value">${money(mgr)}</div>
+                </div>
+                <div class="share-box u">
+                    <div class="share-label">USTALAR 70%</div>
+                    <div class="share-value">${money(ust)}</div>
+                </div>
+            </div>
+            <button class="btn green" style="margin-top:14px" onclick='saveOrder(${JSON.stringify({name, phone, model, number, total, mgr, ust, items}).replace(/'/g, "&#39;")})'>
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Saqlash va SMS yuborish
+            </button>
+        </div>
+    `;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
 
-            openSmsModal(client, phone, total, model, number, isNasiya);
+function saveOrder(data) {
+    const now = new Date();
+    const order = {
+        id: Date.now(),
+        date: now.toLocaleString('uz-UZ'),
+        dateStr: now.toISOString().split('T')[0],
+        ...data
+    };
+    orders.unshift(order);
+    localStorage.setItem('pam_orders', JSON.stringify(orders));
+    
+    const smsText = `XURMATLI ${data.name.toUpperCase() || 'MIJOZ'}!\n\nSIZNING ${data.number || ''} ${data.model.toUpperCase() || ''} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(data.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
+    
+    lastSms = { phone: data.phone, text: smsText };
+    $('smsTo').textContent = data.name || 'Mijoz';
+    $('smsPhone').textContent = data.phone || '—';
+    $('smsText').textContent = smsText;
+    $('smsModal').classList.add('show');
+    
+    $('oName').value = '';
+    $('oPhone').value = '';
+    $('oModel').value = '';
+    $('oNumber').value = '';
+    document.querySelectorAll('#orderChecks input').forEach(cb => {
+        cb.checked = false;
+        cb.closest('.check').classList.remove('on');
+    });
+    $('orderResult').innerHTML = '';
+}
 
-            document.getElementById('clientName').value = '';
-            document.getElementById('clientPhone').value = '';
-            document.getElementById('carModel').value = '';
-            document.getElementById('carNumber').value = '';
-            document.querySelectorAll('#orderServicesList input[type="checkbox"]').forEach(cb => {
-                cb.checked = false;
-                cb.closest('.checkbox-group').classList.remove('selected');
-            });
-            document.getElementById('resultBox').style.display = 'none';
-        }
+/* ============ SMS ============ */
+function closeSms() {
+    $('smsModal').classList.remove('show');
+}
 
-        function openSmsModal(client, phone, total, model, number, isNasiya) {
-            let smsText;
-            if (isNasiya) {
-                const deadline = document.getElementById('nasiyaDeadline')?.value || '';
-                smsText = 'XURMATLI ' + client.toUpperCase() + '!\n\nSIZNING ' + number + ' ' + model.toUpperCase() + ' RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ' + total.toLocaleString() + ' SO\'M BOLDI.\n\nHISOB-KITOB NASIYAGA RASMIYLASHTIRILDI.\nQARZNI QAYTARISH MUDDATI: ' + deadline + '\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!';
-            } else {
-                smsText = 'XURMATLI ' + client.toUpperCase() + '!\n\nSIZNING ' + number + ' ' + model.toUpperCase() + ' RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ' + total.toLocaleString() + ' SO\'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!';
-            }
+function sendSms() {
+    if (!lastSms) return;
+    const clean = lastSms.phone.replace(/[^\d+]/g, '');
+    window.location.href = `sms:${clean}?body=${encodeURIComponent(lastSms.text)}`;
+    toast('SMS ilovasi ochilmoqda...');
+    setTimeout(() => {
+        closeSms();
+        go('s-history', document.querySelectorAll('nav button')[4]);
+    }, 700);
+}
 
-            document.getElementById('smsTo').textContent = client;
-            document.getElementById('smsPhone').textContent = phone;
-            document.getElementById('smsText').textContent = smsText;
-            
-            lastSmsData = { client: client, phone: phone, total: total, model: model, number: number, smsText: smsText };
-            document.getElementById('smsModal').classList.add('show');
-        }
+/* ============ PANEL ============ */
+function setPeriod(p) {
+    period = p;
+    ['today', 'week', 'month', 'all'].forEach(x => {
+        $('p-' + x).classList.toggle('active', x === p);
+    });
+    renderDash();
+}
 
-        function closeSmsModal() {
-            document.getElementById('smsModal').classList.remove('show');
-        }
+function getFiltered() {
+    const today = new Date();
+    const todayStr = today.toISOString().split('T')[0];
+    
+    if (period === 'today') return orders.filter(o => o.dateStr === todayStr);
+    if (period === 'week') {
+        const d = new Date(today);
+        d.setDate(d.getDate() - 7);
+        return orders.filter(o => o.dateStr >= d.toISOString().split('T')[0]);
+    }
+    if (period === 'month') {
+        const d = new Date(today);
+        d.setDate(d.getDate() - 30);
+        return orders.filter(o => o.dateStr >= d.toISOString().split('T')[0]);
+    }
+    return orders;
+}
 
-        function sendSmsNow() {
-            if (!lastSmsData) return;
-            const phone = lastSmsData.phone;
-            const smsText = lastSmsData.smsText;
-            const cleanPhone = phone.replace(/[^\d+]/g, '');
-            const smsLink = 'sms:' + cleanPhone + '?body=' + encodeURIComponent(smsText);
-            
-            try {
-                window.location.href = smsLink;
-                showToast("📱 SMS ilovasi ochilmoqda...");
-                setTimeout(() => {
-                    closeSmsModal();
-                    switchTab('dashboard-section', document.querySelectorAll('nav button')[0]);
-                }, 800);
-            } catch (e) {
-                alert("SMS ilovasi ochilmadi");
-                closeSmsModal();
-            }
-        }
+function renderDash() {
+    const f = getFiltered();
+    const total = f.reduce((s, o) => s + o.total, 0);
+    const mgr = f.reduce((s, o) => s + o.mgr, 0);
+    const ust = f.reduce((s, o) => s + o.ust, 0);
+    
+    const periodNames = { today: 'Bugun', week: 'Oxirgi 7 kun', month: 'Oxirgi 30 kun', all: 'Barcha vaqt' };
+    $('periodText').textContent = periodNames[period];
+    
+    $('dashStats').innerHTML = `
+        <div class="stats">
+            <div class="stat red">
+                <div class="stat-label">Umumiy tushum</div>
+                <div class="stat-value">${money(total)}</div>
+                <div class="stat-sub">so'm</div>
+            </div>
+            <div class="stat dark">
+                <div class="stat-label">Buyurtmalar</div>
+                <div class="stat-value">${f.length}</div>
+                <div class="stat-sub">ta</div>
+            </div>
+            <div class="stat blue">
+                <div class="stat-label">Menejer 30%</div>
+                <div class="stat-value">${money(mgr)}</div>
+                <div class="stat-sub">so'm</div>
+            </div>
+            <div class="stat green">
+                <div class="stat-label">Ustalar 70%</div>
+                <div class="stat-value">${money(ust)}</div>
+                <div class="stat-sub">so'm</div>
+            </div>
+        </div>
+    `;
+    
+    const specMap = {};
+    f.forEach(o => o.items.forEach(i => {
+        const found = ustalar.find(u => i.usta.includes(u.name));
+        const spec = found ? found.spec : 'BOSHQA';
+        if (!specMap[spec]) specMap[spec] = { count: 0, total: 0 };
+        specMap[spec].count++;
+        specMap[spec].total += i.price;
+    }));
+    
+    const entries = Object.entries(specMap).sort((a, b) => b[1].total - a[1].total);
+    
+    if (entries.length === 0) {
+        $('dashSpecs').innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg><div>Ma\'lumot yo\'q</div></div></div>';
+        return;
+    }
+    
+    $('dashSpecs').innerHTML = '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Mutaxassislik bo\'yicha</h2>' +
+        entries.map(([spec, d]) => {
+            const pct = total > 0 ? (d.total / total * 100).toFixed(1) : 0;
+            return `
+                <div class="card" style="border-left:4px solid var(--red); padding:14px;">
+                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                        <div style="flex:1;">
+                            <div style="font-weight:800; font-size:14px; color:var(--text);">${spec}</div>
+                            <div style="font-size:11px; color:var(--muted); margin-top:2px;">${d.count} ta xizmat • ${pct}%</div>
+                        </div>
+                        <div style="text-align:right;">
+                            <div style="color:var(--red); font-weight:900; font-size:15px;">${money(d.total)}</div>
+                            <div style="font-size:10px; color:var(--muted);">so'm</div>
+                        </div>
+                    </div>
+                </div>
+            `;
+        }).join('');
+}
 
-        function setPeriod(period) {
-            currentPeriod = period;
-            renderDashboard();
-        }
+/* ============ TARIX ============ */
+function renderHistory() {
+    const el = $('historyList');
+    if (orders.length === 0) {
+        el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><div>Buyurtmalar yo\'q</div></div></div>';
+        return;
+    }
+    
+    el.innerHTML = orders.map(o => `
+        <div class="card" style="border-left:4px solid var(--red);">
+            <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:10px;">
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:800; font-size:14px;">${o.name || 'Noma\'lum'}</div>
+                    <div style="font-size:12px; color:var(--muted); margin-top:3px;">${o.phone || '—'}</div>
+                    <div style="font-size:12px; color:var(--muted); margin-top:2px;">${o.model || '—'} — ${o.number || '—'}</div>
+                    <div style="font-size:11px; color:#999; margin-top:4px;">${o.date}</div>
+                </div>
+                <div style="display:flex; flex-direction:column; gap:5px;">
+                    <button class="item-del" style="background:rgba(22,163,74,0.1); color:var(--green);" onclick='resendSms(${o.id})'>
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
+                    </button>
+                    <button class="item-del" onclick="delOrder(${o.id})">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                    </button>
+                </div>
+            </div>
+            <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">
+                ${o.items.map(i => i.name).join(', ')}
+            </div>
+            <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #eee;">
+                <div style="font-size:11px; color:var(--muted);">
+                    Menejer: <strong style="color:#2563eb;">${money(o.mgr)}</strong>
+                </div>
+                <div style="color:var(--red); font-weight:900; font-size:15px;">${money(o.total)} so'm</div>
+            </div>
+        </div>
+    `).join('');
+}
 
-        function getFilteredOrders() {
-            const today = new Date();
-            const todayStr = today.toISOString().split('T')[0];
-            
-            if (currentPeriod === 'today') {
-                return orders.filter(o => o.dateStr === todayStr);
-            } else if (currentPeriod === 'week') {
-                const from = new Date(today);
-                from.setDate(from.getDate() - 7);
-                const fromStr = from.toISOString().split('T')[0];
-                return orders.filter(o => o.dateStr >= fromStr);
-            } else if (currentPeriod === 'month') {
-                const from = new Date(today);
-                from.setDate(from.getDate() - 30);
-                const fromStr = from.toISOString().split('T')[0];
-                return orders.filter(o => o.dateStr >= fromStr);
-            }
-            return orders;
-        }
+function delOrder(id) {
+    if (!confirm('O\'chirmoqchimisiz?')) return;
+    orders = orders.filter(o => o.id !== id);
+    localStorage.setItem('pam_orders', JSON.stringify(orders));
+    renderHistory();
+    toast('O\'chirildi');
+}
 
-        function getSpecFromUsta(ustaStr) {
-            if (!ustaStr || ustaStr === "Belgilanmagan") return "BOSHQA";
-            const found = ustalar.find(u => ustaStr.includes(u.name));
-            if (found) return found.spec;
-            for (let i = 0; i < specs.length; i++) {
-                if (ustaStr.toUpperCase().includes(specs[i])) return specs[i];
-            }
-            return "BOSHQA";
-        }
+function resendSms(id) {
+    const o = orders.find(x => x.id === id);
+    if (!o) return;
+    const smsText = `XURMATLI ${o.name.toUpperCase() || 'MIJOZ'}!\n\nSIZNING ${o.number || ''} ${o.model.toUpperCase() || ''} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(o.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
+    lastSms = { phone: o.phone, text: smsText };
+    $('smsTo').textContent = o.name || 'Mijoz';
+    $('smsPhone').textContent = o.phone || '—';
+    $('smsText').textContent = smsText;
+    $('smsModal').classList.add('show');
+}
 
-        function renderDashboard() {
-            const filtered = getFilteredOrders();
-            const totalRevenue = filtered.reduce((sum, o) => sum + o.total, 0);
-            const totalManager = filtered.reduce((sum, o) => sum + o.managerShare, 0);
-            const totalUsta = filtered.reduce((sum, o) => sum + o.ustaShare, 0);
-            
-            const activeNasiyalar = nasiyalar.filter(n => !n.paid);
-            const uniqueClients = new Set(orders.map(o => o.phone)).size;
-            
-            const periodNames = {
-                'today': 'Bugun',
-                'week': 'Oxirgi 7 kun',
-                'month': 'Oxirgi 30 kun',
-                'all': 'Barcha vaqt'
-            };
-            document.getElementById('periodInfo').textContent = periodNames[currentPeriod] || '';
+/* ============ INIT ============ */
+document.addEventListener('touchend', e => {
+    const now = Date.now();
+    if (now - (window._lastTap || 0) <= 300) e.preventDefault();
+    window._lastTap = now;
+}, { passive: false });
 
-            let html = 
-                '<div class="dash-header">' +
-                    '<div class="dash-title">UMUMIY TUSHUM</div>' +
-                    '<div class="dash-total">' + totalRevenue.toLocaleString() + ' so\'m</div>' +
-                    '<div class="dash-sub">📦 ' + filtered.length + ' ta buyurtma • 👥 ' + uniqueClients + ' ta mijoz</div>' +
-                '</div>' +
-                '<div class="dash-people">' +
-                    '<div class="dash-person manager" style="animation-delay: 0.1s;">' +
-                        '<div class="dash-person-icon">💼</div>' +
-                        '<div class="dash-person-label">MENEJER</div>' +
-                        '<div class="dash-person-value">' + Math.round(totalManager).toLocaleString() + '</div>' +
-                        '<div class="dash-person-sub">so\'m (30%)</div>' +
-                    '</div>' +
-                    '<div class="dash-person usta" style="animation-delay: 0.2s;">' +
-                        '<div class="dash-person-icon">👨‍🔧</div>' +
-                        '<div class="dash-person-label">USTALAR</div>' +
-                        '<div class="dash-person-value">' + Math.round(totalUsta).toLocaleString() + '</div>' +
-                        '<div class="dash-person-sub">so\'m (70%)</div>' +
-                    '</div>' +
-                '</div>' +
-                '<div class="dash-mini">' +
-                    '<div class="dash-mini-card orange">' +
-                        '<div class="dash-mini-value">' + filtered.length + '</div>' +
-                        '<div class="dash-mini-label">Buyurtma</div>' +
-                    '</div>' +
-                    '<div class="dash-mini-card purple">' +
-                        '<div class="dash-mini-value">' + activeNasiyalar.length + '</div>' +
-                        '<div class="dash-mini-label">Nasiya</div>' +
-                    '</div>' +
-                    '<div class="dash-mini-card teal">' +
-                        '<div class="dash-mini-value">' + uniqueClients + '</div>' +
-                        '<div class="dash-mini-label">Mijoz</div>' +
-                    '</div>' +
-                '</div>' +
-                '<h2 style="margin-top:20px;">🔧 Mutaxassislik Bo\'yicha</h2>' +
-                '<div id="dashboardSpecs"></div>';
-            
-            document.getElementById('dashboardContent').innerHTML = html;
+window.onload = () => {
+    renderUstaSpecSelect();
+    renderUstalar();
+    renderSvcs();
+    renderSvcUstaSelect();
+    renderOrderChecks();
+    renderHistory();
+    renderDash();
+};
+</script>
 
-            const specMap = {};
-            filtered.forEach(o => {
-                o.services.forEach(s => {
-                    const spec = getSpecFromUsta(s.usta);
-                    if (!specMap[spec]) specMap[spec] = { count: 0, total: 0 };
-                    specMap[spec].count += 1;
-                    specMap[spec].total += s.price;
-                });
-            });
-
-            const specEntries = Object.entries(specMap).filter(e => e[1].count > 0).sort((a, b) => b[1].total - a[1].total);
-            
-            const specsDiv = document.getElementById('dashboardSpecs');
-            if (specEntries.length === 0) {
-                specsDiv.innerHTML = '<div class="card"><div class="empty-state">Bu davrda savdo yo\'q.</div></div>';
-            } else {
-                specsDiv.innerHTML = specEntries.map((e, idx) => {
-                    const spec = e[0];
-                    const data = e[1];
-                    const icon = getSpecIcon(spec);
-                    const percent = totalRevenue > 0 ? (data.total / totalRevenue * 100).toFixed(1) : 0;
-                    const specCls = getSpecClass(spec);
-                    
-                    return '<div class="spec-card ' + specCls + '" style="animation-delay: ' + (idx * 0.08) + 's;">' +
-                        '<div class="spec-header">' +
-                            '<div class="spec-icon-name">' +
-                                '<div class="spec-icon">' + icon + '</div>' +
-                                '<div>' +
-                                    '<div class="spec-name">' + spec.toUpperCase() + '</div>' +
-                                    '<div class="spec-count">' + data.count + ' ta xizmat • ' + percent + '%</div>' +
-                                '</div>' +
-                            '</div>' +
-                            '<div class="spec-amount">' +
-                                '<div class="spec-total">' + Math.round(data.total).toLocaleString() + '</div>' +
-                                '<div class="spec-label">so\'m</div>' +
-                            '</div>' +
-                        '</div>' +
-                        '<div class="progress-bar">' +
-                            '<div class="progress-fill" style="width:0%;" data-width="' + percent + '%"></div>' +
-                        '</div>' +
-                    '</div>';
-                }).join('');
-                
-                setTimeout(() => {
-                    document.querySelectorAll('.progress-fill').forEach(el => {
-                        el.style.width = el.getAttribute('data-width');
-                    });
-                }, 300);
-            }
-        }
-
-        function renderClients() {
-            const search = document.getElementById('clientSearch')?.value.toLowerCase() || '';
-            
-            const clientsMap = {};
-            orders.forEach(o => {
-                const key = o.phone;
-                if (!clientsMap[key]) {
-                    clientsMap[key] = {
-                        name: o.client,
-                        phone: o.phone,
-                        model: o.model,
-                        number: o.number,
-                        orders: [],
-                        totalSpent: 0
-                    };
-                }
-                clientsMap[key].orders.push(o);
-                clientsMap[key].totalSpent += o.total;
-            });
-            
-            const clients = Object.values(clientsMap);
-            
-            clients.forEach(c => {
-                const nasiyaTotal = nasiyalar
-                    .filter(n => n.phone === c.phone && !n.paid)
-                    .reduce((sum, n) => sum + n.total, 0);
-                c.debt = nasiyaTotal;
-            });
-            
-            const filtered = clients.filter(c => 
-                c.name.toLowerCase().includes(search) || 
-                c.phone.includes(search) ||
-                c.number.toLowerCase().includes(search)
-            );
-            
-            const totalClients = clients.length;
-            const qarzliClients = clients.filter(c => c.debt > 0).length;
-            const umumiyQarz = clients.reduce((sum, c) => sum + c.debt, 0);
-            
-            document.getElementById('clientsStats').innerHTML = 
-                '<div class="dash-mini">' +
-                    '<div class="dash-mini-card teal">' +
-                        '<div class="dash-mini-value">' + totalClients + '</div>' +
-                        '<div class="dash-mini-label">Jami mijoz</div>' +
-                    '</div>' +
-                    '<div class="dash-mini-card orange">' +
-                        '<div class="dash-mini-value">' + qarzliClients + '</div>' +
-                        '<div class="dash-mini-label">Qarzli</div>' +
-                    '</div>' +
-                    '<div class="dash-mini-card purple">' +
-                        '<div class="dash-mini-value">' + umumiyQarz.toLocaleString() + '</div>' +
-                        '<div class="dash-mini-label">Umumiy qarz</div>' +
-                    '</div>' +
-                '</div>';
-            
-            const list = document.getElementById('clientsList');
-            if (filtered.length === 0) {
-                list.innerHTML = '<div class="card"><div class="empty-state">Mijozlar topilmadi.</div></div>';
-                return;
-            }
-            
-            list.innerHTML = filtered.map(c => {
-                let debtHtml = '';
-                if (c.debt > 0) {
-                    debtHtml = '<div style="color:#f39c12; font-weight:800; font-size:12px; margin-top:4px;">💳 Qarz: ' + c.debt.toLocaleString() + '</div>';
-                }
-                return '<div class="card mijoz-card" style="cursor:pointer;" onclick="showClientDetails(\'' + c.phone + '\')">' +
-                    '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">' +
-                        '<div style="flex:1; min-width:0;">' +
-                            '<div style="font-weight:800; font-size:15px;">👤 ' + c.name + '</div>' +
-                            '<div class="info-line">📞 ' + c.phone + '</div>' +
-                            '<div class="info-line">🚗 ' + c.model + ' — <strong>' + c.number + '</strong></div>' +
-                            '<div class="info-line">📦 ' + c.orders.length + ' ta buyurtma</div>' +
-                        '</div>' +
-                        '<div style="text-align:right; flex-shrink:0;">' +
-                            '<div style="color:var(--primary-red); font-weight:900; font-size:15px;">' + c.totalSpent.toLocaleString() + '</div>' +
-                            '<div style="font-size:10px; color:#888;">so\'m</div>' +
-                            debtHtml +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-            }).join('');
-        }
-
-        function showClientDetails(phone) {
-            const clientOrders = orders.filter(o => o.phone === phone);
-            if (clientOrders.length === 0) return;
-            
-            const client = clientOrders[0];
-            const clientNasiyalar = nasiyalar.filter(n => n.phone === phone);
-            const totalSpent = clientOrders.reduce((sum, o) => sum + o.total, 0);
-            const totalDebt = clientNasiyalar.filter(n => !n.paid).reduce((sum, n) => sum + n.total, 0);
-            
-            let qarzText = totalDebt > 0 ? 'Qarz: ' + totalDebt.toLocaleString() + " so'm" : "Qarz yo'q";
-            alert('👤 ' + client.client + '\n📞 ' + client.phone + '\n🚗 ' + client.model + ' — ' + client.number + '\n\n📦 Buyurtmalar: ' + clientOrders.length + ' ta\n💰 Jami: ' + totalSpent.toLocaleString() + " so'm\n" + qarzText);
-        }
-
-        function renderNasiya() {
-            const activeNasiyalar = nasiyalar.filter(n => !n.paid);
-            const paidNasiyalar = nasiyalar.filter(n => n.paid);
-            const totalActive = activeNasiyalar.reduce((sum, n) => sum + n.total, 0);
-            const today = new Date().toISOString().split('T')[0];
-            
-            document.getElementById('nasiyaStats').innerHTML = 
-                '<div class="dash-mini-card orange">' +
-                    '<div class="dash-mini-value">' + activeNasiyalar.length + '</div>' +
-                    '<div class="dash-mini-label">Faol</div>' +
-                '</div>' +
-                '<div class="dash-mini-card purple">' +
-                    '<div class="dash-mini-value">' + totalActive.toLocaleString() + '</div>' +
-                    '<div class="dash-mini-label">Summa</div>' +
-                '</div>' +
-                '<div class="dash-mini-card teal">' +
-                    '<div class="dash-mini-value">' + paidNasiyalar.length + '</div>' +
-                    '<div class="dash-mini-label">Qaytarilgan</div>' +
-                '</div>';
-            
-            const list = document.getElementById('nasiyaList');
-            if (nasiyalar.length === 0) {
-                list.innerHTML = '<div class="card"><div class="empty-state">Hozircha nasiyalar yo\'q.</div></div>';
-                return;
-            }
-            
-            const activeList = activeNasiyalar.map(n => {
-                const isOverdue = n.deadlineStr < today;
-                const isToday = n.deadlineStr === today;
-                const deadlineFormatted = new Date(n.deadlineStr).toLocaleDateString('uz-UZ');
-                const borderCls = isOverdue ? 'muddati-otgan' : '';
-                const dateColor = isOverdue ? '#e31e24' : (isToday ? '#f39c12' : '#333');
-                let dateMark = '';
-                if (isOverdue) dateMark = ' ⚠️ O\'TGAN';
-                else if (isToday) dateMark = ' 🔔 BUGUN';
-                
-                return '<div class="card nasiya-card ' + borderCls + '">' +
-                    '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">' +
-                        '<div style="flex:1; min-width:0;">' +
-                            '<div style="font-weight:800; font-size:15px;">👤 ' + n.client + '</div>' +
-                            '<div class="info-line">📞 ' + n.phone + '</div>' +
-                            '<div class="info-line">🚗 ' + n.model + ' — <strong>' + n.number + '</strong></div>' +
-                            '<div class="info-line">🏠 ' + n.address + '</div>' +
-                            '<div class="info-line">📅 Muddat: <strong style="color:' + dateColor + ';">' + deadlineFormatted + dateMark + '</strong></div>' +
-                        '</div>' +
-                        '<div style="text-align:right; flex-shrink:0;">' +
-                            '<div style="color:#e31e24; font-weight:900; font-size:16px;">' + n.total.toLocaleString() + '</div>' +
-                            '<div style="font-size:11px; color:#888;">so\'m</div>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:12px;">' +
-                        '<button class="btn btn-green" style="margin:0; min-height:44px; font-size:13px; padding:10px;" onclick="markAsPaid(' + n.id + ')">✅ Qaytarildi</button>' +
-                        '<button class="btn btn-blue" style="margin:0; min-height:44px; font-size:13px; padding:10px;" onclick="remindNasiya(' + n.id + ')">📱 Eslatish</button>' +
-                    '</div>' +
-                '</div>';
-            }).join('');
-            
-            const paidList = paidNasiyalar.slice(0, 5).map(n => 
-                '<div class="card nasiya-card qaytarilgan" style="padding:12px;">' +
-                    '<div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">' +
-                        '<div style="flex:1;">' +
-                            '<div style="font-weight:700; font-size:14px;">✅ ' + n.client + '</div>' +
-                            '<div class="info-line" style="font-size:12px;">' + n.model + ' — ' + n.number + '</div>' +
-                        '</div>' +
-                        '<div style="color:#2ecc71; font-weight:900; font-size:14px;">' + n.total.toLocaleString() + '</div>' +
-                    '</div>' +
-                '</div>'
-            ).join('');
-            
-            list.innerHTML = (activeList || '<div class="card"><div class="empty-state">Faol nasiyalar yo\'q.</div></div>') + 
-                (paidNasiyalar.length > 0 ? '<h2 style="margin-top:20px;">✅ Qaytarilganlar</h2>' + paidList : '');
-        }
-
-        function markAsPaid(id) {
-            if (!confirm("Qarz to'liq qaytarildi deb belgilashni tasdiqlaysizmi?")) return;
-            const n = nasiyalar.find(x => x.id === id);
-            if (!n) return;
-            n.paid = true;
-            n.paidDate = new Date().toLocaleString('uz-UZ');
-            localStorage.setItem('pam_nasiyalar', JSON.stringify(nasiyalar));
-            renderNasiya();
-            showToast("✅ Qarz qaytarildi!");
-        }
-
-        function remindNasiya(id) {
-            const n = nasiyalar.find(x => x.id === id);
-            if (!n) return;
-            const deadlineFormatted = new Date(n.deadlineStr).toLocaleDateString('uz-UZ');
-            const smsText = 'XURMATLI ' + n.client.toUpperCase() + '!\n\nSIZNING ' + n.number + ' ' + n.model.toUpperCase() + ' RUSUMLI AVTOMASHINANGIZ UCHUN QARZINGIZ ' + n.total.toLocaleString() + ' SO\'M.\n\nQARZNI QAYTARISH MUDDATI: ' + deadlineFormatted + '\n\nILTIMOS, QARZNI O\'Z VAQTIDA QAYTARING.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!';
-            
-            document.getElementById('smsTo').textContent = n.client;
-            document.getElementById('smsPhone').textContent = n.phone;
-            document.getElementById('smsText').textContent = smsText;
-            lastSmsData = { client: n.client, phone: n.phone, smsText: smsText };
-            document.getElementById('smsModal').classList.add('show');
-        }
-
-        function renderHistory() {
-            const list = document.getElementById('historyList');
-            if (orders.length === 0) {
-                list.innerHTML = '<div class="card"><div class="empty-state">Hozircha tarix bo\'sh.</div></div>';
-                return;
-            }
-            list.innerHTML = orders.map(o => {
-                let nasiyaBadge = '';
-                if (o.isNasiya) nasiyaBadge = '<span class="badge badge-nasiya">💳 NASIYA</span>';
-                const servicesNames = o.services.map(s => s.name).join(', ');
-                
-                return '<div class="card history-card">' +
-                    '<div style="display:flex; justify-content:space-between; align-items:flex-start; gap:10px;">' +
-                        '<div style="flex:1; min-width:0;">' +
-                            '<div style="font-weight:800; font-size:15px;">👤 ' + o.client + '</div>' +
-                            '<div class="info-line">📞 ' + o.phone + '</div>' +
-                            '<div class="info-line">🚗 ' + o.model + ' — <strong>' + o.number + '</strong></div>' +
-                            '<div class="history-date">' + o.date + '</div>' +
-                            nasiyaBadge +
-                        '</div>' +
-                        '<div style="display:flex; flex-direction:column; gap:6px;">' +
-                            '<button class="delete-btn" style="background:rgba(46,204,113,0.15); color:#2ecc71;" onclick="resendSms(' + o.id + ')">📱</button>' +
-                            '<button class="delete-btn" onclick="deleteOrder(' + o.id + ')">🗑️</button>' +
-                        '</div>' +
-                    '</div>' +
-                    '<div class="history-details">' +
-                        '<div style="margin-bottom:5px; font-size:13px;"><strong>Xizmatlar:</strong> ' + servicesNames + '</div>' +
-                        '<div style="margin-bottom:5px;"><strong>Jami:</strong> <span style="color:var(--primary-red); font-weight:800;">' + o.total.toLocaleString() + ' so\'m</span></div>' +
-                        '<div>' +
-                            '<span class="badge badge-m">Menejer: ' + Math.round(o.managerShare).toLocaleString() + '</span>' +
-                            '<span class="badge badge-u">Usta: ' + Math.round(o.ustaShare).toLocaleString() + '</span>' +
-                        '</div>' +
-                    '</div>' +
-                '</div>';
-            }).join('');
-        }
-
-        function resendSms(id) {
-            const o = orders.find(x => x.id === id);
-            if (!o) return;
-            openSmsModal(o.client, o.phone, o.total, o.model, o.number, o.isNasiya);
-        }
-
-        function deleteOrder(id) {
-            if(confirm("Bu buyurtmani o'chirmoqchisiz?")) {
-                orders = orders.filter(o => o.id !== id);
-                localStorage.setItem('pam_orders', JSON.stringify(orders));
-                renderHistory();
-                renderDashboard();
-            }
-        }
-
-        let lastTouchEnd = 0;
-        document.addEventListener('touchend', function(event) {
-            const now = Date.now();
-            if (now - lastTouchEnd <= 300) event.preventDefault();
-            lastTouchEnd = now;
-        }, false);
-
-        window.onload = function() {
-            renderSpecTags();
-            renderUstaSpecDropdown();
-            renderUstalar();
-            renderUstaDropdowns();
-            renderServices();
-            renderOrderServices();
-            renderHistory();
-            renderNasiya();
-            renderClients();
-            renderDashboard();
-        };
-    </script>
 </body>
 </html>
