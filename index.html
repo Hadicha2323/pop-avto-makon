@@ -22,8 +22,8 @@
 
 <title>POP-AVTO-MAKON</title>
 
-<!-- Supabase -->
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<!-- Supabase (yangi versiya) -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js"></script>
 
 <style>
 :root {
@@ -79,7 +79,6 @@ body {
     filter: blur(2px);
 }
 
-/* HEADER */
 header {
     position: sticky;
     top: 0;
@@ -173,7 +172,6 @@ header {
 .sync-status.loading { color: #facc15; }
 .sync-status.err { color: #f87171; }
 
-/* NAV */
 nav {
     position: sticky;
     top: 76px;
@@ -231,7 +229,6 @@ nav button.active::after {
 }
 nav button:active { transform: scale(0.97); }
 
-/* SECTION */
 .section {
     display: none;
     padding: 24px 20px;
@@ -868,14 +865,13 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 
 <script>
 /* ============ SUPABASE SOZLAMALARI ============ */
-// ⚠️ BU YERGA O'ZINGIZNING SUPABASE MA'LUMOTLARINGIZNI QO'YING!
-const SUPABASE_URL = 'https://xxxxxxxxxxxxx.supabase.co';
-const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+const SUPABASE_URL = 'https://nkrkhssusfljvbofuggj.supabase.co';
+const SUPABASE_KEY = 'sb_publishable_nUNl6pakp9KDH3fWqUeSiQ_ZUoPHb0V';
 
 let supabaseClient = null;
 
 try {
-    if (typeof window.supabase !== 'undefined') {
+    if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
         console.log('✅ Supabase ulanish tayyor');
     } else {
@@ -954,7 +950,6 @@ async function loadFromSupabase() {
         setSyncStatus('✅ Sinxron', 'ok');
         console.log('✅ Ma\'lumotlar yuklandi:', { ustalar: ustalar.length, services: services.length, orders: orders.length });
         
-        // UI yangilash
         renderUstaSpecSelect();
         renderUstalar();
         renderSvcs();
@@ -965,8 +960,8 @@ async function loadFromSupabase() {
         
     } catch (err) {
         console.error('❌ Supabase xatolik:', err);
-        setSyncStatus('❌ Xatolik: ' + (err.message || 'Unknown'), 'err');
-        toast('Ma\'lumot yuklanmadi', true);
+        setSyncStatus('❌ Xatolik', 'err');
+        toast('Ma\'lumot yuklanmadi: ' + (err.message || ''), true);
     }
 }
 
@@ -1016,7 +1011,7 @@ async function addUsta() {
     
     const newUsta = {
         id: Date.now(),
-        name, spec,
+        name: name, spec: spec,
         work: work || spec,
         rate: Number(rate) || 0
     };
@@ -1037,7 +1032,7 @@ async function addUsta() {
         toast('Usta qo\'shildi');
     } catch (err) {
         console.error(err);
-        toast('Saqlashda xatolik', true);
+        toast('Saqlashda xatolik: ' + err.message, true);
     }
 }
 
@@ -1101,7 +1096,7 @@ async function addSvc() {
     
     const newSvc = {
         id: Date.now(),
-        name,
+        name: name,
         price: Number(price),
         usta: usta || 'Belgilanmagan'
     };
@@ -1121,7 +1116,7 @@ async function addSvc() {
         toast('Xizmat qo\'shildi');
     } catch (err) {
         console.error(err);
-        toast('Saqlashda xatolik', true);
+        toast('Saqlashda xatolik: ' + err.message, true);
     }
 }
 
@@ -1303,7 +1298,7 @@ async function saveOrder(data) {
         $('orderResult').innerHTML = '';
     } catch (err) {
         console.error(err);
-        toast('Saqlashda xatolik', true);
+        toast('Saqlashda xatolik: ' + err.message, true);
     }
 }
 
