@@ -12,24 +12,24 @@
 <meta name="format-detection" content="telephone=no">
 <meta name="description" content="POP AVTO MAKON - Avtoservis xizmatlarini avtomatlashtirish tizimi">
 
-<!-- iOS ICONS -->
 <link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="apple-touch-icon" sizes="192x192" href="icon-192.svg">
 <link rel="apple-touch-icon" sizes="512x512" href="icon-512.svg">
 <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
 <link rel="mask-icon" href="icon-192.svg" color="#e31e24">
-
-<!-- Manifest -->
 <link rel="manifest" href="manifest.json">
 
 <title>POP-AVTO-MAKON</title>
+
+<!-- Supabase -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
 <style>
 :root {
     --red: #e31e24;
     --red-dark: #8a0e12;
     --black: #0a0a0f;
-    --card: #ffffff;
     --text: #1a1a1a;
     --muted: #666;
     --border: #e5e5e5;
@@ -59,7 +59,6 @@ body {
     overflow-x: hidden;
 }
 
-/* ============ FON ============ */
 .bg {
     position: fixed;
     inset: 0;
@@ -80,7 +79,7 @@ body {
     filter: blur(2px);
 }
 
-/* ============ HEADER ============ */
+/* HEADER */
 header {
     position: sticky;
     top: 0;
@@ -162,7 +161,19 @@ header {
     color: var(--red);
 }
 
-/* ============ NAV ============ */
+.sync-status {
+    font-size: 11px;
+    color: #888;
+    background: rgba(255,255,255,0.05);
+    padding: 6px 12px;
+    border-radius: 15px;
+    white-space: nowrap;
+}
+.sync-status.ok { color: #4ade80; }
+.sync-status.loading { color: #facc15; }
+.sync-status.err { color: #f87171; }
+
+/* NAV */
 nav {
     position: sticky;
     top: 76px;
@@ -206,9 +217,7 @@ nav button svg {
     stroke-width: 2;
     transition: all 0.25s;
 }
-nav button.active {
-    color: var(--red);
-}
+nav button.active { color: var(--red); }
 nav button.active::after {
     content: '';
     position: absolute;
@@ -222,7 +231,7 @@ nav button.active::after {
 }
 nav button:active { transform: scale(0.97); }
 
-/* ============ SECTION ============ */
+/* SECTION */
 .section {
     display: none;
     padding: 24px 20px;
@@ -237,12 +246,9 @@ nav button:active { transform: scale(0.97); }
 }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
-.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
 .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 .grid-form .field.full { grid-column: 1 / -1; }
 
-/* ============ TYPOGRAPHY ============ */
 h2 {
     color: white;
     font-size: 17px;
@@ -269,7 +275,6 @@ h2::before {
 }
 h2 svg { width: 20px; height: 20px; color: var(--red); }
 
-/* ============ CARD ============ */
 .card {
     background: rgba(255,255,255,0.98);
     backdrop-filter: blur(20px);
@@ -280,7 +285,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     border: 1px solid rgba(255,255,255,0.1);
 }
 
-/* ============ INPUT ============ */
 .field { margin-bottom: 14px; }
 .field label {
     display: flex;
@@ -294,9 +298,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     letter-spacing: 0.3px;
 }
 .field label svg { width: 14px; height: 14px; color: var(--red); }
-.field input,
-.field select,
-.field textarea {
+.field input, .field select {
     width: 100%;
     padding: 13px 14px;
     border: 2px solid var(--border);
@@ -318,14 +320,11 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     background-size: 16px;
     padding-right: 40px;
 }
-.field input:focus,
-.field select:focus,
-.field textarea:focus {
+.field input:focus, .field select:focus {
     border-color: var(--red);
     box-shadow: 0 0 0 3px rgba(227,30,36,0.12);
 }
 
-/* ============ BUTTON ============ */
 .btn {
     width: 100%;
     min-height: 50px;
@@ -348,13 +347,13 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 .btn svg { width: 18px; height: 18px; }
 .btn:active { transform: scale(0.97); }
-.btn.black { background: linear-gradient(135deg, #2a2a2a, #000); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
-.btn.green { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 15px rgba(22,163,74,0.4); }
-.btn.blue { background: linear-gradient(135deg, #2563eb, #1e40af); box-shadow: 0 4px 15px rgba(37,99,235,0.4); }
-.btn.orange { background: linear-gradient(135deg, #ea580c, #c2410c); box-shadow: 0 4px 15px rgba(234,88,12,0.4); }
-.btn.gray { background: linear-gradient(135deg, #6b7280, #374151); box-shadow: 0 4px 15px rgba(107,114,128,0.4); }
+.btn:disabled { opacity: 0.5; cursor: not-allowed; }
+.btn.black { background: linear-gradient(135deg, #2a2a2a, #000); }
+.btn.green { background: linear-gradient(135deg, #16a34a, #15803d); }
+.btn.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
+.btn.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
+.btn.gray { background: linear-gradient(135deg, #6b7280, #374151); }
 
-/* ============ ITEM LIST ============ */
 .item {
     display: flex;
     align-items: center;
@@ -376,16 +375,8 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 .item-icon svg { width: 22px; height: 22px; }
 .item-icon.green { background: linear-gradient(135deg, #16a34a, #15803d); }
-.item-icon.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
-.item-icon.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
-.item-icon.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
 .item-body { flex: 1; min-width: 0; }
-.item-title {
-    font-size: 16px;
-    font-weight: 700;
-    color: var(--text);
-    margin-bottom: 3px;
-}
+.item-title { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
 .item-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
 .item-price { font-size: 15px; font-weight: 800; color: var(--red); margin-top: 3px; }
 .item-del {
@@ -400,12 +391,10 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.2s;
 }
 .item-del svg { width: 16px; height: 16px; }
 .item-del:active { background: rgba(227,30,36,0.25); }
 
-/* ============ CHECKBOX ============ */
 .check {
     display: flex;
     align-items: center;
@@ -432,33 +421,17 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     align-items: center;
     justify-content: center;
     flex-shrink: 0;
-    transition: all 0.2s;
     background: #fff;
 }
 .check.on .check-box { background: var(--red); border-color: var(--red); }
-.check-box svg {
-    width: 15px;
-    height: 15px;
-    color: white;
-    opacity: 0;
-    transition: opacity 0.2s;
-}
+.check-box svg { width: 15px; height: 15px; color: white; opacity: 0; }
 .check.on .check-box svg { opacity: 1; }
 .check-body { flex: 1; min-width: 0; }
 .check-title { font-size: 15px; font-weight: 700; }
-.check-meta {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    margin-top: 5px;
-    font-size: 13px;
-    color: var(--muted);
-    flex-wrap: wrap;
-}
+.check-meta { display: flex; align-items: center; gap: 10px; margin-top: 5px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
 .check-price { color: var(--red); font-weight: 800; }
 .check-usta { color: var(--blue); font-weight: 600; }
 
-/* ============ RESULT ============ */
 .result {
     background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
     color: white;
@@ -467,11 +440,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     margin-top: 20px;
     border: 2px solid var(--red);
     box-shadow: 0 0 40px rgba(227,30,36,0.4);
-    animation: pop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-}
-@keyframes pop {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
 }
 .result-title {
     text-align: center;
@@ -497,18 +465,8 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 .result-info div:last-child { margin-bottom: 0; }
 .result-info strong { color: white; }
-.result-list {
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 14px;
-    margin-top: 14px;
-}
-.result-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 10px 0;
-    font-size: 15px;
-}
+.result-list { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; margin-top: 14px; }
+.result-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 15px; }
 .result-row span:first-child { color: #ccc; }
 .result-row span:last-child { color: white; font-weight: 600; }
 .result-total {
@@ -522,12 +480,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     font-weight: 900;
 }
 .result-total span:last-child { color: var(--red); }
-.result-share {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 12px;
-    margin-top: 14px;
-}
+.result-share { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
 .share-box { padding: 14px; border-radius: 10px; text-align: center; }
 .share-box.m { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); }
 .share-box.u { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); }
@@ -536,7 +489,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .share-box.m .share-value { color: #60a5fa; }
 .share-box.u .share-value { color: #4ade80; }
 
-/* ============ STATS ============ */
 .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -554,57 +506,23 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .stat::before {
     content: '';
     position: absolute;
-    top: -50%;
-    right: -30%;
-    width: 130px;
-    height: 130px;
+    top: -50%; right: -30%;
+    width: 130px; height: 130px;
     background: rgba(255,255,255,0.1);
     border-radius: 50%;
 }
-.stat-label {
-    font-size: 11px;
-    font-weight: 700;
-    letter-spacing: 1px;
-    opacity: 0.9;
-    text-transform: uppercase;
-    position: relative;
-}
-.stat-value {
-    font-size: 22px;
-    font-weight: 900;
-    margin-top: 8px;
-    position: relative;
-    word-break: break-all;
-}
-.stat-sub {
-    font-size: 12px;
-    opacity: 0.85;
-    margin-top: 4px;
-    position: relative;
-}
+.stat-label { font-size: 11px; font-weight: 700; letter-spacing: 1px; opacity: 0.9; text-transform: uppercase; position: relative; }
+.stat-value { font-size: 22px; font-weight: 900; margin-top: 8px; position: relative; word-break: break-all; }
+.stat-sub { font-size: 12px; opacity: 0.85; margin-top: 4px; position: relative; }
 .stat.red { background: linear-gradient(135deg, #e31e24, #8a0e12); }
 .stat.green { background: linear-gradient(135deg, #16a34a, #15803d); }
 .stat.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
 .stat.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
-.stat.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
 .stat.dark { background: linear-gradient(135deg, #374151, #1f2937); }
 
-/* ============ EMPTY ============ */
-.empty {
-    text-align: center;
-    padding: 50px 20px;
-    color: #999;
-    font-size: 14px;
-}
-.empty svg {
-    width: 56px;
-    height: 56px;
-    stroke-width: 1.5;
-    color: #ccc;
-    margin-bottom: 12px;
-}
+.empty { text-align: center; padding: 50px 20px; color: #999; font-size: 14px; }
+.empty svg { width: 56px; height: 56px; stroke-width: 1.5; color: #ccc; margin-bottom: 12px; }
 
-/* ============ TOAST ============ */
 .toast {
     position: fixed;
     top: 90px;
@@ -624,13 +542,9 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     max-width: 90vw;
     text-align: center;
 }
-.toast.show {
-    transform: translateX(-50%) translateY(0);
-    opacity: 1;
-}
-.toast.error { background: linear-gradient(135deg, #e31e24, #8a0e12); box-shadow: 0 10px 30px rgba(227,30,36,0.5); }
+.toast.show { transform: translateX(-50%) translateY(0); opacity: 1; }
+.toast.error { background: linear-gradient(135deg, #e31e24, #8a0e12); }
 
-/* ============ MODAL ============ */
 .modal-bg {
     position: fixed;
     inset: 0;
@@ -651,16 +565,10 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
-    animation: modalIn 0.3s;
-}
-@keyframes modalIn {
-    from { opacity: 0; transform: scale(0.9) translateY(20px); }
-    to { opacity: 1; transform: scale(1) translateY(0); }
 }
 .modal-title {
     font-size: 18px;
     font-weight: 900;
-    color: var(--text);
     text-align: center;
     margin-bottom: 16px;
     display: flex;
@@ -678,17 +586,11 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     color: #333;
     white-space: pre-line;
     border-left: 4px solid var(--red);
-    font-weight: 500;
     margin-bottom: 14px;
 }
-.modal-actions {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-}
+.modal-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
 .modal-actions .btn { margin-top: 0; }
 
-/* ============ SECTION HEADER ============ */
 .section-head {
     display: flex;
     align-items: center;
@@ -705,7 +607,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     font-weight: 800;
 }
 
-/* ============ TABS ============ */
 .tabs {
     display: flex;
     gap: 8px;
@@ -729,23 +630,10 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .tabs button.active {
     background: linear-gradient(135deg, var(--red), var(--red-dark));
     color: white;
-    box-shadow: 0 4px 12px rgba(227,30,36,0.4);
 }
 
-/* ============ iOS SPECIFIC ============ */
-@supports (-webkit-touch-callout: none) {
-    .section {
-        padding-left: max(20px, env(safe-area-inset-left));
-        padding-right: max(20px, env(safe-area-inset-right));
-    }
-    header { padding-top: max(12px, env(safe-area-inset-top)); }
-}
-
-/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
-    .grid-3 { grid-template-columns: 1fr 1fr; }
-    .grid-4 { grid-template-columns: 1fr 1fr; }
     .stats { grid-template-columns: 1fr 1fr; }
     .grid-form { grid-template-columns: 1fr; }
     .header-inner { flex-wrap: wrap; }
@@ -754,23 +642,14 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     .live-clock { font-size: 12px; padding: 6px 12px; }
     nav { top: 68px; }
     nav button { font-size: 12px; padding: 12px 14px; }
-    nav button svg { width: 16px; height: 16px; }
 }
-
 @media (max-width: 480px) {
     .section { padding: 16px 14px; }
     .card { padding: 16px; }
     .logo-svg { width: 85px; }
     .logo-text h1 { font-size: 13px; }
-    .logo-text p { font-size: 8px; }
     .stat-value { font-size: 18px; }
     .result-total { font-size: 18px; }
-    nav button { font-size: 11px; padding: 11px 12px; gap: 4px; }
-}
-
-@supports (padding: env(safe-area-inset-top)) {
-    header { padding-top: calc(12px + env(safe-area-inset-top)); }
-    body { padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
 }
 </style>
 </head>
@@ -779,7 +658,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 <div class="bg"></div>
 <div class="toast" id="toast">Muvaffaqiyat!</div>
 
-<!-- ============ HEADER ============ -->
 <header>
     <div class="header-inner">
         <div class="logo-wrap">
@@ -794,8 +672,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
                 <path d="M 118 145 L 135 88 L 158 88 L 175 145 L 158 145 L 154 128 L 138 128 L 135 145 Z" fill="#e31e24"/>
                 <path d="M 145 112 L 152 112 L 148 98 Z" fill="white"/>
                 <path d="M 188 88 L 205 88 L 222 122 L 239 88 L 256 88 L 244 145 L 228 145 L 238 112 L 222 138 L 206 112 L 216 145 L 200 145 Z" fill="#1a1a1a"/>
-                <text x="65" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#1a1a1a" letter-spacing="0.5">POP AUTO</text>
-                <text x="215" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#e31e24" letter-spacing="0.5">MAKON</text>
             </svg>
             <div class="logo-text">
                 <h1>POP <span>AUTO</span> MAKON</h1>
@@ -803,7 +679,8 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
             </div>
         </div>
         <div class="header-info">
-            <div class="live-clock" id="liveClock">
+            <div class="sync-status" id="syncStatus">Yuklanmoqda...</div>
+            <div class="live-clock">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 <span id="clockText">--:--</span>
             </div>
@@ -811,7 +688,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     </div>
 </header>
 
-<!-- ============ NAV ============ -->
 <nav>
     <div class="nav-inner">
         <button class="active" onclick="go('s-panel', this)">
@@ -837,13 +713,12 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     </div>
 </nav>
 
-<!-- ============ PANEL ============ -->
+<!-- PANEL -->
 <div class="section active" id="s-panel">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
         Boshqaruv paneli
     </h2>
-
     <div class="card" style="padding:14px;">
         <div class="tabs">
             <button onclick="setPeriod('today')" id="p-today">Bugun</button>
@@ -853,61 +728,40 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         </div>
         <div id="periodText" style="text-align:center; font-size:13px; color:#888; padding:6px;"></div>
     </div>
-
     <div id="dashStats"></div>
     <div id="dashSpecs"></div>
 </div>
 
-<!-- ============ USTALAR ============ -->
+<!-- USTALAR -->
 <div class="section" id="s-ustalar">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
         Ustalar
     </h2>
-
     <div class="card">
         <div class="grid-form">
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Usta ismi
-                </label>
+                <label>Usta ismi</label>
                 <input type="text" id="ustaName" placeholder="Masalan: Akmal aka">
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                    Mutaxassisligi
-                </label>
-                <select id="ustaSpec">
-                    <option value="">Mutaxassislikni tanlang</option>
-                </select>
+                <label>Mutaxassisligi</label>
+                <select id="ustaSpec"><option value="">Mutaxassislikni tanlang</option></select>
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
-                    Qiladigan ishi
-                </label>
+                <label>Qiladigan ishi</label>
                 <input type="text" id="ustaWork" placeholder="Masalan: Motor ta'mirlash">
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Xizmat haqqi (so'm)
-                </label>
+                <label>Xizmat haqqi (so'm)</label>
                 <input type="number" id="ustaRate" placeholder="Masalan: 50000">
             </div>
         </div>
-
         <button class="btn black" onclick="addUsta()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Usta qo'shish
         </button>
     </div>
-
     <div class="section-head">
         <h2>Ustalar ro'yxati</h2>
         <span class="badge" id="ustalarCount">0 ta</span>
@@ -915,48 +769,32 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div id="ustalarList" class="card"></div>
 </div>
 
-<!-- ============ XIZMATLAR ============ -->
+<!-- XIZMATLAR -->
 <div class="section" id="s-xizmatlar">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
         Xizmatlar
     </h2>
-
     <div class="card">
         <div class="grid-form">
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                    Xizmat nomi
-                </label>
+                <label>Xizmat nomi</label>
                 <input type="text" id="svcName" placeholder="Masalan: Spark almashtirish">
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Xizmat narxi
-                </label>
+                <label>Xizmat narxi</label>
                 <input type="number" id="svcPrice" placeholder="Masalan: 150000">
             </div>
-
             <div class="field full">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Usta
-                </label>
-                <select id="svcUsta">
-                    <option value="">Ustani tanlang</option>
-                </select>
+                <label>Usta</label>
+                <select id="svcUsta"><option value="">Ustani tanlang</option></select>
             </div>
         </div>
-
         <button class="btn" onclick="addSvc()">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
             Xizmat qo'shish
         </button>
     </div>
-
     <div class="section-head">
         <h2>Xizmatlar ro'yxati</h2>
         <span class="badge" id="svcsCount">0 ta</span>
@@ -964,66 +802,44 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div id="svcsList" class="card"></div>
 </div>
 
-<!-- ============ BUYURTMA ============ -->
+<!-- BUYURTMA -->
 <div class="section" id="s-order">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
         Yangi buyurtma
     </h2>
-
     <div class="card">
         <div class="grid-form">
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Mijoz ismi
-                </label>
+                <label>Mijoz ismi</label>
                 <input type="text" id="oName" placeholder="Masalan: Mahmudov Shoxrux">
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                    Telefon raqami
-                </label>
+                <label>Telefon raqami</label>
                 <input type="tel" id="oPhone" placeholder="+998 90 123 45 67">
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
-                    Mashina modeli
-                </label>
+                <label>Mashina modeli</label>
                 <input type="text" id="oModel" placeholder="Masalan: Malibu 2">
             </div>
-
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
-                    Mashina raqami
-                </label>
+                <label>Mashina raqami</label>
                 <input type="text" id="oNumber" placeholder="Masalan: 50 A 555 AA">
             </div>
         </div>
     </div>
-
-    <h2>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg>
-        Xizmatlarni tanlang
-    </h2>
+    <h2>Xizmatlarni tanlang</h2>
     <div class="card" style="padding:16px;">
         <div id="orderChecks"></div>
     </div>
-
     <button class="btn black" onclick="calcOrder()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
         Hisob-kitob qilish
     </button>
-
     <div id="orderResult"></div>
 </div>
 
-<!-- ============ TARIX ============ -->
+<!-- TARIX -->
 <div class="section" id="s-history">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
@@ -1032,7 +848,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div id="historyList"></div>
 </div>
 
-<!-- ============ MODAL ============ -->
+<!-- SMS MODAL -->
 <div class="modal-bg" id="smsModal">
     <div class="modal">
         <div class="modal-title">
@@ -1045,28 +861,40 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         <div class="sms-preview" id="smsText"></div>
         <div class="modal-actions">
             <button class="btn gray" onclick="closeSms()">Bekor</button>
-            <button class="btn green" onclick="sendSms()">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
-                Yuborish
-            </button>
+            <button class="btn green" onclick="sendSms()">Yuborish</button>
         </div>
     </div>
 </div>
 
 <script>
+/* ============ SUPABASE SOZLAMALARI ============ */
+// ⚠️ BU YERGA O'ZINGIZNING SUPABASE MA'LUMOTLARINGIZNI QO'YING!
+const SUPABASE_URL = 'https://xxxxxxxxxxxxx.supabase.co';
+const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...';
+
+let supabaseClient = null;
+
+try {
+    if (typeof window.supabase !== 'undefined') {
+        supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+        console.log('✅ Supabase ulanish tayyor');
+    } else {
+        console.error('❌ Supabase kutubxonasi yuklanmadi');
+    }
+} catch (e) {
+    console.error('❌ Supabase xatolik:', e);
+}
+
 /* ============ DATA ============ */
-let ustalar = JSON.parse(localStorage.getItem('pam_ustalar')) || [];
-let services = JSON.parse(localStorage.getItem('pam_services')) || [];
-let orders = JSON.parse(localStorage.getItem('pam_orders')) || [];
-let specs = JSON.parse(localStorage.getItem('pam_specs')) || [
-    "MOTOR", "XODOVOY", "KUZOV", "VAKUM",
-    "ELEKTRIK", "DIAGNOSTIKA", "MEXANIK", "BOSHQA"
-];
+let ustalar = [];
+let services = [];
+let orders = [];
+let specs = ["MOTOR", "XODOVOY", "KUZOV", "VAKUM", "ELEKTRIK", "DIAGNOSTIKA", "MEXANIK", "BOSHQA"];
 let period = 'month';
 let lastSms = null;
 
 const $ = id => document.getElementById(id);
-const money = n => Math.round(n).toLocaleString('uz-UZ');
+const money = n => Math.round(Number(n) || 0).toLocaleString('uz-UZ');
 
 function toast(msg, isError) {
     const t = $('toast');
@@ -1076,7 +904,73 @@ function toast(msg, isError) {
     setTimeout(() => t.classList.remove('show'), 2200);
 }
 
-/* ============ LIVE CLOCK ============ */
+function setSyncStatus(text, cls) {
+    const el = $('syncStatus');
+    if (!el) return;
+    el.textContent = text;
+    el.className = 'sync-status ' + (cls || '');
+}
+
+/* ============ SUPABASE LOAD ============ */
+async function loadFromSupabase() {
+    if (!supabaseClient) {
+        setSyncStatus('❌ Supabase ulanmagan', 'err');
+        return;
+    }
+    
+    setSyncStatus('⏳ Yuklanmoqda...', 'loading');
+    
+    try {
+        // Ustalar
+        const { data: uData, error: e1 } = await supabaseClient
+            .from('ustalar').select('*').order('created_at', { ascending: true });
+        if (e1) throw e1;
+        ustalar = uData || [];
+
+        // Xizmatlar
+        const { data: sData, error: e2 } = await supabaseClient
+            .from('services').select('*').order('created_at', { ascending: true });
+        if (e2) throw e2;
+        services = sData || [];
+
+        // Buyurtmalar
+        const { data: oData, error: e3 } = await supabaseClient
+            .from('orders').select('*').order('id', { ascending: false });
+        if (e3) throw e3;
+        orders = (oData || []).map(o => ({
+            ...o,
+            dateStr: o.date_str || o.dateStr,
+            items: o.items || []
+        }));
+
+        // Mutaxassisliklar
+        const { data: spData, error: e4 } = await supabaseClient
+            .from('specs').select('*').order('id', { ascending: true });
+        if (e4) throw e4;
+        if (spData && spData.length > 0) {
+            specs = spData.map(s => s.name);
+        }
+
+        setSyncStatus('✅ Sinxron', 'ok');
+        console.log('✅ Ma\'lumotlar yuklandi:', { ustalar: ustalar.length, services: services.length, orders: orders.length });
+        
+        // UI yangilash
+        renderUstaSpecSelect();
+        renderUstalar();
+        renderSvcs();
+        renderSvcUstaSelect();
+        renderOrderChecks();
+        renderHistory();
+        renderDash();
+        
+    } catch (err) {
+        console.error('❌ Supabase xatolik:', err);
+        setSyncStatus('❌ Xatolik: ' + (err.message || 'Unknown'), 'err');
+        toast('Ma\'lumot yuklanmadi', true);
+    }
+}
+
+/* ============ CLOCK ============ */
 function updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
@@ -1104,12 +998,14 @@ function go(id, btn) {
 }
 
 function renderUstaSpecSelect() {
-    $('ustaSpec').innerHTML = '<option value="">Mutaxassislikni tanlang</option>' +
+    const el = $('ustaSpec');
+    if (!el) return;
+    el.innerHTML = '<option value="">Mutaxassislikni tanlang</option>' +
         specs.map(s => `<option value="${s}">${s}</option>`).join('');
 }
 
 /* ============ USTALAR ============ */
-function addUsta() {
+async function addUsta() {
     const name = $('ustaName').value.trim();
     const spec = $('ustaSpec').value;
     const work = $('ustaWork').value.trim();
@@ -1118,30 +1014,51 @@ function addUsta() {
     if (!name) return toast('Usta ismini kiriting', true);
     if (!spec) return toast('Mutaxassislikni tanlang', true);
     
-    ustalar.push({ id: Date.now(), name, spec, work: work || spec, rate: Number(rate) || 0 });
-    localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
+    const newUsta = {
+        id: Date.now(),
+        name, spec,
+        work: work || spec,
+        rate: Number(rate) || 0
+    };
     
-    $('ustaName').value = '';
-    $('ustaSpec').value = '';
-    $('ustaWork').value = '';
-    $('ustaRate').value = '';
-    
-    renderUstalar();
-    renderSvcUstaSelect();
-    toast('Usta qo\'shildi');
+    try {
+        const { error } = await supabaseClient.from('ustalar').insert([newUsta]);
+        if (error) throw error;
+        
+        ustalar.push(newUsta);
+        
+        $('ustaName').value = '';
+        $('ustaSpec').value = '';
+        $('ustaWork').value = '';
+        $('ustaRate').value = '';
+        
+        renderUstalar();
+        renderSvcUstaSelect();
+        toast('Usta qo\'shildi');
+    } catch (err) {
+        console.error(err);
+        toast('Saqlashda xatolik', true);
+    }
 }
 
-function delUsta(id) {
+async function delUsta(id) {
     if (!confirm('Ustani o\'chirmoqchimisiz?')) return;
-    ustalar = ustalar.filter(u => u.id !== id);
-    localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
-    renderUstalar();
-    renderSvcUstaSelect();
-    toast('O\'chirildi');
+    try {
+        const { error } = await supabaseClient.from('ustalar').delete().eq('id', id);
+        if (error) throw error;
+        ustalar = ustalar.filter(u => u.id !== id);
+        renderUstalar();
+        renderSvcUstaSelect();
+        toast('O\'chirildi');
+    } catch (err) {
+        console.error(err);
+        toast('Xatolik', true);
+    }
 }
 
 function renderUstalar() {
     const el = $('ustalarList');
+    if (!el) return;
     $('ustalarCount').textContent = ustalar.length + ' ta';
     
     if (ustalar.length === 0) {
@@ -1174,7 +1091,7 @@ function renderSvcUstaSelect() {
         ustalar.map(u => `<option value="${u.name} (${u.spec})">${u.name} — ${u.spec}</option>`).join('');
 }
 
-function addSvc() {
+async function addSvc() {
     const name = $('svcName').value.trim();
     const price = $('svcPrice').value;
     const usta = $('svcUsta').value;
@@ -1182,29 +1099,50 @@ function addSvc() {
     if (!name) return toast('Xizmat nomini kiriting', true);
     if (!price) return toast('Xizmat narxini kiriting', true);
     
-    services.push({ id: Date.now(), name, price: Number(price), usta: usta || 'Belgilanmagan' });
-    localStorage.setItem('pam_services', JSON.stringify(services));
+    const newSvc = {
+        id: Date.now(),
+        name,
+        price: Number(price),
+        usta: usta || 'Belgilanmagan'
+    };
     
-    $('svcName').value = '';
-    $('svcPrice').value = '';
-    $('svcUsta').value = '';
-    
-    renderSvcs();
-    renderOrderChecks();
-    toast('Xizmat qo\'shildi');
+    try {
+        const { error } = await supabaseClient.from('services').insert([newSvc]);
+        if (error) throw error;
+        
+        services.push(newSvc);
+        
+        $('svcName').value = '';
+        $('svcPrice').value = '';
+        $('svcUsta').value = '';
+        
+        renderSvcs();
+        renderOrderChecks();
+        toast('Xizmat qo\'shildi');
+    } catch (err) {
+        console.error(err);
+        toast('Saqlashda xatolik', true);
+    }
 }
 
-function delSvc(id) {
+async function delSvc(id) {
     if (!confirm('Xizmatni o\'chirmoqchimisiz?')) return;
-    services = services.filter(s => s.id !== id);
-    localStorage.setItem('pam_services', JSON.stringify(services));
-    renderSvcs();
-    renderOrderChecks();
-    toast('O\'chirildi');
+    try {
+        const { error } = await supabaseClient.from('services').delete().eq('id', id);
+        if (error) throw error;
+        services = services.filter(s => s.id !== id);
+        renderSvcs();
+        renderOrderChecks();
+        toast('O\'chirildi');
+    } catch (err) {
+        console.error(err);
+        toast('Xatolik', true);
+    }
 }
 
 function renderSvcs() {
     const el = $('svcsList');
+    if (!el) return;
     $('svcsCount').textContent = services.length + ' ta';
     
     if (services.length === 0) {
@@ -1232,6 +1170,7 @@ function renderSvcs() {
 /* ============ BUYURTMA ============ */
 function renderOrderChecks() {
     const el = $('orderChecks');
+    if (!el) return;
     if (services.length === 0) {
         el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg><div>Xizmatlar yo\'q</div></div>';
         return;
@@ -1323,34 +1262,49 @@ function calcOrder() {
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
 }
 
-function saveOrder(data) {
+async function saveOrder(data) {
     const now = new Date();
     const order = {
         id: Date.now(),
         date: now.toLocaleString('uz-UZ'),
-        dateStr: now.toISOString().split('T')[0],
-        ...data
+        date_str: now.toISOString().split('T')[0],
+        name: data.name,
+        phone: data.phone,
+        model: data.model,
+        number: data.number,
+        total: data.total,
+        mgr: data.mgr,
+        ust: data.ust,
+        items: data.items
     };
-    orders.unshift(order);
-    localStorage.setItem('pam_orders', JSON.stringify(orders));
     
-    const smsText = `XURMATLI ${data.name.toUpperCase() || 'MIJOZ'}!\n\nSIZNING ${data.number || ''} ${data.model.toUpperCase() || ''} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(data.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
-    
-    lastSms = { phone: data.phone, text: smsText };
-    $('smsTo').textContent = data.name || 'Mijoz';
-    $('smsPhone').textContent = data.phone || '—';
-    $('smsText').textContent = smsText;
-    $('smsModal').classList.add('show');
-    
-    $('oName').value = '';
-    $('oPhone').value = '';
-    $('oModel').value = '';
-    $('oNumber').value = '';
-    document.querySelectorAll('#orderChecks input').forEach(cb => {
-        cb.checked = false;
-        cb.closest('.check').classList.remove('on');
-    });
-    $('orderResult').innerHTML = '';
+    try {
+        const { error } = await supabaseClient.from('orders').insert([order]);
+        if (error) throw error;
+        
+        orders.unshift({...order, dateStr: order.date_str});
+        
+        const smsText = `XURMATLI ${data.name.toUpperCase() || 'MIJOZ'}!\n\nSIZNING ${data.number || ''} ${data.model.toUpperCase() || ''} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(data.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
+        
+        lastSms = { phone: data.phone, text: smsText };
+        $('smsTo').textContent = data.name || 'Mijoz';
+        $('smsPhone').textContent = data.phone || '—';
+        $('smsText').textContent = smsText;
+        $('smsModal').classList.add('show');
+        
+        $('oName').value = '';
+        $('oPhone').value = '';
+        $('oModel').value = '';
+        $('oNumber').value = '';
+        document.querySelectorAll('#orderChecks input').forEach(cb => {
+            cb.checked = false;
+            cb.closest('.check').classList.remove('on');
+        });
+        $('orderResult').innerHTML = '';
+    } catch (err) {
+        console.error(err);
+        toast('Saqlashda xatolik', true);
+    }
 }
 
 /* ============ SMS ============ */
@@ -1373,7 +1327,8 @@ function sendSms() {
 function setPeriod(p) {
     period = p;
     ['today', 'week', 'month', 'all'].forEach(x => {
-        $('p-' + x).classList.toggle('active', x === p);
+        const btn = $('p-' + x);
+        if (btn) btn.classList.toggle('active', x === p);
     });
     renderDash();
 }
@@ -1398,9 +1353,9 @@ function getFiltered() {
 
 function renderDash() {
     const f = getFiltered();
-    const total = f.reduce((s, o) => s + o.total, 0);
-    const mgr = f.reduce((s, o) => s + o.mgr, 0);
-    const ust = f.reduce((s, o) => s + o.ust, 0);
+    const total = f.reduce((s, o) => s + Number(o.total || 0), 0);
+    const mgr = f.reduce((s, o) => s + Number(o.mgr || 0), 0);
+    const ust = f.reduce((s, o) => s + Number(o.ust || 0), 0);
     
     const periodNames = { today: 'Bugun', week: 'Oxirgi 7 kun', month: 'Oxirgi 30 kun', all: 'Barcha vaqt' };
     $('periodText').textContent = periodNames[period];
@@ -1431,12 +1386,12 @@ function renderDash() {
     `;
     
     const specMap = {};
-    f.forEach(o => o.items.forEach(i => {
-        const found = ustalar.find(u => i.usta.includes(u.name));
+    f.forEach(o => (o.items || []).forEach(i => {
+        const found = ustalar.find(u => (i.usta || '').includes(u.name));
         const spec = found ? found.spec : 'BOSHQA';
         if (!specMap[spec]) specMap[spec] = { count: 0, total: 0 };
         specMap[spec].count++;
-        specMap[spec].total += i.price;
+        specMap[spec].total += Number(i.price || 0);
     }));
     
     const entries = Object.entries(specMap).sort((a, b) => b[1].total - a[1].total);
@@ -1446,7 +1401,7 @@ function renderDash() {
         return;
     }
     
-    $('dashSpecs').innerHTML = '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Mutaxassislik bo\'yicha</h2>' +
+    $('dashSpecs').innerHTML = '<h2>Mutaxassislik bo\'yicha</h2>' +
         '<div class="grid-2">' +
         entries.map(([spec, d]) => {
             const pct = total > 0 ? (d.total / total * 100).toFixed(1) : 0;
@@ -1454,7 +1409,7 @@ function renderDash() {
                 <div class="card" style="border-left:4px solid var(--red); padding:16px; margin-bottom:0;">
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
                         <div style="flex:1;">
-                            <div style="font-weight:800; font-size:15px; color:var(--text);">${spec}</div>
+                            <div style="font-weight:800; font-size:15px;">${spec}</div>
                             <div style="font-size:12px; color:var(--muted); margin-top:3px;">${d.count} ta xizmat • ${pct}%</div>
                         </div>
                         <div style="text-align:right;">
@@ -1471,6 +1426,7 @@ function renderDash() {
 /* ============ TARIX ============ */
 function renderHistory() {
     const el = $('historyList');
+    if (!el) return;
     if (orders.length === 0) {
         el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><div>Buyurtmalar yo\'q</div></div></div>';
         return;
@@ -1495,7 +1451,7 @@ function renderHistory() {
                 </div>
             </div>
             <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">
-                ${o.items.map(i => i.name).join(', ')}
+                ${(o.items || []).map(i => i.name).join(', ')}
             </div>
             <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #eee;">
                 <div style="font-size:11px; color:var(--muted);">
@@ -1507,18 +1463,25 @@ function renderHistory() {
     `).join('') + '</div>';
 }
 
-function delOrder(id) {
+async function delOrder(id) {
     if (!confirm('O\'chirmoqchimisiz?')) return;
-    orders = orders.filter(o => o.id !== id);
-    localStorage.setItem('pam_orders', JSON.stringify(orders));
-    renderHistory();
-    toast('O\'chirildi');
+    try {
+        const { error } = await supabaseClient.from('orders').delete().eq('id', id);
+        if (error) throw error;
+        orders = orders.filter(o => o.id !== id);
+        renderHistory();
+        renderDash();
+        toast('O\'chirildi');
+    } catch (err) {
+        console.error(err);
+        toast('Xatolik', true);
+    }
 }
 
 function resendSms(id) {
     const o = orders.find(x => x.id === id);
     if (!o) return;
-    const smsText = `XURMATLI ${o.name.toUpperCase() || 'MIJOZ'}!\n\nSIZNING ${o.number || ''} ${o.model.toUpperCase() || ''} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(o.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
+    const smsText = `XURMATLI ${(o.name || 'MIJOZ').toUpperCase()}!\n\nSIZNING ${o.number || ''} ${(o.model || '').toUpperCase()} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(o.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
     lastSms = { phone: o.phone, text: smsText };
     $('smsTo').textContent = o.name || 'Mijoz';
     $('smsPhone').textContent = o.phone || '—';
@@ -1533,23 +1496,19 @@ document.addEventListener('touchend', e => {
     window._lastTap = now;
 }, { passive: false });
 
-window.onload = () => {
+window.onload = async () => {
     updateClock();
     renderUstaSpecSelect();
-    renderUstalar();
-    renderSvcs();
-    renderSvcUstaSelect();
-    renderOrderChecks();
-    renderHistory();
-    renderDash();
+    await loadFromSupabase();
+    console.log('✅ Dastur tayyor');
 };
 
 /* ============ SERVICE WORKER ============ */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then(reg => console.log('✅ Service Worker registered'))
-            .catch(err => console.log('❌ Service Worker error:', err));
+            .then(() => console.log('✅ Service Worker registered'))
+            .catch(err => console.log('SW error:', err));
     });
 }
 </script>
