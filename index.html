@@ -2,11 +2,27 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<!-- iOS DESKTOP VARIANT: user-scalable=yes qilib qo'yildi -->
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="PAM">
+<meta name="application-name" content="POP AVTO MAKON">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="format-detection" content="telephone=no">
+<meta name="description" content="POP AVTO MAKON - Avtoservis xizmatlarini avtomatlashtirish tizimi">
+
+<!-- iOS ICONS -->
+<link rel="apple-touch-icon" href="icon-192.svg">
+<link rel="apple-touch-icon" sizes="192x192" href="icon-192.svg">
+<link rel="apple-touch-icon" sizes="512x512" href="icon-512.svg">
+<link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
+<link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
+<link rel="mask-icon" href="icon-192.svg" color="#e31e24">
+
+<!-- Manifest -->
+<link rel="manifest" href="manifest.json">
+
 <title>POP-AVTO-MAKON</title>
 <style>
 :root {
@@ -64,7 +80,7 @@ body {
     filter: blur(2px);
 }
 
-/* ============ HEADER (DESKTOP) ============ */
+/* ============ HEADER ============ */
 header {
     position: sticky;
     top: 0;
@@ -146,7 +162,7 @@ header {
     color: var(--red);
 }
 
-/* ============ NAV (DESKTOP — gorizontal) ============ */
+/* ============ NAV ============ */
 nav {
     position: sticky;
     top: 76px;
@@ -206,7 +222,7 @@ nav button.active::after {
 }
 nav button:active { transform: scale(0.97); }
 
-/* ============ SECTION (DESKTOP GRID) ============ */
+/* ============ SECTION ============ */
 .section {
     display: none;
     padding: 24px 20px;
@@ -220,34 +236,11 @@ nav button:active { transform: scale(0.97); }
     to { opacity: 1; transform: translateY(0); }
 }
 
-/* Desktop grid layout */
-.grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-}
-
-.grid-3 {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 16px;
-}
-
-.grid-4 {
-    display: grid;
-    grid-template-columns: repeat(4, 1fr);
-    gap: 14px;
-}
-
-.grid-form {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 0 20px;
-}
-
-.grid-form .field.full {
-    grid-column: 1 / -1;
-}
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 14px; }
+.grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
+.grid-form .field.full { grid-column: 1 / -1; }
 
 /* ============ TYPOGRAPHY ============ */
 h2 {
@@ -288,9 +281,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 
 /* ============ INPUT ============ */
-.field {
-    margin-bottom: 14px;
-}
+.field { margin-bottom: 14px; }
 .field label {
     display: flex;
     align-items: center;
@@ -395,17 +386,8 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     color: var(--text);
     margin-bottom: 3px;
 }
-.item-sub {
-    font-size: 13px;
-    color: var(--muted);
-    margin-top: 2px;
-}
-.item-price {
-    font-size: 15px;
-    font-weight: 800;
-    color: var(--red);
-    margin-top: 3px;
-}
+.item-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
+.item-price { font-size: 15px; font-weight: 800; color: var(--red); margin-top: 3px; }
 .item-del {
     width: 38px;
     height: 38px;
@@ -453,10 +435,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     transition: all 0.2s;
     background: #fff;
 }
-.check.on .check-box {
-    background: var(--red);
-    border-color: var(--red);
-}
+.check.on .check-box { background: var(--red); border-color: var(--red); }
 .check-box svg {
     width: 15px;
     height: 15px;
@@ -476,14 +455,8 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     color: var(--muted);
     flex-wrap: wrap;
 }
-.check-price {
-    color: var(--red);
-    font-weight: 800;
-}
-.check-usta {
-    color: var(--blue);
-    font-weight: 600;
-}
+.check-price { color: var(--red); font-weight: 800; }
+.check-usta { color: var(--blue); font-weight: 600; }
 
 /* ============ RESULT ============ */
 .result {
@@ -555,11 +528,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     gap: 12px;
     margin-top: 14px;
 }
-.share-box {
-    padding: 14px;
-    border-radius: 10px;
-    text-align: center;
-}
+.share-box { padding: 14px; border-radius: 10px; text-align: center; }
 .share-box.m { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); }
 .share-box.u { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); }
 .share-label { font-size: 11px; color: #888; letter-spacing: 0.5px; margin-bottom: 5px; }
@@ -765,7 +734,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 
 /* ============ iOS SPECIFIC ============ */
 @supports (-webkit-touch-callout: none) {
-    /* iPhone-specific adjustments */
     .section {
         padding-left: max(20px, env(safe-area-inset-left));
         padding-right: max(20px, env(safe-area-inset-right));
@@ -773,55 +741,33 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     header { padding-top: max(12px, env(safe-area-inset-top)); }
 }
 
-/* ============ SMALL SCREEN (iPhone portrait) ============ */
+/* ============ RESPONSIVE ============ */
 @media (max-width: 768px) {
-    /* Desktop layoutni saqlab qolish — faqat scale kichraytiradi */
     .grid-2 { grid-template-columns: 1fr 1fr; }
     .grid-3 { grid-template-columns: 1fr 1fr; }
     .grid-4 { grid-template-columns: 1fr 1fr; }
     .stats { grid-template-columns: 1fr 1fr; }
     .grid-form { grid-template-columns: 1fr; }
-    
-    .header-inner {
-        flex-wrap: wrap;
-    }
-    
+    .header-inner { flex-wrap: wrap; }
     .logo-svg { width: 100px; }
     .logo-text h1 { font-size: 15px; }
-    
-    .live-clock {
-        font-size: 12px;
-        padding: 6px 12px;
-    }
-    
+    .live-clock { font-size: 12px; padding: 6px 12px; }
     nav { top: 68px; }
-    nav button {
-        font-size: 12px;
-        padding: 12px 14px;
-    }
+    nav button { font-size: 12px; padding: 12px 14px; }
     nav button svg { width: 16px; height: 16px; }
 }
 
-/* ============ VERY SMALL SCREEN ============ */
 @media (max-width: 480px) {
     .section { padding: 16px 14px; }
     .card { padding: 16px; }
-    
     .logo-svg { width: 85px; }
     .logo-text h1 { font-size: 13px; }
     .logo-text p { font-size: 8px; }
-    
     .stat-value { font-size: 18px; }
     .result-total { font-size: 18px; }
-    
-    nav button {
-        font-size: 11px;
-        padding: 11px 12px;
-        gap: 4px;
-    }
+    nav button { font-size: 11px; padding: 11px 12px; gap: 4px; }
 }
 
-/* ============ iPhone-specific safe area ============ */
 @supports (padding: env(safe-area-inset-top)) {
     header { padding-top: calc(12px + env(safe-area-inset-top)); }
     body { padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
@@ -865,7 +811,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     </div>
 </header>
 
-<!-- ============ NAV (DESKTOP GORIZONTAL) ============ -->
+<!-- ============ NAV ============ -->
 <nav>
     <div class="nav-inner">
         <button class="active" onclick="go('s-panel', this)">
@@ -1597,6 +1543,15 @@ window.onload = () => {
     renderHistory();
     renderDash();
 };
+
+/* ============ SERVICE WORKER ============ */
+if ('serviceWorker' in navigator) {
+    window.addEventListener('load', () => {
+        navigator.serviceWorker.register('/sw.js')
+            .then(reg => console.log('✅ Service Worker registered'))
+            .catch(err => console.log('❌ Service Worker error:', err));
+    });
+}
 </script>
 
 </body>
