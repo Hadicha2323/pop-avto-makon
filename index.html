@@ -2,7 +2,8 @@
 <html lang="uz">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
+<!-- iOS DESKTOP VARIANT: user-scalable=yes qilib qo'yildi -->
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="theme-color" content="#0a0a0f">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
@@ -37,10 +38,9 @@ html, body { min-height: 100vh; }
 
 body {
     color: var(--text);
-    padding-bottom: calc(80px + var(--safe-bottom));
+    padding-bottom: 30px;
     background: var(--black);
     overflow-x: hidden;
-    overscroll-behavior-y: none;
 }
 
 /* ============ FON ============ */
@@ -64,7 +64,7 @@ body {
     filter: blur(2px);
 }
 
-/* ============ HEADER ============ */
+/* ============ HEADER (DESKTOP) ============ */
 header {
     position: sticky;
     top: 0;
@@ -73,23 +73,27 @@ header {
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
     border-bottom: 2px solid var(--red);
-    padding: calc(10px + var(--safe-top)) 14px 10px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
+    padding: 12px 20px;
     box-shadow: 0 4px 25px rgba(227,30,36,0.3);
 }
 
+.header-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+}
+
 .logo-wrap {
-    width: 100%;
-    max-width: 340px;
     display: flex;
     align-items: center;
     gap: 12px;
 }
 
 .logo-svg {
-    width: 110px;
+    width: 130px;
     height: auto;
     flex-shrink: 0;
     filter: drop-shadow(0 0 12px rgba(227,30,36,0.4));
@@ -101,96 +105,112 @@ header {
     to { filter: drop-shadow(0 0 18px rgba(227,30,36,0.7)); }
 }
 
-.logo-text {
-    flex: 1;
-    min-width: 0;
-}
-
 .logo-text h1 {
     color: white;
-    font-size: 14px;
+    font-size: 18px;
     font-weight: 900;
     letter-spacing: 0.5px;
     font-style: italic;
-    white-space: nowrap;
 }
 .logo-text h1 span { color: var(--red); }
 .logo-text p {
     color: #888;
-    font-size: 8px;
+    font-size: 10px;
     letter-spacing: 2px;
     margin-top: 2px;
 }
 
-@media (max-width: 380px) {
-    .logo-svg { width: 90px; }
-    .logo-text h1 { font-size: 12px; }
+.header-info {
+    display: flex;
+    align-items: center;
+    gap: 15px;
 }
 
-/* ============ NAV ============ */
+.live-clock {
+    color: white;
+    font-size: 14px;
+    font-weight: 700;
+    background: rgba(227,30,36,0.15);
+    padding: 8px 16px;
+    border-radius: 20px;
+    border: 1px solid rgba(227,30,36,0.3);
+    white-space: nowrap;
+}
+
+.live-clock svg {
+    width: 14px;
+    height: 14px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 6px;
+    color: var(--red);
+}
+
+/* ============ NAV (DESKTOP — gorizontal) ============ */
 nav {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    z-index: 100;
+    position: sticky;
+    top: 76px;
+    z-index: 99;
     background: rgba(10,10,15,0.98);
     backdrop-filter: blur(20px);
     -webkit-backdrop-filter: blur(20px);
-    border-top: 1px solid rgba(255,255,255,0.1);
-    padding-bottom: var(--safe-bottom);
-    display: flex;
-    box-shadow: 0 -4px 30px rgba(0,0,0,0.5);
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+    padding: 0 20px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
 }
+
+.nav-inner {
+    max-width: 1100px;
+    margin: 0 auto;
+    display: flex;
+    gap: 4px;
+}
+
 nav button {
-    flex: 1;
-    min-height: 64px;
     background: none;
     border: none;
     color: #888;
-    font-size: 10px;
+    font-size: 13px;
     font-weight: 700;
     cursor: pointer;
     display: flex;
-    flex-direction: column;
     align-items: center;
-    justify-content: center;
-    gap: 3px;
-    padding: 8px 2px;
+    gap: 6px;
+    padding: 14px 18px;
     transition: all 0.25s;
     position: relative;
+    white-space: nowrap;
+    flex-shrink: 0;
 }
 nav button svg {
-    width: 22px;
-    height: 22px;
+    width: 18px;
+    height: 18px;
     stroke-width: 2;
     transition: all 0.25s;
 }
 nav button.active {
     color: var(--red);
 }
-nav button.active svg {
-    transform: scale(1.1) translateY(-2px);
-    filter: drop-shadow(0 0 8px rgba(227,30,36,0.6));
-}
-nav button.active::before {
+nav button.active::after {
     content: '';
     position: absolute;
-    top: 0;
-    left: 25%;
-    right: 25%;
-    height: 2px;
+    bottom: 0;
+    left: 12px;
+    right: 12px;
+    height: 3px;
     background: var(--red);
-    border-radius: 0 0 3px 3px;
+    border-radius: 3px 3px 0 0;
     box-shadow: 0 0 8px var(--red);
 }
-nav button:active { transform: scale(0.95); }
+nav button:active { transform: scale(0.97); }
 
-/* ============ SECTION ============ */
+/* ============ SECTION (DESKTOP GRID) ============ */
 .section {
     display: none;
-    padding: 16px;
-    max-width: 700px;
+    padding: 24px 20px;
+    max-width: 1100px;
     margin: 0 auto;
     animation: slideIn 0.35s cubic-bezier(0.4, 0, 0.2, 1);
 }
@@ -200,18 +220,48 @@ nav button:active { transform: scale(0.95); }
     to { opacity: 1; transform: translateY(0); }
 }
 
+/* Desktop grid layout */
+.grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+}
+
+.grid-3 {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+
+.grid-4 {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+}
+
+.grid-form {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 0 20px;
+}
+
+.grid-form .field.full {
+    grid-column: 1 / -1;
+}
+
 /* ============ TYPOGRAPHY ============ */
 h2 {
     color: white;
-    font-size: 15px;
+    font-size: 17px;
     font-weight: 800;
-    margin: 20px 0 12px;
+    margin: 24px 0 14px;
     padding-left: 12px;
     position: relative;
     display: flex;
     align-items: center;
     gap: 8px;
 }
+h2:first-child { margin-top: 0; }
 h2::before {
     content: '';
     position: absolute;
@@ -219,27 +269,27 @@ h2::before {
     top: 50%;
     transform: translateY(-50%);
     width: 3px;
-    height: 18px;
+    height: 20px;
     background: var(--red);
     border-radius: 2px;
     box-shadow: 0 0 8px var(--red);
 }
-h2 svg { width: 18px; height: 18px; color: var(--red); }
+h2 svg { width: 20px; height: 20px; color: var(--red); }
 
 /* ============ CARD ============ */
 .card {
     background: rgba(255,255,255,0.98);
     backdrop-filter: blur(20px);
     border-radius: 14px;
-    padding: 16px;
-    margin-bottom: 12px;
+    padding: 20px;
+    margin-bottom: 16px;
     box-shadow: 0 8px 30px rgba(0,0,0,0.4);
     border: 1px solid rgba(255,255,255,0.1);
 }
 
 /* ============ INPUT ============ */
 .field {
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 .field label {
     display: flex;
@@ -306,27 +356,26 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     margin-top: 8px;
 }
 .btn svg { width: 18px; height: 18px; }
-.btn:active { transform: scale(0.97); box-shadow: 0 2px 8px rgba(227,30,36,0.6); }
+.btn:active { transform: scale(0.97); }
 .btn.black { background: linear-gradient(135deg, #2a2a2a, #000); box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
 .btn.green { background: linear-gradient(135deg, #16a34a, #15803d); box-shadow: 0 4px 15px rgba(22,163,74,0.4); }
 .btn.blue { background: linear-gradient(135deg, #2563eb, #1e40af); box-shadow: 0 4px 15px rgba(37,99,235,0.4); }
 .btn.orange { background: linear-gradient(135deg, #ea580c, #c2410c); box-shadow: 0 4px 15px rgba(234,88,12,0.4); }
 .btn.gray { background: linear-gradient(135deg, #6b7280, #374151); box-shadow: 0 4px 15px rgba(107,114,128,0.4); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 
 /* ============ ITEM LIST ============ */
 .item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 0;
+    gap: 14px;
+    padding: 14px 0;
     border-bottom: 1px solid #f0f0f0;
 }
 .item:last-child { border-bottom: none; }
 .item-icon {
-    width: 42px;
-    height: 42px;
-    border-radius: 10px;
+    width: 46px;
+    height: 46px;
+    border-radius: 12px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -334,33 +383,33 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     flex-shrink: 0;
     background: linear-gradient(135deg, var(--red), var(--red-dark));
 }
-.item-icon svg { width: 20px; height: 20px; }
+.item-icon svg { width: 22px; height: 22px; }
 .item-icon.green { background: linear-gradient(135deg, #16a34a, #15803d); }
 .item-icon.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
 .item-icon.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
 .item-icon.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
 .item-body { flex: 1; min-width: 0; }
 .item-title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 700;
     color: var(--text);
-    margin-bottom: 2px;
+    margin-bottom: 3px;
 }
 .item-sub {
-    font-size: 12px;
+    font-size: 13px;
     color: var(--muted);
     margin-top: 2px;
 }
 .item-price {
-    font-size: 14px;
+    font-size: 15px;
     font-weight: 800;
     color: var(--red);
-    margin-top: 2px;
+    margin-top: 3px;
 }
 .item-del {
-    width: 34px;
-    height: 34px;
-    border-radius: 8px;
+    width: 38px;
+    height: 38px;
+    border-radius: 10px;
     background: rgba(227,30,36,0.08);
     border: none;
     color: var(--red);
@@ -372,7 +421,7 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     transition: all 0.2s;
 }
 .item-del svg { width: 16px; height: 16px; }
-.item-del:active { background: rgba(227,30,36,0.25); transform: scale(0.9); }
+.item-del:active { background: rgba(227,30,36,0.25); }
 
 /* ============ CHECKBOX ============ */
 .check {
@@ -382,7 +431,7 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     padding: 14px;
     border: 2px solid var(--border);
     border-radius: 12px;
-    margin-bottom: 8px;
+    margin-bottom: 10px;
     cursor: pointer;
     background: #fff;
     transition: all 0.2s;
@@ -393,10 +442,10 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     box-shadow: 0 0 0 3px rgba(227,30,36,0.1);
 }
 .check-box {
-    width: 24px;
-    height: 24px;
+    width: 26px;
+    height: 26px;
     border: 2px solid var(--border);
-    border-radius: 6px;
+    border-radius: 7px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -409,21 +458,21 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     border-color: var(--red);
 }
 .check-box svg {
-    width: 14px;
-    height: 14px;
+    width: 15px;
+    height: 15px;
     color: white;
     opacity: 0;
     transition: opacity 0.2s;
 }
 .check.on .check-box svg { opacity: 1; }
 .check-body { flex: 1; min-width: 0; }
-.check-title { font-size: 14px; font-weight: 700; }
+.check-title { font-size: 15px; font-weight: 700; }
 .check-meta {
     display: flex;
     align-items: center;
-    gap: 8px;
-    margin-top: 4px;
-    font-size: 12px;
+    gap: 10px;
+    margin-top: 5px;
+    font-size: 13px;
     color: var(--muted);
     flex-wrap: wrap;
 }
@@ -440,9 +489,9 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
 .result {
     background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
     color: white;
-    padding: 20px;
+    padding: 24px;
     border-radius: 14px;
-    margin-top: 16px;
+    margin-top: 20px;
     border: 2px solid var(--red);
     box-shadow: 0 0 40px rgba(227,30,36,0.4);
     animation: pop 0.4s cubic-bezier(0.4, 0, 0.2, 1);
@@ -457,35 +506,35 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     font-weight: 800;
     letter-spacing: 1px;
     color: #888;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
     text-transform: uppercase;
 }
 .result-info {
     background: rgba(255,255,255,0.05);
-    padding: 12px;
+    padding: 14px;
     border-radius: 10px;
-    margin-bottom: 12px;
-    font-size: 13px;
+    margin-bottom: 14px;
+    font-size: 14px;
 }
 .result-info div {
     display: flex;
     justify-content: space-between;
-    margin-bottom: 6px;
+    margin-bottom: 8px;
     color: #ccc;
 }
 .result-info div:last-child { margin-bottom: 0; }
 .result-info strong { color: white; }
 .result-list {
     border-top: 1px solid rgba(255,255,255,0.1);
-    padding-top: 12px;
-    margin-top: 12px;
+    padding-top: 14px;
+    margin-top: 14px;
 }
 .result-row {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 8px 0;
-    font-size: 14px;
+    padding: 10px 0;
+    font-size: 15px;
 }
 .result-row span:first-child { color: #ccc; }
 .result-row span:last-child { color: white; font-weight: 600; }
@@ -493,40 +542,40 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 14px 0;
+    padding: 16px 0;
     margin-top: 12px;
     border-top: 2px solid var(--red);
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 900;
 }
 .result-total span:last-child { color: var(--red); }
 .result-share {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-top: 12px;
+    gap: 12px;
+    margin-top: 14px;
 }
 .share-box {
-    padding: 12px;
+    padding: 14px;
     border-radius: 10px;
     text-align: center;
 }
 .share-box.m { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); }
 .share-box.u { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); }
-.share-label { font-size: 11px; color: #888; letter-spacing: 0.5px; margin-bottom: 4px; }
-.share-value { font-size: 16px; font-weight: 900; }
+.share-label { font-size: 11px; color: #888; letter-spacing: 0.5px; margin-bottom: 5px; }
+.share-value { font-size: 18px; font-weight: 900; }
 .share-box.m .share-value { color: #60a5fa; }
 .share-box.u .share-value { color: #4ade80; }
 
 /* ============ STATS ============ */
 .stats {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 10px;
-    margin-bottom: 12px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 14px;
+    margin-bottom: 16px;
 }
 .stat {
-    padding: 14px;
+    padding: 18px;
     border-radius: 14px;
     color: white;
     position: relative;
@@ -538,13 +587,13 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     position: absolute;
     top: -50%;
     right: -30%;
-    width: 120px;
-    height: 120px;
+    width: 130px;
+    height: 130px;
     background: rgba(255,255,255,0.1);
     border-radius: 50%;
 }
 .stat-label {
-    font-size: 10px;
+    font-size: 11px;
     font-weight: 700;
     letter-spacing: 1px;
     opacity: 0.9;
@@ -552,16 +601,16 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     position: relative;
 }
 .stat-value {
-    font-size: 20px;
+    font-size: 22px;
     font-weight: 900;
-    margin-top: 6px;
+    margin-top: 8px;
     position: relative;
     word-break: break-all;
 }
 .stat-sub {
-    font-size: 11px;
+    font-size: 12px;
     opacity: 0.85;
-    margin-top: 3px;
+    margin-top: 4px;
     position: relative;
 }
 .stat.red { background: linear-gradient(135deg, #e31e24, #8a0e12); }
@@ -574,30 +623,30 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
 /* ============ EMPTY ============ */
 .empty {
     text-align: center;
-    padding: 40px 20px;
+    padding: 50px 20px;
     color: #999;
-    font-size: 13px;
+    font-size: 14px;
 }
 .empty svg {
-    width: 50px;
-    height: 50px;
+    width: 56px;
+    height: 56px;
     stroke-width: 1.5;
     color: #ccc;
-    margin-bottom: 10px;
+    margin-bottom: 12px;
 }
 
 /* ============ TOAST ============ */
 .toast {
     position: fixed;
-    top: calc(70px + var(--safe-top));
+    top: 90px;
     left: 50%;
     transform: translateX(-50%) translateY(-100px);
     background: linear-gradient(135deg, #16a34a, #15803d);
     color: white;
-    padding: 12px 24px;
+    padding: 14px 28px;
     border-radius: 30px;
     font-weight: 800;
-    font-size: 13px;
+    font-size: 14px;
     box-shadow: 0 10px 30px rgba(22,163,74,0.5);
     z-index: 9999;
     opacity: 0;
@@ -628,8 +677,8 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
 .modal {
     background: white;
     border-radius: 18px;
-    padding: 22px;
-    max-width: 420px;
+    padding: 24px;
+    max-width: 460px;
     width: 100%;
     max-height: 90vh;
     overflow-y: auto;
@@ -640,7 +689,7 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     to { opacity: 1; transform: scale(1) translateY(0); }
 }
 .modal-title {
-    font-size: 17px;
+    font-size: 18px;
     font-weight: 900;
     color: var(--text);
     text-align: center;
@@ -653,20 +702,20 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
 .modal-title svg { width: 20px; height: 20px; color: var(--red); }
 .sms-preview {
     background: #f5f5f5;
-    padding: 14px;
+    padding: 16px;
     border-radius: 12px;
-    font-size: 13px;
+    font-size: 14px;
     line-height: 1.6;
     color: #333;
     white-space: pre-line;
     border-left: 4px solid var(--red);
     font-weight: 500;
-    margin-bottom: 12px;
+    margin-bottom: 14px;
 }
 .modal-actions {
     display: grid;
     grid-template-columns: 1fr 1fr;
-    gap: 8px;
+    gap: 10px;
 }
 .modal-actions .btn { margin-top: 0; }
 
@@ -675,34 +724,34 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     display: flex;
     align-items: center;
     justify-content: space-between;
-    margin: 20px 0 12px;
+    margin: 24px 0 14px;
 }
 .section-head h2 { margin: 0; }
 .badge {
-    padding: 4px 10px;
+    padding: 5px 14px;
     border-radius: 20px;
     background: rgba(227,30,36,0.15);
     color: var(--red);
-    font-size: 11px;
+    font-size: 12px;
     font-weight: 800;
 }
 
-/* ============ TABS (sub) ============ */
+/* ============ TABS ============ */
 .tabs {
     display: flex;
-    gap: 6px;
+    gap: 8px;
     background: rgba(255,255,255,0.05);
-    padding: 4px;
+    padding: 5px;
     border-radius: 12px;
-    margin-bottom: 14px;
+    margin-bottom: 16px;
 }
 .tabs button {
     flex: 1;
-    padding: 10px;
+    padding: 11px;
     border: none;
     background: transparent;
     color: #888;
-    font-size: 13px;
+    font-size: 14px;
     font-weight: 700;
     border-radius: 8px;
     cursor: pointer;
@@ -714,11 +763,68 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     box-shadow: 0 4px 12px rgba(227,30,36,0.4);
 }
 
-/* ============ RESPONSIVE ============ */
-@media (max-width: 380px) {
-    .stats { grid-template-columns: 1fr; }
-    .result-share { grid-template-columns: 1fr; }
-    nav button { font-size: 9px; }
+/* ============ iOS SPECIFIC ============ */
+@supports (-webkit-touch-callout: none) {
+    /* iPhone-specific adjustments */
+    .section {
+        padding-left: max(20px, env(safe-area-inset-left));
+        padding-right: max(20px, env(safe-area-inset-right));
+    }
+    header { padding-top: max(12px, env(safe-area-inset-top)); }
+}
+
+/* ============ SMALL SCREEN (iPhone portrait) ============ */
+@media (max-width: 768px) {
+    /* Desktop layoutni saqlab qolish — faqat scale kichraytiradi */
+    .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr 1fr; }
+    .grid-4 { grid-template-columns: 1fr 1fr; }
+    .stats { grid-template-columns: 1fr 1fr; }
+    .grid-form { grid-template-columns: 1fr; }
+    
+    .header-inner {
+        flex-wrap: wrap;
+    }
+    
+    .logo-svg { width: 100px; }
+    .logo-text h1 { font-size: 15px; }
+    
+    .live-clock {
+        font-size: 12px;
+        padding: 6px 12px;
+    }
+    
+    nav { top: 68px; }
+    nav button {
+        font-size: 12px;
+        padding: 12px 14px;
+    }
+    nav button svg { width: 16px; height: 16px; }
+}
+
+/* ============ VERY SMALL SCREEN ============ */
+@media (max-width: 480px) {
+    .section { padding: 16px 14px; }
+    .card { padding: 16px; }
+    
+    .logo-svg { width: 85px; }
+    .logo-text h1 { font-size: 13px; }
+    .logo-text p { font-size: 8px; }
+    
+    .stat-value { font-size: 18px; }
+    .result-total { font-size: 18px; }
+    
+    nav button {
+        font-size: 11px;
+        padding: 11px 12px;
+        gap: 4px;
+    }
+}
+
+/* ============ iPhone-specific safe area ============ */
+@supports (padding: env(safe-area-inset-top)) {
+    header { padding-top: calc(12px + env(safe-area-inset-top)); }
+    body { padding-bottom: calc(30px + env(safe-area-inset-bottom)); }
 }
 </style>
 </head>
@@ -729,38 +835,61 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
 
 <!-- ============ HEADER ============ -->
 <header>
-    <div class="logo-wrap">
-        <!-- PAM LOGO SVG -->
-        <svg class="logo-svg" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
-            <!-- Mashina silueti (qizil) -->
-            <g fill="none" stroke="#e31e24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                <path d="M 100 52 Q 140 28 210 26 Q 280 28 320 52"/>
-                <path d="M 88 62 Q 140 56 210 54 Q 280 56 332 62"/>
-                <ellipse cx="98" cy="60" rx="7" ry="5" stroke-width="2.5"/>
-                <ellipse cx="322" cy="60" rx="7" ry="5" stroke-width="2.5"/>
-            </g>
-            
-            <!-- P harfi (qora) -->
-            <path d="M 65 90 L 82 90 Q 105 90 102 112 Q 100 130 82 130 L 76 130 L 79 112 L 85 112 Q 92 112 92 106 Q 92 100 85 100 L 72 100 Z" fill="#1a1a1a"/>
-            
-            <!-- A harfi (qizil) -->
-            <path d="M 118 145 L 135 88 L 158 88 L 175 145 L 158 145 L 154 128 L 138 128 L 135 145 Z" fill="#e31e24"/>
-            <path d="M 145 112 L 152 112 L 148 98 Z" fill="white"/>
-            
-            <!-- M harfi (qora) -->
-            <path d="M 188 88 L 205 88 L 222 122 L 239 88 L 256 88 L 244 145 L 228 145 L 238 112 L 222 138 L 206 112 L 216 145 L 200 145 Z" fill="#1a1a1a"/>
-            
-            <!-- POP AUTO MAKON yozuvi -->
-            <text x="65" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#1a1a1a" letter-spacing="0.5">POP AUTO</text>
-            <text x="215" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#e31e24" letter-spacing="0.5">MAKON</text>
-        </svg>
-        
-        <div class="logo-text">
-            <h1>POP <span>AUTO</span> MAKON</h1>
-            <p>AVTOSERVIS TIZIMI</p>
+    <div class="header-inner">
+        <div class="logo-wrap">
+            <svg class="logo-svg" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+                <g fill="none" stroke="#e31e24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                    <path d="M 100 52 Q 140 28 210 26 Q 280 28 320 52"/>
+                    <path d="M 88 62 Q 140 56 210 54 Q 280 56 332 62"/>
+                    <ellipse cx="98" cy="60" rx="7" ry="5" stroke-width="2.5"/>
+                    <ellipse cx="322" cy="60" rx="7" ry="5" stroke-width="2.5"/>
+                </g>
+                <path d="M 65 90 L 82 90 Q 105 90 102 112 Q 100 130 82 130 L 76 130 L 79 112 L 85 112 Q 92 112 92 106 Q 92 100 85 100 L 72 100 Z" fill="#1a1a1a"/>
+                <path d="M 118 145 L 135 88 L 158 88 L 175 145 L 158 145 L 154 128 L 138 128 L 135 145 Z" fill="#e31e24"/>
+                <path d="M 145 112 L 152 112 L 148 98 Z" fill="white"/>
+                <path d="M 188 88 L 205 88 L 222 122 L 239 88 L 256 88 L 244 145 L 228 145 L 238 112 L 222 138 L 206 112 L 216 145 L 200 145 Z" fill="#1a1a1a"/>
+                <text x="65" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#1a1a1a" letter-spacing="0.5">POP AUTO</text>
+                <text x="215" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#e31e24" letter-spacing="0.5">MAKON</text>
+            </svg>
+            <div class="logo-text">
+                <h1>POP <span>AUTO</span> MAKON</h1>
+                <p>AVTOSERVIS TIZIMI</p>
+            </div>
+        </div>
+        <div class="header-info">
+            <div class="live-clock" id="liveClock">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
+                <span id="clockText">--:--</span>
+            </div>
         </div>
     </div>
 </header>
+
+<!-- ============ NAV (DESKTOP GORIZONTAL) ============ -->
+<nav>
+    <div class="nav-inner">
+        <button class="active" onclick="go('s-panel', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
+            Panel
+        </button>
+        <button onclick="go('s-order', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+            Buyurtma
+        </button>
+        <button onclick="go('s-ustalar', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+            Ustalar
+        </button>
+        <button onclick="go('s-xizmatlar', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+            Xizmatlar
+        </button>
+        <button onclick="go('s-history', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
+            Tarix
+        </button>
+    </div>
+</nav>
 
 <!-- ============ PANEL ============ -->
 <div class="section active" id="s-panel">
@@ -769,14 +898,14 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
         Boshqaruv paneli
     </h2>
 
-    <div class="card" style="padding:12px;">
+    <div class="card" style="padding:14px;">
         <div class="tabs">
             <button onclick="setPeriod('today')" id="p-today">Bugun</button>
             <button onclick="setPeriod('week')" id="p-week">7 kun</button>
             <button onclick="setPeriod('month')" id="p-month" class="active">30 kun</button>
             <button onclick="setPeriod('all')" id="p-all">Barchasi</button>
         </div>
-        <div id="periodText" style="text-align:center; font-size:12px; color:#888; padding:4px;"></div>
+        <div id="periodText" style="text-align:center; font-size:13px; color:#888; padding:6px;"></div>
     </div>
 
     <div id="dashStats"></div>
@@ -791,38 +920,40 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     </h2>
 
     <div class="card">
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Usta ismi
-            </label>
-            <input type="text" id="ustaName" placeholder="Masalan: Akmal aka">
-        </div>
+        <div class="grid-form">
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Usta ismi
+                </label>
+                <input type="text" id="ustaName" placeholder="Masalan: Akmal aka">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                Mutaxassisligi
-            </label>
-            <select id="ustaSpec">
-                <option value="">Mutaxassislikni tanlang</option>
-            </select>
-        </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    Mutaxassisligi
+                </label>
+                <select id="ustaSpec">
+                    <option value="">Mutaxassislikni tanlang</option>
+                </select>
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
-                Qiladigan ishi
-            </label>
-            <input type="text" id="ustaWork" placeholder="Masalan: Motor ta'mirlash">
-        </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v20M2 12h20"/></svg>
+                    Qiladigan ishi
+                </label>
+                <input type="text" id="ustaWork" placeholder="Masalan: Motor ta'mirlash">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Xizmat haqqi (so'm)
-            </label>
-            <input type="number" id="ustaRate" placeholder="Masalan: 50000">
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Xizmat haqqi (so'm)
+                </label>
+                <input type="number" id="ustaRate" placeholder="Masalan: 50000">
+            </div>
         </div>
 
         <button class="btn black" onclick="addUsta()">
@@ -846,30 +977,32 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     </h2>
 
     <div class="card">
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                Xizmat nomi
-            </label>
-            <input type="text" id="svcName" placeholder="Masalan: Spark almashtirish">
-        </div>
+        <div class="grid-form">
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    Xizmat nomi
+                </label>
+                <input type="text" id="svcName" placeholder="Masalan: Spark almashtirish">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                Xizmat narxi
-            </label>
-            <input type="number" id="svcPrice" placeholder="Masalan: 150000">
-        </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Xizmat narxi
+                </label>
+                <input type="number" id="svcPrice" placeholder="Masalan: 150000">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Usta
-            </label>
-            <select id="svcUsta">
-                <option value="">Ustani tanlang</option>
-            </select>
+            <div class="field full">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Usta
+                </label>
+                <select id="svcUsta">
+                    <option value="">Ustani tanlang</option>
+                </select>
+            </div>
         </div>
 
         <button class="btn" onclick="addSvc()">
@@ -893,36 +1026,38 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     </h2>
 
     <div class="card">
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                Mijoz ismi
-            </label>
-            <input type="text" id="oName" placeholder="Masalan: Mahmudov Shoxrux">
-        </div>
+        <div class="grid-form">
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Mijoz ismi
+                </label>
+                <input type="text" id="oName" placeholder="Masalan: Mahmudov Shoxrux">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
-                Telefon raqami
-            </label>
-            <input type="tel" id="oPhone" placeholder="+998 90 123 45 67">
-        </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Telefon raqami
+                </label>
+                <input type="tel" id="oPhone" placeholder="+998 90 123 45 67">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
-                Mashina modeli
-            </label>
-            <input type="text" id="oModel" placeholder="Masalan: Malibu 2">
-        </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+                    Mashina modeli
+                </label>
+                <input type="text" id="oModel" placeholder="Masalan: Malibu 2">
+            </div>
 
-        <div class="field">
-            <label>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
-                Mashina raqami
-            </label>
-            <input type="text" id="oNumber" placeholder="Masalan: 50 A 555 AA">
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
+                    Mashina raqami
+                </label>
+                <input type="text" id="oNumber" placeholder="Masalan: 50 A 555 AA">
+            </div>
         </div>
     </div>
 
@@ -930,7 +1065,7 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg>
         Xizmatlarni tanlang
     </h2>
-    <div class="card" style="padding:12px;">
+    <div class="card" style="padding:16px;">
         <div id="orderChecks"></div>
     </div>
 
@@ -951,30 +1086,6 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
     <div id="historyList"></div>
 </div>
 
-<!-- ============ NAV ============ -->
-<nav>
-    <button class="active" onclick="go('s-panel', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-        <span>Panel</span>
-    </button>
-    <button onclick="go('s-order', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
-        <span>Buyurtma</span>
-    </button>
-    <button onclick="go('s-ustalar', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        <span>Ustalar</span>
-    </button>
-    <button onclick="go('s-xizmatlar', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        <span>Xizmatlar</span>
-    </button>
-    <button onclick="go('s-history', this)">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-        <span>Tarix</span>
-    </button>
-</nav>
-
 <!-- ============ MODAL ============ -->
 <div class="modal-bg" id="smsModal">
     <div class="modal">
@@ -982,7 +1093,7 @@ h2 svg { width: 18px; height: 18px; color: var(--red); }
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
             SMS yuborish
         </div>
-        <div style="font-size:12px; color:#666; margin-bottom:10px; text-align:center;">
+        <div style="font-size:13px; color:#666; margin-bottom:12px; text-align:center;">
             <strong id="smsTo"></strong> — <span id="smsPhone"></span>
         </div>
         <div class="sms-preview" id="smsText"></div>
@@ -1008,7 +1119,6 @@ let specs = JSON.parse(localStorage.getItem('pam_specs')) || [
 let period = 'month';
 let lastSms = null;
 
-/* ============ HELPERS ============ */
 const $ = id => document.getElementById(id);
 const money = n => Math.round(n).toLocaleString('uz-UZ');
 
@@ -1019,6 +1129,17 @@ function toast(msg, isError) {
     t.classList.add('show');
     setTimeout(() => t.classList.remove('show'), 2200);
 }
+
+/* ============ LIVE CLOCK ============ */
+function updateClock() {
+    const now = new Date();
+    const h = String(now.getHours()).padStart(2, '0');
+    const m = String(now.getMinutes()).padStart(2, '0');
+    const s = String(now.getSeconds()).padStart(2, '0');
+    const el = $('clockText');
+    if (el) el.textContent = `${h}:${m}:${s}`;
+}
+setInterval(updateClock, 1000);
 
 /* ============ NAV ============ */
 function go(id, btn) {
@@ -1036,7 +1157,6 @@ function go(id, btn) {
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
-/* ============ SPEC SELECT ============ */
 function renderUstaSpecSelect() {
     $('ustaSpec').innerHTML = '<option value="">Mutaxassislikni tanlang</option>' +
         specs.map(s => `<option value="${s}">${s}</option>`).join('');
@@ -1052,12 +1172,7 @@ function addUsta() {
     if (!name) return toast('Usta ismini kiriting', true);
     if (!spec) return toast('Mutaxassislikni tanlang', true);
     
-    ustalar.push({
-        id: Date.now(),
-        name, spec,
-        work: work || spec,
-        rate: Number(rate) || 0
-    });
+    ustalar.push({ id: Date.now(), name, spec, work: work || spec, rate: Number(rate) || 0 });
     localStorage.setItem('pam_ustalar', JSON.stringify(ustalar));
     
     $('ustaName').value = '';
@@ -1121,12 +1236,7 @@ function addSvc() {
     if (!name) return toast('Xizmat nomini kiriting', true);
     if (!price) return toast('Xizmat narxini kiriting', true);
     
-    services.push({
-        id: Date.now(),
-        name,
-        price: Number(price),
-        usta: usta || 'Belgilanmagan'
-    });
+    services.push({ id: Date.now(), name, price: Number(price), usta: usta || 'Belgilanmagan' });
     localStorage.setItem('pam_services', JSON.stringify(services));
     
     $('svcName').value = '';
@@ -1391,23 +1501,25 @@ function renderDash() {
     }
     
     $('dashSpecs').innerHTML = '<h2><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>Mutaxassislik bo\'yicha</h2>' +
+        '<div class="grid-2">' +
         entries.map(([spec, d]) => {
             const pct = total > 0 ? (d.total / total * 100).toFixed(1) : 0;
             return `
-                <div class="card" style="border-left:4px solid var(--red); padding:14px;">
+                <div class="card" style="border-left:4px solid var(--red); padding:16px; margin-bottom:0;">
                     <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
                         <div style="flex:1;">
-                            <div style="font-weight:800; font-size:14px; color:var(--text);">${spec}</div>
-                            <div style="font-size:11px; color:var(--muted); margin-top:2px;">${d.count} ta xizmat • ${pct}%</div>
+                            <div style="font-weight:800; font-size:15px; color:var(--text);">${spec}</div>
+                            <div style="font-size:12px; color:var(--muted); margin-top:3px;">${d.count} ta xizmat • ${pct}%</div>
                         </div>
                         <div style="text-align:right;">
-                            <div style="color:var(--red); font-weight:900; font-size:15px;">${money(d.total)}</div>
-                            <div style="font-size:10px; color:var(--muted);">so'm</div>
+                            <div style="color:var(--red); font-weight:900; font-size:16px;">${money(d.total)}</div>
+                            <div style="font-size:11px; color:var(--muted);">so'm</div>
                         </div>
                     </div>
                 </div>
             `;
-        }).join('');
+        }).join('') +
+        '</div>';
 }
 
 /* ============ TARIX ============ */
@@ -1418,11 +1530,11 @@ function renderHistory() {
         return;
     }
     
-    el.innerHTML = orders.map(o => `
-        <div class="card" style="border-left:4px solid var(--red);">
+    el.innerHTML = '<div class="grid-2">' + orders.map(o => `
+        <div class="card" style="border-left:4px solid var(--red); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:10px;">
                 <div style="flex:1; min-width:0;">
-                    <div style="font-weight:800; font-size:14px;">${o.name || 'Noma\'lum'}</div>
+                    <div style="font-weight:800; font-size:15px;">${o.name || 'Noma\'lum'}</div>
                     <div style="font-size:12px; color:var(--muted); margin-top:3px;">${o.phone || '—'}</div>
                     <div style="font-size:12px; color:var(--muted); margin-top:2px;">${o.model || '—'} — ${o.number || '—'}</div>
                     <div style="font-size:11px; color:#999; margin-top:4px;">${o.date}</div>
@@ -1443,10 +1555,10 @@ function renderHistory() {
                 <div style="font-size:11px; color:var(--muted);">
                     Menejer: <strong style="color:#2563eb;">${money(o.mgr)}</strong>
                 </div>
-                <div style="color:var(--red); font-weight:900; font-size:15px;">${money(o.total)} so'm</div>
+                <div style="color:var(--red); font-weight:900; font-size:16px;">${money(o.total)} so'm</div>
             </div>
         </div>
-    `).join('');
+    `).join('') + '</div>';
 }
 
 function delOrder(id) {
@@ -1476,6 +1588,7 @@ document.addEventListener('touchend', e => {
 }, { passive: false });
 
 window.onload = () => {
+    updateClock();
     renderUstaSpecSelect();
     renderUstalar();
     renderSvcs();
