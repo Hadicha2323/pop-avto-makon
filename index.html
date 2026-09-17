@@ -10,19 +10,15 @@
 <meta name="application-name" content="POP AVTO MAKON">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<meta name="description" content="POP AVTO MAKON - Avtoservis xizmatlarini avtomatlashtirish tizimi">
+<meta name="description" content="POP AVTO MAKON - Автосервис хизматларини автоматлаштириш тизими">
 
-<link rel="apple-touch-icon" href="icon-192.svg">
-<link rel="apple-touch-icon" sizes="192x192" href="icon-192.svg">
-<link rel="apple-touch-icon" sizes="512x512" href="icon-512.svg">
 <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
-<link rel="mask-icon" href="icon-192.svg" color="#e31e24">
+<link rel="apple-touch-icon" href="icon-192.svg">
 <link rel="manifest" href="manifest.json">
 
 <title>POP-AVTO-MAKON</title>
 
-<!-- Supabase (yangi versiya) -->
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.0/dist/umd/supabase.js"></script>
 
 <style>
@@ -37,8 +33,6 @@
     --blue: #2563eb;
     --orange: #ea580c;
     --purple: #9333ea;
-    --safe-top: env(safe-area-inset-top, 0px);
-    --safe-bottom: env(safe-area-inset-bottom, 0px);
 }
 
 * {
@@ -79,6 +73,7 @@ body {
     filter: blur(2px);
 }
 
+/* HEADER */
 header {
     position: sticky;
     top: 0;
@@ -106,17 +101,28 @@ header {
     gap: 12px;
 }
 
-.logo-svg {
-    width: 130px;
-    height: auto;
+/* ЛОГОТИП ОҚ ФОНЛИ КАРТОЧКАДА */
+.logo-box {
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 6px 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
-    filter: drop-shadow(0 0 12px rgba(227,30,36,0.4));
-    animation: logoGlow 3s ease-in-out infinite alternate;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 2px rgba(227,30,36,0.3);
+    animation: logoBoxGlow 3s ease-in-out infinite alternate;
 }
 
-@keyframes logoGlow {
-    from { filter: drop-shadow(0 0 8px rgba(227,30,36,0.3)); }
-    to { filter: drop-shadow(0 0 18px rgba(227,30,36,0.7)); }
+@keyframes logoBoxGlow {
+    from { box-shadow: 0 4px 20px rgba(0,0,0,0.4), 0 0 0 2px rgba(227,30,36,0.3); }
+    to { box-shadow: 0 4px 25px rgba(0,0,0,0.5), 0 0 0 2px rgba(227,30,36,0.7), 0 0 20px rgba(227,30,36,0.4); }
+}
+
+.logo-svg {
+    width: 120px;
+    height: auto;
+    display: block;
 }
 
 .logo-text h1 {
@@ -172,6 +178,7 @@ header {
 .sync-status.loading { color: #facc15; }
 .sync-status.err { color: #f87171; }
 
+/* NAV */
 nav {
     position: sticky;
     top: 76px;
@@ -229,6 +236,7 @@ nav button.active::after {
 }
 nav button:active { transform: scale(0.97); }
 
+/* SECTION */
 .section {
     display: none;
     padding: 24px 20px;
@@ -243,6 +251,7 @@ nav button:active { transform: scale(0.97); }
 }
 
 .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
 .grid-form { display: grid; grid-template-columns: 1fr 1fr; gap: 0 20px; }
 .grid-form .field.full { grid-column: 1 / -1; }
 
@@ -322,6 +331,35 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     box-shadow: 0 0 0 3px rgba(227,30,36,0.12);
 }
 
+.search-box {
+    position: relative;
+    margin-bottom: 14px;
+}
+.search-box input {
+    width: 100%;
+    padding: 14px 16px 14px 45px;
+    border: 2px solid rgba(227,30,36,0.2);
+    border-radius: 12px;
+    font-size: 15px;
+    outline: none;
+    background: rgba(255,255,255,0.98);
+    color: var(--text);
+    font-weight: 500;
+}
+.search-box input:focus {
+    border-color: var(--red);
+    box-shadow: 0 0 0 4px rgba(227,30,36,0.15);
+}
+.search-box::before {
+    content: '🔍';
+    position: absolute;
+    left: 15px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 18px;
+    z-index: 1;
+}
+
 .btn {
     width: 100%;
     min-height: 50px;
@@ -344,7 +382,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 .btn svg { width: 18px; height: 18px; }
 .btn:active { transform: scale(0.97); }
-.btn:disabled { opacity: 0.5; cursor: not-allowed; }
 .btn.black { background: linear-gradient(135deg, #2a2a2a, #000); }
 .btn.green { background: linear-gradient(135deg, #16a34a, #15803d); }
 .btn.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
@@ -371,7 +408,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     background: linear-gradient(135deg, var(--red), var(--red-dark));
 }
 .item-icon svg { width: 22px; height: 22px; }
-.item-icon.green { background: linear-gradient(135deg, #16a34a, #15803d); }
+.item-icon.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
 .item-body { flex: 1; min-width: 0; }
 .item-title { font-size: 16px; font-weight: 700; margin-bottom: 3px; }
 .item-sub { font-size: 13px; color: var(--muted); margin-top: 2px; }
@@ -391,43 +428,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 .item-del svg { width: 16px; height: 16px; }
 .item-del:active { background: rgba(227,30,36,0.25); }
-
-.check {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 14px;
-    border: 2px solid var(--border);
-    border-radius: 12px;
-    margin-bottom: 10px;
-    cursor: pointer;
-    background: #fff;
-    transition: all 0.2s;
-}
-.check.on {
-    border-color: var(--red);
-    background: linear-gradient(135deg, #fff, #fff5f5);
-    box-shadow: 0 0 0 3px rgba(227,30,36,0.1);
-}
-.check-box {
-    width: 26px;
-    height: 26px;
-    border: 2px solid var(--border);
-    border-radius: 7px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    flex-shrink: 0;
-    background: #fff;
-}
-.check.on .check-box { background: var(--red); border-color: var(--red); }
-.check-box svg { width: 15px; height: 15px; color: white; opacity: 0; }
-.check.on .check-box svg { opacity: 1; }
-.check-body { flex: 1; min-width: 0; }
-.check-title { font-size: 15px; font-weight: 700; }
-.check-meta { display: flex; align-items: center; gap: 10px; margin-top: 5px; font-size: 13px; color: var(--muted); flex-wrap: wrap; }
-.check-price { color: var(--red); font-weight: 800; }
-.check-usta { color: var(--blue); font-weight: 600; }
 
 .result {
     background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
@@ -462,10 +462,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 }
 .result-info div:last-child { margin-bottom: 0; }
 .result-info strong { color: white; }
-.result-list { border-top: 1px solid rgba(255,255,255,0.1); padding-top: 14px; margin-top: 14px; }
-.result-row { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; font-size: 15px; }
-.result-row span:first-child { color: #ccc; }
-.result-row span:last-child { color: white; font-weight: 600; }
 .result-total {
     display: flex;
     justify-content: space-between;
@@ -516,6 +512,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .stat.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
 .stat.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
 .stat.dark { background: linear-gradient(135deg, #374151, #1f2937); }
+.stat.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
 
 .empty { text-align: center; padding: 50px 20px; color: #999; font-size: 14px; }
 .empty svg { width: 56px; height: 56px; stroke-width: 1.5; color: #ccc; margin-bottom: 12px; }
@@ -611,9 +608,11 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     padding: 5px;
     border-radius: 12px;
     margin-bottom: 16px;
+    flex-wrap: wrap;
 }
 .tabs button {
     flex: 1;
+    min-width: 80px;
     padding: 11px;
     border: none;
     background: transparent;
@@ -629,12 +628,65 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     color: white;
 }
 
+.usta-stat-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 12px 0;
+    border-bottom: 1px solid #f0f0f0;
+    gap: 10px;
+}
+.usta-stat-row:last-child { border-bottom: none; }
+.usta-stat-name { font-weight: 700; font-size: 14px; }
+.usta-stat-spec { font-size: 11px; color: var(--muted); margin-top: 2px; }
+.usta-stat-amount { text-align: right; }
+.usta-stat-money { color: var(--green); font-weight: 900; font-size: 15px; }
+.usta-stat-count { font-size: 11px; color: var(--muted); margin-top: 2px; }
+
+/* МИЖОЗ КАРТАСИ */
+.mijoz-card {
+    border-left: 5px solid var(--blue);
+}
+.mijoz-avatar {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #2563eb, #1e40af);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    font-weight: 900;
+    flex-shrink: 0;
+}
+.mijoz-info {
+    display: flex;
+    justify-content: space-between;
+    gap: 10px;
+    margin-bottom: 8px;
+}
+.mijoz-actions {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 8px;
+    margin-top: 12px;
+}
+.mijoz-actions .btn {
+    margin: 0;
+    min-height: 42px;
+    font-size: 13px;
+    padding: 10px;
+}
+
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
+    .grid-3 { grid-template-columns: 1fr; }
     .stats { grid-template-columns: 1fr 1fr; }
     .grid-form { grid-template-columns: 1fr; }
     .header-inner { flex-wrap: wrap; }
     .logo-svg { width: 100px; }
+    .logo-box { padding: 5px 10px; }
     .logo-text h1 { font-size: 15px; }
     .live-clock { font-size: 12px; padding: 6px 12px; }
     nav { top: 68px; }
@@ -643,7 +695,8 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 @media (max-width: 480px) {
     .section { padding: 16px 14px; }
     .card { padding: 16px; }
-    .logo-svg { width: 85px; }
+    .logo-svg { width: 80px; }
+    .logo-box { padding: 4px 8px; border-radius: 10px; }
     .logo-text h1 { font-size: 13px; }
     .stat-value { font-size: 18px; }
     .result-total { font-size: 18px; }
@@ -653,30 +706,34 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 <body>
 
 <div class="bg"></div>
-<div class="toast" id="toast">Muvaffaqiyat!</div>
+<div class="toast" id="toast">Муваффақият!</div>
 
 <header>
     <div class="header-inner">
         <div class="logo-wrap">
-            <svg class="logo-svg" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
-                <g fill="none" stroke="#e31e24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
-                    <path d="M 100 52 Q 140 28 210 26 Q 280 28 320 52"/>
-                    <path d="M 88 62 Q 140 56 210 54 Q 280 56 332 62"/>
-                    <ellipse cx="98" cy="60" rx="7" ry="5" stroke-width="2.5"/>
-                    <ellipse cx="322" cy="60" rx="7" ry="5" stroke-width="2.5"/>
-                </g>
-                <path d="M 65 90 L 82 90 Q 105 90 102 112 Q 100 130 82 130 L 76 130 L 79 112 L 85 112 Q 92 112 92 106 Q 92 100 85 100 L 72 100 Z" fill="#1a1a1a"/>
-                <path d="M 118 145 L 135 88 L 158 88 L 175 145 L 158 145 L 154 128 L 138 128 L 135 145 Z" fill="#e31e24"/>
-                <path d="M 145 112 L 152 112 L 148 98 Z" fill="white"/>
-                <path d="M 188 88 L 205 88 L 222 122 L 239 88 L 256 88 L 244 145 L 228 145 L 238 112 L 222 138 L 206 112 L 216 145 L 200 145 Z" fill="#1a1a1a"/>
-            </svg>
+            <div class="logo-box">
+                <svg class="logo-svg" viewBox="0 0 420 200" xmlns="http://www.w3.org/2000/svg">
+                    <g fill="none" stroke="#e31e24" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+                        <path d="M 100 52 Q 140 28 210 26 Q 280 28 320 52"/>
+                        <path d="M 88 62 Q 140 56 210 54 Q 280 56 332 62"/>
+                        <ellipse cx="98" cy="60" rx="7" ry="5" stroke-width="2.5"/>
+                        <ellipse cx="322" cy="60" rx="7" ry="5" stroke-width="2.5"/>
+                    </g>
+                    <path d="M 65 90 L 82 90 Q 105 90 102 112 Q 100 130 82 130 L 76 130 L 79 112 L 85 112 Q 92 112 92 106 Q 92 100 85 100 L 72 100 Z" fill="#1a1a1a"/>
+                    <path d="M 118 145 L 135 88 L 158 88 L 175 145 L 158 145 L 154 128 L 138 128 L 135 145 Z" fill="#e31e24"/>
+                    <path d="M 145 112 L 152 112 L 148 98 Z" fill="white"/>
+                    <path d="M 188 88 L 205 88 L 222 122 L 239 88 L 256 88 L 244 145 L 228 145 L 238 112 L 222 138 L 206 112 L 216 145 L 200 145 Z" fill="#1a1a1a"/>
+                    <text x="65" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#1a1a1a" letter-spacing="0.5">POP AUTO</text>
+                    <text x="215" y="180" font-family="Arial Black, Arial, sans-serif" font-size="22" font-weight="900" font-style="italic" fill="#e31e24" letter-spacing="0.5">MAKON</text>
+                </svg>
+            </div>
             <div class="logo-text">
                 <h1>POP <span>AUTO</span> MAKON</h1>
-                <p>AVTOSERVIS TIZIMI</p>
+                <p>АВТОСЕРВИС ТИЗИМИ</p>
             </div>
         </div>
         <div class="header-info">
-            <div class="sync-status" id="syncStatus">Yuklanmoqda...</div>
+            <div class="sync-status" id="syncStatus">Юкланмоқда...</div>
             <div class="live-clock">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 6v6l4 2"/></svg>
                 <span id="clockText">--:--</span>
@@ -689,203 +746,214 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div class="nav-inner">
         <button class="active" onclick="go('s-panel', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-            Panel
+            Панел
         </button>
         <button onclick="go('s-order', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
-            Buyurtma
+            Мижоз
+        </button>
+        <button onclick="go('s-mijozlar', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+            Мижозлар
         </button>
         <button onclick="go('s-ustalar', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            Ustalar
-        </button>
-        <button onclick="go('s-xizmatlar', this)">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            Xizmatlar
+            Усталар
         </button>
         <button onclick="go('s-history', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-            Tarix
+            Тарих
         </button>
     </div>
 </nav>
 
-<!-- PANEL -->
+<!-- ПАНЕЛ -->
 <div class="section active" id="s-panel">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="9"/><rect x="14" y="3" width="7" height="5"/><rect x="14" y="12" width="7" height="9"/><rect x="3" y="16" width="7" height="5"/></svg>
-        Boshqaruv paneli
+        Бошқарув панели
     </h2>
     <div class="card" style="padding:14px;">
         <div class="tabs">
-            <button onclick="setPeriod('today')" id="p-today">Bugun</button>
-            <button onclick="setPeriod('week')" id="p-week">7 kun</button>
-            <button onclick="setPeriod('month')" id="p-month" class="active">30 kun</button>
-            <button onclick="setPeriod('all')" id="p-all">Barchasi</button>
+            <button onclick="setPeriod('today')" id="p-today">Бугун</button>
+            <button onclick="setPeriod('week')" id="p-week">7 кун</button>
+            <button onclick="setPeriod('month')" id="p-month" class="active">30 кун</button>
+            <button onclick="setPeriod('all')" id="p-all">Барчаси</button>
         </div>
         <div id="periodText" style="text-align:center; font-size:13px; color:#888; padding:6px;"></div>
     </div>
     <div id="dashStats"></div>
-    <div id="dashSpecs"></div>
+    <div id="dashUstalar"></div>
 </div>
 
-<!-- USTALAR -->
-<div class="section" id="s-ustalar">
-    <h2>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-        Ustalar
-    </h2>
-    <div class="card">
-        <div class="grid-form">
-            <div class="field">
-                <label>Usta ismi</label>
-                <input type="text" id="ustaName" placeholder="Masalan: Akmal aka">
-            </div>
-            <div class="field">
-                <label>Mutaxassisligi</label>
-                <select id="ustaSpec"><option value="">Mutaxassislikni tanlang</option></select>
-            </div>
-            <div class="field">
-                <label>Qiladigan ishi</label>
-                <input type="text" id="ustaWork" placeholder="Masalan: Motor ta'mirlash">
-            </div>
-            <div class="field">
-                <label>Xizmat haqqi (so'm)</label>
-                <input type="number" id="ustaRate" placeholder="Masalan: 50000">
-            </div>
-        </div>
-        <button class="btn black" onclick="addUsta()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Usta qo'shish
-        </button>
-    </div>
-    <div class="section-head">
-        <h2>Ustalar ro'yxati</h2>
-        <span class="badge" id="ustalarCount">0 ta</span>
-    </div>
-    <div id="ustalarList" class="card"></div>
-</div>
-
-<!-- XIZMATLAR -->
-<div class="section" id="s-xizmatlar">
-    <h2>
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-        Xizmatlar
-    </h2>
-    <div class="card">
-        <div class="grid-form">
-            <div class="field">
-                <label>Xizmat nomi</label>
-                <input type="text" id="svcName" placeholder="Masalan: Spark almashtirish">
-            </div>
-            <div class="field">
-                <label>Xizmat narxi</label>
-                <input type="number" id="svcPrice" placeholder="Masalan: 150000">
-            </div>
-            <div class="field full">
-                <label>Usta</label>
-                <select id="svcUsta"><option value="">Ustani tanlang</option></select>
-            </div>
-        </div>
-        <button class="btn" onclick="addSvc()">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-            Xizmat qo'shish
-        </button>
-    </div>
-    <div class="section-head">
-        <h2>Xizmatlar ro'yxati</h2>
-        <span class="badge" id="svcsCount">0 ta</span>
-    </div>
-    <div id="svcsList" class="card"></div>
-</div>
-
-<!-- BUYURTMA -->
+<!-- МИЖОЗ (ЯНГИ БУЮРТМА) -->
 <div class="section" id="s-order">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
-        Yangi buyurtma
+        Янги мижоз
     </h2>
     <div class="card">
         <div class="grid-form">
             <div class="field">
-                <label>Mijoz ismi</label>
-                <input type="text" id="oName" placeholder="Masalan: Mahmudov Shoxrux">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Мижоз исми
+                </label>
+                <input type="text" id="oName" placeholder="Мисол: Маҳмудов Шоҳрух">
             </div>
             <div class="field">
-                <label>Telefon raqami</label>
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                    Телефон рақами
+                </label>
                 <input type="tel" id="oPhone" placeholder="+998 90 123 45 67">
             </div>
             <div class="field">
-                <label>Mashina modeli</label>
-                <input type="text" id="oModel" placeholder="Masalan: Malibu 2">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
+                    Автомобиль модели
+                </label>
+                <input type="text" id="oModel" placeholder="Мисол: Malibu 2">
             </div>
             <div class="field">
-                <label>Mashina raqami</label>
-                <input type="text" id="oNumber" placeholder="Masalan: 50 A 555 AA">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="6" width="18" height="12" rx="2"/><path d="M7 10h10M7 14h6"/></svg>
+                    Автомобиль рақами
+                </label>
+                <input type="text" id="oNumber" placeholder="Мисол: 50 A 555 AA">
+            </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Устани танланг
+                </label>
+                <select id="oUsta"><option value="">-- Устани танланг --</option></select>
+            </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+                    Дагавор сумма (сўм)
+                </label>
+                <input type="number" id="oDagavor" placeholder="Мисол: 500000">
             </div>
         </div>
     </div>
-    <h2>Xizmatlarni tanlang</h2>
-    <div class="card" style="padding:16px;">
-        <div id="orderChecks"></div>
-    </div>
     <button class="btn black" onclick="calcOrder()">
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
-        Hisob-kitob qilish
+        Ҳисоб-китоб қилиш
     </button>
     <div id="orderResult"></div>
 </div>
 
-<!-- TARIX -->
+<!-- МИЖОЗЛАР БАЗАСИ -->
+<div class="section" id="s-mijozlar">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
+        Мижозлар базаси
+    </h2>
+
+    <div class="search-box">
+        <input type="text" id="mijozSearch" placeholder="Мижоз исми, рақами ёки авто рақами..." oninput="renderMijozlar()">
+    </div>
+
+    <div id="mijozlarStats" style="margin-bottom:14px;"></div>
+
+    <div id="mijozlarList"></div>
+</div>
+
+<!-- УСТАЛАР -->
+<div class="section" id="s-ustalar">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+        Уста қўшиш
+    </h2>
+    <div class="card">
+        <div class="grid-form">
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                    Уста исми
+                </label>
+                <input type="text" id="ustaName" placeholder="Мисол: Акмал ака">
+            </div>
+            <div class="field">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
+                    Мутахассислиги
+                </label>
+                <select id="ustaSpec"><option value="">-- Мутахассисликни танланг --</option></select>
+            </div>
+            <div class="field full">
+                <label>
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+                    Янги мутахассислик (агар рўйхатда бўлмаса)
+                </label>
+                <input type="text" id="newSpecName" placeholder="Мисол: КОНДИЦИОНЕР" style="text-transform: uppercase;">
+            </div>
+        </div>
+        <button class="btn orange" onclick="addNewSpec()" style="margin-bottom:8px;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Янги мутахассислик қўшиш
+        </button>
+        <button class="btn black" onclick="addUsta()">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+            Уста қўшиш
+        </button>
+    </div>
+    <div class="section-head">
+        <h2>Усталар рўйхати</h2>
+        <span class="badge" id="ustalarCount">0 та</span>
+    </div>
+    <div id="ustalarList" class="card"></div>
+</div>
+
+<!-- ТАРИХ -->
 <div class="section" id="s-history">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg>
-        Buyurtmalar tarixi
+        Буюртмалар тарихи
     </h2>
     <div id="historyList"></div>
 </div>
 
-<!-- SMS MODAL -->
+<!-- SMS МОДАЛ -->
 <div class="modal-bg" id="smsModal">
     <div class="modal">
         <div class="modal-title">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-            SMS yuborish
+            SMS юбориш
         </div>
         <div style="font-size:13px; color:#666; margin-bottom:12px; text-align:center;">
             <strong id="smsTo"></strong> — <span id="smsPhone"></span>
         </div>
         <div class="sms-preview" id="smsText"></div>
         <div class="modal-actions">
-            <button class="btn gray" onclick="closeSms()">Bekor</button>
-            <button class="btn green" onclick="sendSms()">Yuborish</button>
+            <button class="btn gray" onclick="closeSms()">Бекор</button>
+            <button class="btn green" onclick="sendSms()">Юбориш</button>
         </div>
     </div>
 </div>
 
 <script>
-/* ============ SUPABASE SOZLAMALARI ============ */
+/* ============ SUPABASE ============ */
 const SUPABASE_URL = 'https://nkrkhssusfljvbofuggj.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_nUNl6pakp9KDH3fWqUeSiQ_ZUoPHb0V';
 
 let supabaseClient = null;
-
 try {
     if (typeof window.supabase !== 'undefined' && window.supabase.createClient) {
         supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
-        console.log('✅ Supabase ulanish tayyor');
-    } else {
-        console.error('❌ Supabase kutubxonasi yuklanmadi');
+        console.log('✅ Supabase уланиш тайёр');
     }
 } catch (e) {
-    console.error('❌ Supabase xatolik:', e);
+    console.error('❌ Supabase хато:', e);
 }
 
 /* ============ DATA ============ */
 let ustalar = [];
-let services = [];
 let orders = [];
-let specs = ["MOTOR", "XODOVOY", "KUZOV", "VAKUM", "ELEKTRIK", "DIAGNOSTIKA", "MEXANIK", "BOSHQA"];
+let mijozlar = [];
+let specs = ["МОТОР", "ХОДОВОЙ", "КУЗОВ", "ВАКУМ", "ЭЛЕКТРИК", "ДИАГНОСТИКА", "МЕХАНИК", "БОШҚА"];
 let period = 'month';
 let lastSms = null;
 
@@ -907,39 +975,29 @@ function setSyncStatus(text, cls) {
     el.className = 'sync-status ' + (cls || '');
 }
 
-/* ============ SUPABASE LOAD ============ */
+/* ============ SUPABASE ЮКЛАШ ============ */
 async function loadFromSupabase() {
     if (!supabaseClient) {
-        setSyncStatus('❌ Supabase ulanmagan', 'err');
+        setSyncStatus('❌ Supabase уланмаган', 'err');
         return;
     }
-    
-    setSyncStatus('⏳ Yuklanmoqda...', 'loading');
-    
+    setSyncStatus('⏳ Юкланмоқда...', 'loading');
     try {
-        // Ustalar
         const { data: uData, error: e1 } = await supabaseClient
             .from('ustalar').select('*').order('created_at', { ascending: true });
         if (e1) throw e1;
         ustalar = uData || [];
 
-        // Xizmatlar
-        const { data: sData, error: e2 } = await supabaseClient
-            .from('services').select('*').order('created_at', { ascending: true });
-        if (e2) throw e2;
-        services = sData || [];
-
-        // Buyurtmalar
         const { data: oData, error: e3 } = await supabaseClient
             .from('orders').select('*').order('id', { ascending: false });
         if (e3) throw e3;
-        orders = (oData || []).map(o => ({
-            ...o,
-            dateStr: o.date_str || o.dateStr,
-            items: o.items || []
-        }));
+        orders = (oData || []).map(o => ({ ...o, dateStr: o.date_str || o.dateStr }));
 
-        // Mutaxassisliklar
+        const { data: mData, error: e5 } = await supabaseClient
+            .from('mijozlar').select('*').order('updated_at', { ascending: false });
+        if (e5) throw e5;
+        mijozlar = mData || [];
+
         const { data: spData, error: e4 } = await supabaseClient
             .from('specs').select('*').order('id', { ascending: true });
         if (e4) throw e4;
@@ -947,25 +1005,27 @@ async function loadFromSupabase() {
             specs = spData.map(s => s.name);
         }
 
-        setSyncStatus('✅ Sinxron', 'ok');
-        console.log('✅ Ma\'lumotlar yuklandi:', { ustalar: ustalar.length, services: services.length, orders: orders.length });
-        
+        setSyncStatus('✅ Синхрон', 'ok');
+        console.log('✅ Маълумотлар юкланди:', { 
+            ustalar: ustalar.length, 
+            orders: orders.length,
+            mijozlar: mijozlar.length 
+        });
+
         renderUstaSpecSelect();
         renderUstalar();
-        renderSvcs();
-        renderSvcUstaSelect();
-        renderOrderChecks();
+        renderOrderUstaSelect();
         renderHistory();
         renderDash();
-        
+        renderMijozlar();
     } catch (err) {
-        console.error('❌ Supabase xatolik:', err);
-        setSyncStatus('❌ Xatolik', 'err');
-        toast('Ma\'lumot yuklanmadi: ' + (err.message || ''), true);
+        console.error('❌ Supabase хато:', err);
+        setSyncStatus('❌ Хато', 'err');
+        toast('Маълумот юкланмади: ' + (err.message || ''), true);
     }
 }
 
-/* ============ CLOCK ============ */
+/* ============ СОАТ ============ */
 function updateClock() {
     const now = new Date();
     const h = String(now.getHours()).padStart(2, '0');
@@ -976,91 +1036,100 @@ function updateClock() {
 }
 setInterval(updateClock, 1000);
 
-/* ============ NAV ============ */
+/* ============ НАВИГАЦИЯ ============ */
 function go(id, btn) {
     document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
     document.querySelectorAll('nav button').forEach(b => b.classList.remove('active'));
     $(id).classList.add('active');
     btn.classList.add('active');
-    
+
     if (id === 's-panel') renderDash();
     if (id === 's-ustalar') { renderUstalar(); renderUstaSpecSelect(); }
-    if (id === 's-xizmatlar') { renderSvcs(); renderSvcUstaSelect(); }
-    if (id === 's-order') { renderOrderChecks(); renderSvcUstaSelect(); }
+    if (id === 's-order') renderOrderUstaSelect();
     if (id === 's-history') renderHistory();
-    
+    if (id === 's-mijozlar') renderMijozlar();
+
     window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
+/* ============ МУТАХАССИСЛИКЛАР ============ */
 function renderUstaSpecSelect() {
     const el = $('ustaSpec');
     if (!el) return;
-    el.innerHTML = '<option value="">Mutaxassislikni tanlang</option>' +
+    el.innerHTML = '<option value="">-- Мутахассисликни танланг --</option>' +
         specs.map(s => `<option value="${s}">${s}</option>`).join('');
 }
 
-/* ============ USTALAR ============ */
+async function addNewSpec() {
+    const name = $('newSpecName').value.trim().toUpperCase();
+    if (!name) return toast('Мутахассислик номини киритинг', true);
+    if (specs.includes(name)) return toast('Бу мутахассислик мавжуд', true);
+
+    try {
+        const { error } = await supabaseClient.from('specs').insert([{ name: name }]);
+        if (error) throw error;
+        specs.push(name);
+        $('newSpecName').value = '';
+        renderUstaSpecSelect();
+        toast('Мутахассислик қўшилди');
+    } catch (err) {
+        console.error(err);
+        toast('Хатолик: ' + err.message, true);
+    }
+}
+
+/* ============ УСТАЛАР ============ */
 async function addUsta() {
     const name = $('ustaName').value.trim();
     const spec = $('ustaSpec').value;
-    const work = $('ustaWork').value.trim();
-    const rate = $('ustaRate').value;
-    
-    if (!name) return toast('Usta ismini kiriting', true);
-    if (!spec) return toast('Mutaxassislikni tanlang', true);
-    
-    const newUsta = {
-        id: Date.now(),
-        name: name, spec: spec,
-        work: work || spec,
-        rate: Number(rate) || 0
-    };
-    
+
+    if (!name) return toast('Уста исмини киритинг', true);
+    if (!spec) return toast('Мутахассисликни танланг', true);
+
+    const newUsta = { id: Date.now(), name: name, spec: spec };
+
     try {
         const { error } = await supabaseClient.from('ustalar').insert([newUsta]);
         if (error) throw error;
-        
+
         ustalar.push(newUsta);
-        
         $('ustaName').value = '';
         $('ustaSpec').value = '';
-        $('ustaWork').value = '';
-        $('ustaRate').value = '';
-        
+
         renderUstalar();
-        renderSvcUstaSelect();
-        toast('Usta qo\'shildi');
+        renderOrderUstaSelect();
+        toast('Уста қўшилди');
     } catch (err) {
         console.error(err);
-        toast('Saqlashda xatolik: ' + err.message, true);
+        toast('Сақлашда хатолик', true);
     }
 }
 
 async function delUsta(id) {
-    if (!confirm('Ustani o\'chirmoqchimisiz?')) return;
+    if (!confirm('Устани ўчирмоқчимисиз?')) return;
     try {
         const { error } = await supabaseClient.from('ustalar').delete().eq('id', id);
         if (error) throw error;
         ustalar = ustalar.filter(u => u.id !== id);
         renderUstalar();
-        renderSvcUstaSelect();
-        toast('O\'chirildi');
+        renderOrderUstaSelect();
+        toast('Ўчирилди');
     } catch (err) {
         console.error(err);
-        toast('Xatolik', true);
+        toast('Хатолик', true);
     }
 }
 
 function renderUstalar() {
     const el = $('ustalarList');
     if (!el) return;
-    $('ustalarCount').textContent = ustalar.length + ' ta';
-    
+    $('ustalarCount').textContent = ustalar.length + ' та';
+
     if (ustalar.length === 0) {
-        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div>Ustalar yo\'q</div></div>';
+        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div>Усталар йўқ</div></div>';
         return;
     }
-    
+
     el.innerHTML = ustalar.map(u => `
         <div class="item">
             <div class="item-icon">
@@ -1068,8 +1137,7 @@ function renderUstalar() {
             </div>
             <div class="item-body">
                 <div class="item-title">${u.name}</div>
-                <div class="item-sub">${u.spec} • ${u.work}</div>
-                ${u.rate ? `<div class="item-price">${money(u.rate)} so'm</div>` : ''}
+                <div class="item-sub">${u.spec}</div>
             </div>
             <button class="item-del" onclick="delUsta(${u.id})">
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
@@ -1078,120 +1146,12 @@ function renderUstalar() {
     `).join('');
 }
 
-/* ============ XIZMATLAR ============ */
-function renderSvcUstaSelect() {
-    const el = $('svcUsta');
+/* ============ МИЖОЗ ============ */
+function renderOrderUstaSelect() {
+    const el = $('oUsta');
     if (!el) return;
-    el.innerHTML = '<option value="">Ustani tanlang</option>' +
-        ustalar.map(u => `<option value="${u.name} (${u.spec})">${u.name} — ${u.spec}</option>`).join('');
-}
-
-async function addSvc() {
-    const name = $('svcName').value.trim();
-    const price = $('svcPrice').value;
-    const usta = $('svcUsta').value;
-    
-    if (!name) return toast('Xizmat nomini kiriting', true);
-    if (!price) return toast('Xizmat narxini kiriting', true);
-    
-    const newSvc = {
-        id: Date.now(),
-        name: name,
-        price: Number(price),
-        usta: usta || 'Belgilanmagan'
-    };
-    
-    try {
-        const { error } = await supabaseClient.from('services').insert([newSvc]);
-        if (error) throw error;
-        
-        services.push(newSvc);
-        
-        $('svcName').value = '';
-        $('svcPrice').value = '';
-        $('svcUsta').value = '';
-        
-        renderSvcs();
-        renderOrderChecks();
-        toast('Xizmat qo\'shildi');
-    } catch (err) {
-        console.error(err);
-        toast('Saqlashda xatolik: ' + err.message, true);
-    }
-}
-
-async function delSvc(id) {
-    if (!confirm('Xizmatni o\'chirmoqchimisiz?')) return;
-    try {
-        const { error } = await supabaseClient.from('services').delete().eq('id', id);
-        if (error) throw error;
-        services = services.filter(s => s.id !== id);
-        renderSvcs();
-        renderOrderChecks();
-        toast('O\'chirildi');
-    } catch (err) {
-        console.error(err);
-        toast('Xatolik', true);
-    }
-}
-
-function renderSvcs() {
-    const el = $('svcsList');
-    if (!el) return;
-    $('svcsCount').textContent = services.length + ' ta';
-    
-    if (services.length === 0) {
-        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><div>Xizmatlar yo\'q</div></div>';
-        return;
-    }
-    
-    el.innerHTML = services.map(s => `
-        <div class="item">
-            <div class="item-icon green">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-            </div>
-            <div class="item-body">
-                <div class="item-title">${s.name}</div>
-                <div class="item-price">${money(s.price)} so'm</div>
-                <div class="item-sub">${s.usta}</div>
-            </div>
-            <button class="item-del" onclick="delSvc(${s.id})">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            </button>
-        </div>
-    `).join('');
-}
-
-/* ============ BUYURTMA ============ */
-function renderOrderChecks() {
-    const el = $('orderChecks');
-    if (!el) return;
-    if (services.length === 0) {
-        el.innerHTML = '<div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg><div>Xizmatlar yo\'q</div></div>';
-        return;
-    }
-    
-    el.innerHTML = services.map(s => `
-        <label class="check" onclick="toggleCheck(this)">
-            <div class="check-box">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-            </div>
-            <input type="checkbox" value="${s.id}" data-price="${s.price}" data-name="${s.name}" data-usta="${s.usta}" style="display:none">
-            <div class="check-body">
-                <div class="check-title">${s.name}</div>
-                <div class="check-meta">
-                    <span class="check-price">${money(s.price)} so'm</span>
-                    <span class="check-usta">${s.usta}</span>
-                </div>
-            </div>
-        </label>
-    `).join('');
-}
-
-function toggleCheck(label) {
-    const cb = label.querySelector('input[type="checkbox"]');
-    cb.checked = !cb.checked;
-    label.classList.toggle('on', cb.checked);
+    el.innerHTML = '<option value="">-- Устани танланг --</option>' +
+        ustalar.map(u => `<option value="${u.name}|${u.spec}">${u.name} — ${u.spec}</option>`).join('');
 }
 
 function calcOrder() {
@@ -1199,58 +1159,47 @@ function calcOrder() {
     const phone = $('oPhone').value.trim();
     const model = $('oModel').value.trim();
     const number = $('oNumber').value.trim();
-    
-    const checked = document.querySelectorAll('#orderChecks input:checked');
-    if (checked.length === 0) return toast('Xizmat tanlang', true);
-    
-    let total = 0;
-    let items = [];
-    checked.forEach(cb => {
-        const p = Number(cb.dataset.price);
-        const n = cb.dataset.name;
-        const u = cb.dataset.usta;
-        total += p;
-        items.push({ name: n, price: p, usta: u });
-    });
-    
-    const mgr = total * 0.30;
-    const ust = total * 0.70;
-    
+    const ustaVal = $('oUsta').value;
+    const dagavor = Number($('oDagavor').value);
+
+    if (!name) return toast('Мижоз исмини киритинг', true);
+    if (!phone) return toast('Телефон рақамини киритинг', true);
+    if (!model) return toast('Автомобиль моделини киритинг', true);
+    if (!number) return toast('Автомобиль рақамини киритинг', true);
+    if (!ustaVal) return toast('Устани танланг', true);
+    if (!dagavor || dagavor <= 0) return toast('Дагавор суммани киритинг', true);
+
+    const [ustaName, ustaSpec] = ustaVal.split('|');
+    const mgr = dagavor * 0.30;
+    const ust = dagavor * 0.70;
+
     const el = $('orderResult');
     el.innerHTML = `
         <div class="result">
-            <div class="result-title">Hisob-kitob</div>
+            <div class="result-title">Ҳисоб-китоб</div>
             <div class="result-info">
-                <div><span>Mijoz</span><strong>${name || 'Noma\'lum'}</strong></div>
-                <div><span>Telefon</span><strong>${phone || 'Noma\'lum'}</strong></div>
-                <div><span>Mashina</span><strong>${model || 'Noma\'lum'}</strong></div>
-                <div><span>Raqam</span><strong>${number || 'Noma\'lum'}</strong></div>
-            </div>
-            <div class="result-list">
-                ${items.map(i => `
-                    <div class="result-row">
-                        <span>${i.name} <small style="color:#60a5fa">(${i.usta})</small></span>
-                        <span>${money(i.price)}</span>
-                    </div>
-                `).join('')}
+                <div><span>Мижоз</span><strong>${name}</strong></div>
+                <div><span>Телефон</span><strong>${phone}</strong></div>
+                <div><span>Автомобиль</span><strong>${model} — ${number}</strong></div>
+                <div><span>Уста</span><strong>${ustaName} (${ustaSpec})</strong></div>
             </div>
             <div class="result-total">
-                <span>JAMI</span>
-                <span>${money(total)} so'm</span>
+                <span>ЖАМИ</span>
+                <span>${money(dagavor)} сўм</span>
             </div>
             <div class="result-share">
                 <div class="share-box m">
-                    <div class="share-label">MENEJER 30%</div>
+                    <div class="share-label">МЕНЕЖЕР 30%</div>
                     <div class="share-value">${money(mgr)}</div>
                 </div>
                 <div class="share-box u">
-                    <div class="share-label">USTALAR 70%</div>
+                    <div class="share-label">УСТА 70%</div>
                     <div class="share-value">${money(ust)}</div>
                 </div>
             </div>
-            <button class="btn green" style="margin-top:14px" onclick='saveOrder(${JSON.stringify({name, phone, model, number, total, mgr, ust, items}).replace(/'/g, "&#39;")})'>
+            <button class="btn green" style="margin-top:14px" onclick='saveOrder(${JSON.stringify({name, phone, model, number, ustaName, ustaSpec, dagavor, mgr, ust}).replace(/'/g, "&#39;")})'>
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Saqlash va SMS yuborish
+                Сақлаш ва SMS юбориш
             </button>
         </div>
     `;
@@ -1267,58 +1216,213 @@ async function saveOrder(data) {
         phone: data.phone,
         model: data.model,
         number: data.number,
-        total: data.total,
+        dagavor: data.dagavor,
+        total: data.dagavor,
         mgr: data.mgr,
         ust: data.ust,
-        items: data.items
+        usta_name: data.ustaName,
+        usta_spec: data.ustaSpec
     };
-    
+
     try {
         const { error } = await supabaseClient.from('orders').insert([order]);
         if (error) throw error;
-        
+
         orders.unshift({...order, dateStr: order.date_str});
-        
-        const smsText = `XURMATLI ${data.name.toUpperCase() || 'MIJOZ'}!\n\nSIZNING ${data.number || ''} ${data.model.toUpperCase() || ''} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(data.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
-        
+
+        // МИЖОЗНИ БАЗАГА ҚЎШИШ ЁКИ ЯНГИЛАШ
+        await saveMijoz(data);
+
+        const smsText = `ҲУРМАТЛИ ${data.name.toUpperCase()}!\n\nСИЗНИНГ ${data.number} ${data.model.toUpperCase()} РУСУМЛИ АВТОМОБИЛИНГИЗГА КЎРСАТИЛГАН ХИЗМАТЛАР ${money(data.dagavor)} СЎМ БЎЛДИ.\n\nХИЗМАТИМИЗДАН ФОЙДАЛАНГАНИНГИЗ УЧУН МИННАТДОРМИЗ!`;
+
         lastSms = { phone: data.phone, text: smsText };
-        $('smsTo').textContent = data.name || 'Mijoz';
-        $('smsPhone').textContent = data.phone || '—';
+        $('smsTo').textContent = data.name;
+        $('smsPhone').textContent = data.phone;
         $('smsText').textContent = smsText;
         $('smsModal').classList.add('show');
-        
+
         $('oName').value = '';
         $('oPhone').value = '';
         $('oModel').value = '';
         $('oNumber').value = '';
-        document.querySelectorAll('#orderChecks input').forEach(cb => {
-            cb.checked = false;
-            cb.closest('.check').classList.remove('on');
-        });
+        $('oUsta').value = '';
+        $('oDagavor').value = '';
         $('orderResult').innerHTML = '';
     } catch (err) {
         console.error(err);
-        toast('Saqlashda xatolik: ' + err.message, true);
+        toast('Сақлашда хатолик: ' + err.message, true);
     }
 }
 
-/* ============ SMS ============ */
-function closeSms() {
-    $('smsModal').classList.remove('show');
+/* ============ МИЖОЗНИ САҚЛАШ/ЯНГИЛАШ ============ */
+async function saveMijoz(data) {
+    try {
+        // Телефон рақами бўйича мавжуд мижозни қидириш
+        const existing = mijozlar.find(m => m.phone === data.phone);
+
+        if (existing) {
+            // Мавжуд мижозни янгилаш
+            const newTotal = Number(existing.total_spent || 0) + data.dagavor;
+            const newCount = Number(existing.orders_count || 0) + 1;
+
+            const { error } = await supabaseClient.from('mijozlar')
+                .update({
+                    name: data.name,
+                    model: data.model,
+                    number: data.number,
+                    total_spent: newTotal,
+                    orders_count: newCount,
+                    updated_at: new Date().toISOString()
+                })
+                .eq('id', existing.id);
+
+            if (error) throw error;
+
+            existing.name = data.name;
+            existing.model = data.model;
+            existing.number = data.number;
+            existing.total_spent = newTotal;
+            existing.orders_count = newCount;
+        } else {
+            // Янги мижоз яратиш
+            const newMijoz = {
+                id: Date.now(),
+                name: data.name,
+                phone: data.phone,
+                model: data.model,
+                number: data.number,
+                total_spent: data.dagavor,
+                orders_count: 1
+            };
+
+            const { error } = await supabaseClient.from('mijozlar').insert([newMijoz]);
+            if (error) throw error;
+
+            mijozlar.unshift(newMijoz);
+        }
+
+        renderMijozlar();
+    } catch (err) {
+        console.error('Мижоз сақлашда хато:', err);
+    }
 }
+
+/* ============ МИЖОЗЛАР РЎЙХАТИ ============ */
+function renderMijozlar() {
+    const el = $('mijozlarList');
+    if (!el) return;
+
+    const search = ($('mijozSearch')?.value || '').toLowerCase();
+
+    const filtered = mijozlar.filter(m => 
+        (m.name || '').toLowerCase().includes(search) ||
+        (m.phone || '').includes(search) ||
+        (m.number || '').toLowerCase().includes(search) ||
+        (m.model || '').toLowerCase().includes(search)
+    );
+
+    // Статистика
+    const total = mijozlar.length;
+    const totalSpent = mijozlar.reduce((s, m) => s + Number(m.total_spent || 0), 0);
+    const totalOrders = mijozlar.reduce((s, m) => s + Number(m.orders_count || 0), 0);
+
+    const statsEl = $('mijozlarStats');
+    if (statsEl) {
+        statsEl.innerHTML = `
+            <div class="grid-3">
+                <div class="stat blue" style="padding:14px;">
+                    <div class="stat-label">Жами мижоз</div>
+                    <div class="stat-value" style="font-size:20px;">${total}</div>
+                </div>
+                <div class="stat dark" style="padding:14px;">
+                    <div class="stat-label">Буюртмалар</div>
+                    <div class="stat-value" style="font-size:20px;">${totalOrders}</div>
+                </div>
+                <div class="stat green" style="padding:14px;">
+                    <div class="stat-label">Умумий тушум</div>
+                    <div class="stat-value" style="font-size:16px;">${money(totalSpent)}</div>
+                </div>
+            </div>
+        `;
+    }
+
+    if (filtered.length === 0) {
+        el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg><div>Мижозлар топилмади</div></div></div>';
+        return;
+    }
+
+    el.innerHTML = filtered.map(m => {
+        const initial = (m.name || '?').charAt(0).toUpperCase();
+        const clientOrders = orders.filter(o => o.phone === m.phone);
+        const lastOrder = clientOrders[0];
+
+        return `
+            <div class="card mijoz-card">
+                <div class="mijoz-info">
+                    <div style="display:flex; gap:12px; flex:1; min-width:0;">
+                        <div class="mijoz-avatar">${initial}</div>
+                        <div style="flex:1; min-width:0;">
+                            <div style="font-weight:800; font-size:15px;">${m.name || 'Номаълум'}</div>
+                            <div style="font-size:13px; color:var(--muted); margin-top:3px;">📞 ${m.phone || '—'}</div>
+                            <div style="font-size:13px; color:var(--muted); margin-top:2px;">🚗 ${m.model || '—'} — ${m.number || '—'}</div>
+                        </div>
+                    </div>
+                    <div style="text-align:right; flex-shrink:0;">
+                        <div style="color:var(--green); font-weight:900; font-size:15px;">${money(m.total_spent)}</div>
+                        <div style="font-size:10px; color:#888;">сўм</div>
+                        <div style="font-size:11px; color:var(--muted); margin-top:3px;">${m.orders_count || 0} та буюртма</div>
+                    </div>
+                </div>
+                ${lastOrder ? `<div style="font-size:12px; color:var(--muted); margin-top:8px; padding-top:8px; border-top:1px solid #eee;">Охирги: ${lastOrder.date}</div>` : ''}
+                <div class="mijoz-actions">
+                    <button class="btn blue" onclick="callMijoz('${m.phone}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+                        Қўнғироқ
+                    </button>
+                    <button class="btn gray" onclick="showMijozDetails('${m.phone}')">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
+                        Батафсил
+                    </button>
+                </div>
+            </div>
+        `;
+    }).join('');
+}
+
+function callMijoz(phone) {
+    if (!phone) return;
+    const clean = phone.replace(/[^\d+]/g, '');
+    window.location.href = `tel:${clean}`;
+}
+
+function showMijozDetails(phone) {
+    const m = mijozlar.find(x => x.phone === phone);
+    if (!m) return;
+    const clientOrders = orders.filter(o => o.phone === phone);
+    let text = `👤 ${m.name}\n📞 ${m.phone}\n🚗 ${m.model} — ${m.number}\n\n`;
+    text += `📦 Буюртмалар: ${m.orders_count} та\n`;
+    text += `💰 Жами тўлов: ${money(m.total_spent)} сўм\n`;
+    if (clientOrders.length > 0) {
+        text += `\n📅 Охирги буюртма: ${clientOrders[0].date}`;
+    }
+    alert(text);
+}
+
+/* ============ SMS ============ */
+function closeSms() { $('smsModal').classList.remove('show'); }
 
 function sendSms() {
     if (!lastSms) return;
     const clean = lastSms.phone.replace(/[^\d+]/g, '');
     window.location.href = `sms:${clean}?body=${encodeURIComponent(lastSms.text)}`;
-    toast('SMS ilovasi ochilmoqda...');
+    toast('SMS илова очилмоқда...');
     setTimeout(() => {
         closeSms();
-        go('s-history', document.querySelectorAll('nav button')[4]);
+        go('s-mijozlar', document.querySelectorAll('nav button')[2]);
     }, 700);
 }
 
-/* ============ PANEL ============ */
+/* ============ ПАНЕЛ ============ */
 function setPeriod(p) {
     period = p;
     ['today', 'week', 'month', 'all'].forEach(x => {
@@ -1331,7 +1435,7 @@ function setPeriod(p) {
 function getFiltered() {
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
-    
+
     if (period === 'today') return orders.filter(o => o.dateStr === todayStr);
     if (period === 'week') {
         const d = new Date(today);
@@ -1348,92 +1452,108 @@ function getFiltered() {
 
 function renderDash() {
     const f = getFiltered();
-    const total = f.reduce((s, o) => s + Number(o.total || 0), 0);
+    const total = f.reduce((s, o) => s + Number(o.dagavor || 0), 0);
     const mgr = f.reduce((s, o) => s + Number(o.mgr || 0), 0);
     const ust = f.reduce((s, o) => s + Number(o.ust || 0), 0);
-    
-    const periodNames = { today: 'Bugun', week: 'Oxirgi 7 kun', month: 'Oxirgi 30 kun', all: 'Barcha vaqt' };
+
+    const periodNames = { today: 'Бугун', week: 'Охирги 7 кун', month: 'Охирги 30 кун', all: 'Барча вақт' };
     $('periodText').textContent = periodNames[period];
-    
+
     $('dashStats').innerHTML = `
         <div class="stats">
             <div class="stat red">
-                <div class="stat-label">Umumiy tushum</div>
+                <div class="stat-label">Умумий тушум</div>
                 <div class="stat-value">${money(total)}</div>
-                <div class="stat-sub">so'm</div>
+                <div class="stat-sub">сўм</div>
             </div>
             <div class="stat dark">
-                <div class="stat-label">Buyurtmalar</div>
+                <div class="stat-label">Буюртмалар</div>
                 <div class="stat-value">${f.length}</div>
-                <div class="stat-sub">ta</div>
+                <div class="stat-sub">та</div>
             </div>
             <div class="stat blue">
-                <div class="stat-label">Menejer 30%</div>
+                <div class="stat-label">Менежер 30%</div>
                 <div class="stat-value">${money(mgr)}</div>
-                <div class="stat-sub">so'm</div>
+                <div class="stat-sub">сўм</div>
             </div>
             <div class="stat green">
-                <div class="stat-label">Ustalar 70%</div>
+                <div class="stat-label">Усталар 70%</div>
                 <div class="stat-value">${money(ust)}</div>
-                <div class="stat-sub">so'm</div>
+                <div class="stat-sub">сўм</div>
             </div>
         </div>
     `;
-    
-    const specMap = {};
-    f.forEach(o => (o.items || []).forEach(i => {
-        const found = ustalar.find(u => (i.usta || '').includes(u.name));
-        const spec = found ? found.spec : 'BOSHQA';
-        if (!specMap[spec]) specMap[spec] = { count: 0, total: 0 };
-        specMap[spec].count++;
-        specMap[spec].total += Number(i.price || 0);
-    }));
-    
-    const entries = Object.entries(specMap).sort((a, b) => b[1].total - a[1].total);
-    
+
+    const ustaMap = {};
+    f.forEach(o => {
+        const key = o.usta_name || 'Номаълум';
+        if (!ustaMap[key]) ustaMap[key] = { spec: o.usta_spec || '', count: 0, total: 0, share: 0 };
+        ustaMap[key].count++;
+        ustaMap[key].total += Number(o.dagavor || 0);
+        ustaMap[key].share += Number(o.ust || 0);
+    });
+
+    const entries = Object.entries(ustaMap).sort((a, b) => b[1].share - a[1].share);
+
+    let html = '<h2 style="margin-top:24px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Усталар иш ҳаққи</h2>';
+
     if (entries.length === 0) {
-        $('dashSpecs').innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M9 11H3v10h6zM21 3h-6v18h6zM15 7H9v14h6z"/></svg><div>Ma\'lumot yo\'q</div></div></div>';
-        return;
-    }
-    
-    $('dashSpecs').innerHTML = '<h2>Mutaxassislik bo\'yicha</h2>' +
-        '<div class="grid-2">' +
-        entries.map(([spec, d]) => {
-            const pct = total > 0 ? (d.total / total * 100).toFixed(1) : 0;
-            return `
-                <div class="card" style="border-left:4px solid var(--red); padding:16px; margin-bottom:0;">
-                    <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
-                        <div style="flex:1;">
-                            <div style="font-weight:800; font-size:15px;">${spec}</div>
-                            <div style="font-size:12px; color:var(--muted); margin-top:3px;">${d.count} ta xizmat • ${pct}%</div>
-                        </div>
-                        <div style="text-align:right;">
-                            <div style="color:var(--red); font-weight:900; font-size:16px;">${money(d.total)}</div>
-                            <div style="font-size:11px; color:var(--muted);">so'm</div>
-                        </div>
+        html += '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div>Маълумот йўқ</div></div></div>';
+    } else {
+        html += '<div class="card">';
+        entries.forEach(([name, d]) => {
+            html += `
+                <div class="usta-stat-row">
+                    <div>
+                        <div class="usta-stat-name">👨‍🔧 ${name}</div>
+                        <div class="usta-stat-spec">${d.spec} • ${d.count} та буюртма</div>
+                    </div>
+                    <div class="usta-stat-amount">
+                        <div class="usta-stat-money">${money(d.share)} сўм</div>
+                        <div class="usta-stat-count">Жами: ${money(d.total)}</div>
                     </div>
                 </div>
             `;
-        }).join('') +
-        '</div>';
+        });
+        html += '</div>';
+    }
+
+    html += '<h2 style="margin-top:24px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Менежер иш ҳаққи</h2>';
+    html += `
+        <div class="card">
+            <div class="usta-stat-row">
+                <div>
+                    <div class="usta-stat-name">💼 Менежер</div>
+                    <div class="usta-stat-spec">${f.length} та буюртмадан 30%</div>
+                </div>
+                <div class="usta-stat-amount">
+                    <div class="usta-stat-money">${money(mgr)} сўм</div>
+                    <div class="usta-stat-count">Жами: ${money(total)}</div>
+                </div>
+            </div>
+        </div>
+    `;
+
+    $('dashUstalar').innerHTML = html;
 }
 
-/* ============ TARIX ============ */
+/* ============ ТАРИХ ============ */
 function renderHistory() {
     const el = $('historyList');
     if (!el) return;
     if (orders.length === 0) {
-        el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><div>Buyurtmalar yo\'q</div></div></div>';
+        el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><div>Буюртмалар йўқ</div></div></div>';
         return;
     }
-    
+
     el.innerHTML = '<div class="grid-2">' + orders.map(o => `
         <div class="card" style="border-left:4px solid var(--red); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:10px;">
                 <div style="flex:1; min-width:0;">
-                    <div style="font-weight:800; font-size:15px;">${o.name || 'Noma\'lum'}</div>
+                    <div style="font-weight:800; font-size:15px;">${o.name || 'Номаълум'}</div>
                     <div style="font-size:12px; color:var(--muted); margin-top:3px;">${o.phone || '—'}</div>
                     <div style="font-size:12px; color:var(--muted); margin-top:2px;">${o.model || '—'} — ${o.number || '—'}</div>
+                    <div style="font-size:12px; color:var(--blue); margin-top:3px;">👨‍🔧 ${o.usta_name || '—'} (${o.usta_spec || '—'})</div>
                     <div style="font-size:11px; color:#999; margin-top:4px;">${o.date}</div>
                 </div>
                 <div style="display:flex; flex-direction:column; gap:5px;">
@@ -1445,41 +1565,38 @@ function renderHistory() {
                     </button>
                 </div>
             </div>
-            <div style="font-size:12px; color:var(--muted); margin-bottom:8px;">
-                ${(o.items || []).map(i => i.name).join(', ')}
-            </div>
             <div style="display:flex; justify-content:space-between; align-items:center; padding-top:8px; border-top:1px solid #eee;">
                 <div style="font-size:11px; color:var(--muted);">
-                    Menejer: <strong style="color:#2563eb;">${money(o.mgr)}</strong>
+                    Менежер: <strong style="color:#2563eb;">${money(o.mgr)}</strong> • Уста: <strong style="color:#16a34a;">${money(o.ust)}</strong>
                 </div>
-                <div style="color:var(--red); font-weight:900; font-size:16px;">${money(o.total)} so'm</div>
+                <div style="color:var(--red); font-weight:900; font-size:16px;">${money(o.dagavor || o.total)} сўм</div>
             </div>
         </div>
     `).join('') + '</div>';
 }
 
 async function delOrder(id) {
-    if (!confirm('O\'chirmoqchimisiz?')) return;
+    if (!confirm('Ўчирмоқчимисиз?')) return;
     try {
         const { error } = await supabaseClient.from('orders').delete().eq('id', id);
         if (error) throw error;
         orders = orders.filter(o => o.id !== id);
         renderHistory();
         renderDash();
-        toast('O\'chirildi');
+        toast('Ўчирилди');
     } catch (err) {
         console.error(err);
-        toast('Xatolik', true);
+        toast('Хатолик', true);
     }
 }
 
 function resendSms(id) {
     const o = orders.find(x => x.id === id);
     if (!o) return;
-    const smsText = `XURMATLI ${(o.name || 'MIJOZ').toUpperCase()}!\n\nSIZNING ${o.number || ''} ${(o.model || '').toUpperCase()} RUSUMLI AVTOMASHINANGIZGA QILINGAN XIZMATLAR ${money(o.total)} SO'M BOLDI.\n\nXIZMATIMIZDAN FOYDALANGANINGIZ UCHUN MINNATDORMIZ!`;
+    const smsText = `ҲУРМАТЛИ ${(o.name || 'МИЖОЗ').toUpperCase()}!\n\nСИЗНИНГ ${o.number || ''} ${(o.model || '').toUpperCase()} РУСУМЛИ АВТОМОБИЛИНГИЗГА КЎРСАТИЛГАН ХИЗМАТЛАР ${money(o.dagavor || o.total)} СЎМ БЎЛДИ.\n\nХИЗМАТИМИЗДАН ФОЙДАЛАНГАНИНГИЗ УЧУН МИННАТДОРМИЗ!`;
     lastSms = { phone: o.phone, text: smsText };
-    $('smsTo').textContent = o.name || 'Mijoz';
-    $('smsPhone').textContent = o.phone || '—';
+    $('smsTo').textContent = o.name;
+    $('smsPhone').textContent = o.phone;
     $('smsText').textContent = smsText;
     $('smsModal').classList.add('show');
 }
@@ -1495,7 +1612,7 @@ window.onload = async () => {
     updateClock();
     renderUstaSpecSelect();
     await loadFromSupabase();
-    console.log('✅ Dastur tayyor');
+    console.log('✅ Дастур тайёр');
 };
 
 /* ============ SERVICE WORKER ============ */
