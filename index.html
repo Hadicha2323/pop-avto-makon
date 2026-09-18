@@ -10,7 +10,6 @@
 <meta name="application-name" content="POP AVTO MAKON">
 <meta name="mobile-web-app-capable" content="yes">
 <meta name="format-detection" content="telephone=no">
-<meta name="description" content="POP AVTO MAKON - Автосервис хизматларини автоматлаштириш тизими">
 
 <link rel="icon" type="image/svg+xml" sizes="192x192" href="icon-192.svg">
 <link rel="icon" type="image/svg+xml" sizes="512x512" href="icon-512.svg">
@@ -33,6 +32,7 @@
     --blue: #2563eb;
     --orange: #ea580c;
     --purple: #9333ea;
+    --yellow: #f59e0b;
 }
 
 * {
@@ -73,14 +73,12 @@ body {
     filter: blur(2px);
 }
 
-/* HEADER */
 header {
     position: sticky;
     top: 0;
     z-index: 100;
     background: rgba(10,10,15,0.95);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-bottom: 2px solid var(--red);
     padding: 12px 20px;
     box-shadow: 0 4px 25px rgba(227,30,36,0.3);
@@ -101,7 +99,6 @@ header {
     gap: 12px;
 }
 
-/* ЛОГОТИП ОҚ ФОНЛИ КАРТОЧКАДА */
 .logo-box {
     background: #ffffff;
     border-radius: 12px;
@@ -178,14 +175,12 @@ header {
 .sync-status.loading { color: #facc15; }
 .sync-status.err { color: #f87171; }
 
-/* NAV */
 nav {
     position: sticky;
     top: 76px;
     z-index: 99;
     background: rgba(10,10,15,0.98);
     backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
     border-bottom: 1px solid rgba(255,255,255,0.08);
     padding: 0 20px;
     box-shadow: 0 4px 20px rgba(0,0,0,0.4);
@@ -236,7 +231,6 @@ nav button.active::after {
 }
 nav button:active { transform: scale(0.97); }
 
-/* SECTION */
 .section {
     display: none;
     padding: 24px 20px;
@@ -387,6 +381,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .btn.blue { background: linear-gradient(135deg, #2563eb, #1e40af); }
 .btn.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
 .btn.gray { background: linear-gradient(135deg, #6b7280, #374151); }
+.btn.yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
 
 .item {
     display: flex;
@@ -513,6 +508,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .stat.orange { background: linear-gradient(135deg, #ea580c, #c2410c); }
 .stat.dark { background: linear-gradient(135deg, #374151, #1f2937); }
 .stat.purple { background: linear-gradient(135deg, #9333ea, #6b21a8); }
+.stat.yellow { background: linear-gradient(135deg, #f59e0b, #d97706); }
 
 .empty { text-align: center; padding: 50px 20px; color: #999; font-size: 14px; }
 .empty svg { width: 56px; height: 56px; stroke-width: 1.5; color: #ccc; margin-bottom: 12px; }
@@ -600,6 +596,14 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     font-size: 12px;
     font-weight: 800;
 }
+.badge.pending {
+    background: rgba(245,158,11,0.15);
+    color: var(--yellow);
+}
+.badge.confirmed {
+    background: rgba(22,163,74,0.15);
+    color: var(--green);
+}
 
 .tabs {
     display: flex;
@@ -643,10 +647,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .usta-stat-money { color: var(--green); font-weight: 900; font-size: 15px; }
 .usta-stat-count { font-size: 11px; color: var(--muted); margin-top: 2px; }
 
-/* МИЖОЗ КАРТАСИ */
-.mijoz-card {
-    border-left: 5px solid var(--blue);
-}
+.mijoz-card { border-left: 5px solid var(--blue); }
 .mijoz-avatar {
     width: 46px;
     height: 46px;
@@ -678,6 +679,91 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     font-size: 13px;
     padding: 10px;
 }
+
+.usta-card {
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.usta-card:active {
+    transform: scale(0.98);
+    background: #f9f9f9;
+}
+.usta-detail {
+    background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
+    color: white;
+    padding: 20px;
+    border-radius: 14px;
+    margin-top: 14px;
+    border: 2px solid var(--red);
+    animation: slideIn 0.3s;
+}
+.usta-detail-title {
+    font-size: 15px;
+    font-weight: 900;
+    text-align: center;
+    margin-bottom: 16px;
+    color: white;
+}
+.usta-day-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 0;
+    border-bottom: 1px solid rgba(255,255,255,0.1);
+}
+.usta-day-row:last-child { border-bottom: none; }
+.usta-day-date {
+    font-size: 12px;
+    color: #ccc;
+}
+.usta-day-info {
+    text-align: right;
+    font-size: 12px;
+    color: #888;
+}
+.usta-day-count {
+    color: white;
+    font-weight: 900;
+    font-size: 14px;
+    margin-bottom: 2px;
+}
+
+/* ============ UPDATE NOTIFICATION ============ */
+.update-banner {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: white;
+    padding: 14px 20px;
+    z-index: 99999;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 4px 20px rgba(0,0,0,0.4);
+    animation: slideDown 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+@keyframes slideDown {
+    from { transform: translateY(-100%); }
+    to { transform: translateY(0); }
+}
+.update-banner-icon { font-size: 24px; }
+.update-banner-content { flex: 1; }
+.update-banner-title { font-weight: 800; font-size: 14px; }
+.update-banner-sub { font-size: 12px; opacity: 0.9; margin-top: 2px; }
+.update-banner-btn {
+    background: white;
+    color: #16a34a;
+    border: none;
+    padding: 10px 18px;
+    border-radius: 8px;
+    font-weight: 800;
+    font-size: 13px;
+    cursor: pointer;
+    transition: all 0.2s;
+}
+.update-banner-btn:active { transform: scale(0.95); }
 
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -750,7 +836,11 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         </button>
         <button onclick="go('s-order', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
-            Мижоз
+            Янги мижоз
+        </button>
+        <button onclick="go('s-jarayonda', this)">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+            Жараёнда
         </button>
         <button onclick="go('s-mijozlar', this)">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
@@ -786,7 +876,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div id="dashUstalar"></div>
 </div>
 
-<!-- МИЖОЗ (ЯНГИ БУЮРТМА) -->
+<!-- ЯНГИ МИЖОЗ -->
 <div class="section" id="s-order">
     <h2>
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
@@ -838,11 +928,23 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
             </div>
         </div>
     </div>
-    <button class="btn black" onclick="calcOrder()">
-        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><rect x="4" y="2" width="16" height="20" rx="2"/><line x1="8" y1="6" x2="16" y2="6"/><line x1="8" y1="10" x2="16" y2="10"/><line x1="8" y1="14" x2="12" y2="14"/></svg>
-        Ҳисоб-китоб қилиш
+    <button class="btn black" onclick="addToJarayon()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Жараёнга қўшиш
     </button>
-    <div id="orderResult"></div>
+</div>
+
+<!-- ЖАРАЁНДА -->
+<div class="section" id="s-jarayonda">
+    <h2>
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+        Жараёндаги буюртмалар
+    </h2>
+    <div class="section-head">
+        <h2>Кутилмоқда</h2>
+        <span class="badge pending" id="jarayonCount">0 та</span>
+    </div>
+    <div id="jarayonList"></div>
 </div>
 
 <!-- МИЖОЗЛАР БАЗАСИ -->
@@ -851,13 +953,10 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M23 21v-2a4 4 0 0 0-3-3.87"/><path d="M16 3.13a4 4 0 0 1 0 7.75"/></svg>
         Мижозлар базаси
     </h2>
-
     <div class="search-box">
         <input type="text" id="mijozSearch" placeholder="Мижоз исми, рақами ёки авто рақами..." oninput="renderMijozlar()">
     </div>
-
     <div id="mijozlarStats" style="margin-bottom:14px;"></div>
-
     <div id="mijozlarList"></div>
 </div>
 
@@ -870,24 +969,15 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div class="card">
         <div class="grid-form">
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-                    Уста исми
-                </label>
+                <label>Уста исми</label>
                 <input type="text" id="ustaName" placeholder="Мисол: Акмал ака">
             </div>
             <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg>
-                    Мутахассислиги
-                </label>
+                <label>Мутахассислиги</label>
                 <select id="ustaSpec"><option value="">-- Мутахассисликни танланг --</option></select>
             </div>
             <div class="field full">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
-                    Янги мутахассислик (агар рўйхатда бўлмаса)
-                </label>
+                <label>Янги мутахассислик (агар рўйхатда бўлмаса)</label>
                 <input type="text" id="newSpecName" placeholder="Мисол: КОНДИЦИОНЕР" style="text-transform: uppercase;">
             </div>
         </div>
@@ -905,6 +995,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         <span class="badge" id="ustalarCount">0 та</span>
     </div>
     <div id="ustalarList" class="card"></div>
+    <div id="ustaDetail"></div>
 </div>
 
 <!-- ТАРИХ -->
@@ -991,30 +1082,38 @@ async function loadFromSupabase() {
         const { data: oData, error: e3 } = await supabaseClient
             .from('orders').select('*').order('id', { ascending: false });
         if (e3) throw e3;
-        orders = (oData || []).map(o => ({ ...o, dateStr: o.date_str || o.dateStr }));
+        orders = (oData || []).map(o => ({
+            ...o,
+            dateStr: o.date_str || o.dateStr,
+            status: o.status || 'confirmed'
+        }));
 
         const { data: mData, error: e5 } = await supabaseClient
             .from('mijozlar').select('*').order('updated_at', { ascending: false });
-        if (e5) throw e5;
-        mijozlar = mData || [];
+        if (e5) {
+            console.warn('Мижозлар юкланмади:', e5);
+            mijozlar = [];
+        } else {
+            mijozlar = mData || [];
+        }
 
         const { data: spData, error: e4 } = await supabaseClient
             .from('specs').select('*').order('id', { ascending: true });
-        if (e4) throw e4;
-        if (spData && spData.length > 0) {
+        if (!e4 && spData && spData.length > 0) {
             specs = spData.map(s => s.name);
         }
 
         setSyncStatus('✅ Синхрон', 'ok');
-        console.log('✅ Маълумотлар юкланди:', { 
-            ustalar: ustalar.length, 
+        console.log('✅ Маълумотлар юкланди:', {
+            ustalar: ustalar.length,
             orders: orders.length,
-            mijozlar: mijozlar.length 
+            mijozlar: mijozlar.length
         });
 
         renderUstaSpecSelect();
         renderUstalar();
         renderOrderUstaSelect();
+        renderJarayon();
         renderHistory();
         renderDash();
         renderMijozlar();
@@ -1046,6 +1145,7 @@ function go(id, btn) {
     if (id === 's-panel') renderDash();
     if (id === 's-ustalar') { renderUstalar(); renderUstaSpecSelect(); }
     if (id === 's-order') renderOrderUstaSelect();
+    if (id === 's-jarayonda') renderJarayon();
     if (id === 's-history') renderHistory();
     if (id === 's-mijozlar') renderMijozlar();
 
@@ -1130,23 +1230,93 @@ function renderUstalar() {
         return;
     }
 
-    el.innerHTML = ustalar.map(u => `
-        <div class="item">
-            <div class="item-icon">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+    el.innerHTML = ustalar.map(u => {
+        const todayStr = new Date().toISOString().split('T')[0];
+        const todayOrders = orders.filter(o =>
+            (o.usta_name === u.name) &&
+            o.dateStr === todayStr &&
+            o.status === 'confirmed'
+        );
+        const todayCount = todayOrders.length;
+        const todaySum = todayOrders.reduce((s, o) => s + Number(o.ust || 0), 0);
+
+        return `
+            <div class="item usta-card" onclick="showUstaDetail('${u.name}', '${u.spec}')">
+                <div class="item-icon">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+                </div>
+                <div class="item-body">
+                    <div class="item-title">${u.name}</div>
+                    <div class="item-sub">${u.spec}</div>
+                    <div style="font-size:12px; color:var(--blue); margin-top:4px;">
+                        📊 Бугун: <strong>${todayCount} та буюртма</strong> • <strong>${money(todaySum)} сўм</strong>
+                    </div>
+                </div>
+                <button class="item-del" onclick="event.stopPropagation(); delUsta(${u.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
+                </button>
             </div>
-            <div class="item-body">
-                <div class="item-title">${u.name}</div>
-                <div class="item-sub">${u.spec}</div>
-            </div>
-            <button class="item-del" onclick="delUsta(${u.id})">
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/></svg>
-            </button>
-        </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
-/* ============ МИЖОЗ ============ */
+function showUstaDetail(name, spec) {
+    const el = $('ustaDetail');
+
+    const dayMap = {};
+    orders.filter(o => o.usta_name === name && o.status === 'confirmed').forEach(o => {
+        const d = o.dateStr || 'unknown';
+        if (!dayMap[d]) dayMap[d] = { count: 0, total: 0, share: 0 };
+        dayMap[d].count++;
+        dayMap[d].total += Number(o.dagavor || 0);
+        dayMap[d].share += Number(o.ust || 0);
+    });
+
+    const days = Object.entries(dayMap)
+        .sort((a, b) => b[0].localeCompare(a[0]))
+        .slice(0, 30);
+
+    const totalAll = orders.filter(o => o.usta_name === name && o.status === 'confirmed')
+        .reduce((s, o) => s + Number(o.ust || 0), 0);
+
+    let html = `
+        <div class="usta-detail">
+            <div class="usta-detail-title">👨‍🔧 ${name} (${spec})</div>
+            <div style="text-align:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:10px;">
+                <div style="font-size:11px; color:#888;">Умумий иш ҳаққи</div>
+                <div style="font-size:22px; font-weight:900; color:#4ade80;">${money(totalAll)} сўм</div>
+            </div>
+    `;
+
+    if (days.length === 0) {
+        html += '<div style="text-align:center; color:#888; padding:20px;">Маълумот йўқ</div>';
+    } else {
+        days.forEach(([date, d]) => {
+            const dateObj = new Date(date);
+            const dayNames = ['Якшанба', 'Душанба', 'Сешанба', 'Чоршанба', 'Пайшанба', 'Жума', 'Шанба'];
+            const dayName = dayNames[dateObj.getDay()] || date;
+            const formatted = dateObj.toLocaleDateString('ru-RU');
+
+            html += `
+                <div class="usta-day-row">
+                    <div>
+                        <div class="usta-day-date">${formatted} — ${dayName}</div>
+                    </div>
+                    <div class="usta-day-info">
+                        <div class="usta-day-count">${d.count} та буюртма</div>
+                        <div>${money(d.share)} сўм</div>
+                    </div>
+                </div>
+            `;
+        });
+    }
+
+    html += '</div>';
+    el.innerHTML = html;
+    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+/* ============ ЯНГИ МИЖОЗ ============ */
 function renderOrderUstaSelect() {
     const el = $('oUsta');
     if (!el) return;
@@ -1154,7 +1324,7 @@ function renderOrderUstaSelect() {
         ustalar.map(u => `<option value="${u.name}|${u.spec}">${u.name} — ${u.spec}</option>`).join('');
 }
 
-function calcOrder() {
+async function addToJarayon() {
     const name = $('oName').value.trim();
     const phone = $('oPhone').value.trim();
     const model = $('oModel').value.trim();
@@ -1173,55 +1343,22 @@ function calcOrder() {
     const mgr = dagavor * 0.30;
     const ust = dagavor * 0.70;
 
-    const el = $('orderResult');
-    el.innerHTML = `
-        <div class="result">
-            <div class="result-title">Ҳисоб-китоб</div>
-            <div class="result-info">
-                <div><span>Мижоз</span><strong>${name}</strong></div>
-                <div><span>Телефон</span><strong>${phone}</strong></div>
-                <div><span>Автомобиль</span><strong>${model} — ${number}</strong></div>
-                <div><span>Уста</span><strong>${ustaName} (${ustaSpec})</strong></div>
-            </div>
-            <div class="result-total">
-                <span>ЖАМИ</span>
-                <span>${money(dagavor)} сўм</span>
-            </div>
-            <div class="result-share">
-                <div class="share-box m">
-                    <div class="share-label">МЕНЕЖЕР 30%</div>
-                    <div class="share-value">${money(mgr)}</div>
-                </div>
-                <div class="share-box u">
-                    <div class="share-label">УСТА 70%</div>
-                    <div class="share-value">${money(ust)}</div>
-                </div>
-            </div>
-            <button class="btn green" style="margin-top:14px" onclick='saveOrder(${JSON.stringify({name, phone, model, number, ustaName, ustaSpec, dagavor, mgr, ust}).replace(/'/g, "&#39;")})'>
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-                Сақлаш ва SMS юбориш
-            </button>
-        </div>
-    `;
-    el.scrollIntoView({ behavior: 'smooth', block: 'start' });
-}
-
-async function saveOrder(data) {
     const now = new Date();
     const order = {
         id: Date.now(),
         date: now.toLocaleString('uz-UZ'),
         date_str: now.toISOString().split('T')[0],
-        name: data.name,
-        phone: data.phone,
-        model: data.model,
-        number: data.number,
-        dagavor: data.dagavor,
-        total: data.dagavor,
-        mgr: data.mgr,
-        ust: data.ust,
-        usta_name: data.ustaName,
-        usta_spec: data.ustaSpec
+        name: name,
+        phone: phone,
+        model: model,
+        number: number,
+        dagavor: dagavor,
+        total: dagavor,
+        mgr: mgr,
+        ust: ust,
+        usta_name: ustaName,
+        usta_spec: ustaSpec,
+        status: 'pending'
     };
 
     try {
@@ -1230,38 +1367,130 @@ async function saveOrder(data) {
 
         orders.unshift({...order, dateStr: order.date_str});
 
-        // МИЖОЗНИ БАЗАГА ҚЎШИШ ЁКИ ЯНГИЛАШ
-        await saveMijoz(data);
-
-        const smsText = `ҲУРМАТЛИ ${data.name.toUpperCase()}!\n\nСИЗНИНГ ${data.number} ${data.model.toUpperCase()} РУСУМЛИ АВТОМОБИЛИНГИЗГА КЎРСАТИЛГАН ХИЗМАТЛАР ${money(data.dagavor)} СЎМ БЎЛДИ.\n\nХИЗМАТИМИЗДАН ФОЙДАЛАНГАНИНГИЗ УЧУН МИННАТДОРМИЗ!`;
-
-        lastSms = { phone: data.phone, text: smsText };
-        $('smsTo').textContent = data.name;
-        $('smsPhone').textContent = data.phone;
-        $('smsText').textContent = smsText;
-        $('smsModal').classList.add('show');
-
         $('oName').value = '';
         $('oPhone').value = '';
         $('oModel').value = '';
         $('oNumber').value = '';
         $('oUsta').value = '';
         $('oDagavor').value = '';
-        $('orderResult').innerHTML = '';
+
+        renderJarayon();
+        toast('Жараёнга қўшилди! Пули олинганда тасдиқланади');
+
+        setTimeout(() => {
+            go('s-jarayonda', document.querySelectorAll('nav button')[2]);
+        }, 800);
     } catch (err) {
         console.error(err);
         toast('Сақлашда хатолик: ' + err.message, true);
     }
 }
 
-/* ============ МИЖОЗНИ САҚЛАШ/ЯНГИЛАШ ============ */
-async function saveMijoz(data) {
+/* ============ ЖАРАЁНДА ============ */
+function renderJarayon() {
+    const el = $('jarayonList');
+    if (!el) return;
+
+    const pending = orders.filter(o => o.status === 'pending');
+    $('jarayonCount').textContent = pending.length + ' та';
+
+    if (pending.length === 0) {
+        el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg><div>Жараёнда буюртмалар йўқ</div></div></div>';
+        return;
+    }
+
+    el.innerHTML = pending.map(o => `
+        <div class="card" style="border-left:5px solid var(--yellow);">
+            <div class="mijoz-info">
+                <div style="flex:1; min-width:0;">
+                    <div style="font-weight:800; font-size:15px;">${o.name}</div>
+                    <div style="font-size:12px; color:var(--muted); margin-top:3px;">📞 ${o.phone}</div>
+                    <div style="font-size:12px; color:var(--muted); margin-top:2px;">🚗 ${o.model} — ${o.number}</div>
+                    <div style="font-size:12px; color:var(--blue); margin-top:3px;">👨‍🔧 ${o.usta_name} (${o.usta_spec})</div>
+                    <div style="font-size:11px; color:#999; margin-top:4px;">${o.date}</div>
+                </div>
+                <div style="text-align:right; flex-shrink:0;">
+                    <div style="color:var(--red); font-weight:900; font-size:16px;">${money(o.dagavor)}</div>
+                    <div style="font-size:10px; color:#888;">сўм</div>
+                    <div class="badge pending" style="margin-top:6px;">⏳ КУТИЛМОҚДА</div>
+                </div>
+            </div>
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px;">
+                <button class="btn green" style="margin:0; min-height:46px; font-size:14px;" onclick="confirmOrder(${o.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                    Тасдиқлаш
+                </button>
+                <button class="btn gray" style="margin:0; min-height:46px; font-size:14px;" onclick="cancelOrder(${o.id})">
+                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+                    Бекор
+                </button>
+            </div>
+        </div>
+    `).join('');
+}
+
+async function confirmOrder(id) {
+    if (!confirm('Мижоздан пул олиндими? Тасдиқлайсизми?')) return;
+
+    const o = orders.find(x => x.id === id);
+    if (!o) return;
+
     try {
-        // Телефон рақами бўйича мавжуд мижозни қидириш
+        const { error } = await supabaseClient.from('orders')
+            .update({ status: 'confirmed' })
+            .eq('id', id);
+        if (error) throw error;
+
+        o.status = 'confirmed';
+
+        await saveMijoz({
+            name: o.name,
+            phone: o.phone,
+            model: o.model,
+            number: o.number,
+            dagavor: o.dagavor
+        });
+
+        const smsText = `ҲУРМАТЛИ ${o.name.toUpperCase()}!\n\nСИЗНИНГ ${o.number} ${o.model.toUpperCase()} РУСУМЛИ АВТОМОБИЛИНГИЗГА КЎРСАТИЛГАН ХИЗМАТЛАР ${money(o.dagavor)} СЎМ БЎЛДИ.\n\nХИЗМАТИМИЗДАН ФОЙДАЛАНГАНИНГИЗ УЧУН МИННАТДОРМИЗ!`;
+
+        lastSms = { phone: o.phone, text: smsText };
+        $('smsTo').textContent = o.name;
+        $('smsPhone').textContent = o.phone;
+        $('smsText').textContent = smsText;
+        $('smsModal').classList.add('show');
+
+        renderJarayon();
+        renderDash();
+        renderHistory();
+        renderMijozlar();
+    } catch (err) {
+        console.error(err);
+        toast('Тасдиқлашда хатолик', true);
+    }
+}
+
+async function cancelOrder(id) {
+    if (!confirm('Буюртмани бекор қиласизми?')) return;
+
+    try {
+        const { error } = await supabaseClient.from('orders').delete().eq('id', id);
+        if (error) throw error;
+        orders = orders.filter(o => o.id !== id);
+        renderJarayon();
+        toast('Бекор қилинди');
+    } catch (err) {
+        console.error(err);
+        toast('Хатолик', true);
+    }
+}
+
+/* ============ МИЖОЗНИ САҚЛАШ ============ */
+async function saveMijoz(data) {
+    if (!supabaseClient) return;
+    try {
         const existing = mijozlar.find(m => m.phone === data.phone);
 
         if (existing) {
-            // Мавжуд мижозни янгилаш
             const newTotal = Number(existing.total_spent || 0) + data.dagavor;
             const newCount = Number(existing.orders_count || 0) + 1;
 
@@ -1284,7 +1513,6 @@ async function saveMijoz(data) {
             existing.total_spent = newTotal;
             existing.orders_count = newCount;
         } else {
-            // Янги мижоз яратиш
             const newMijoz = {
                 id: Date.now(),
                 name: data.name,
@@ -1307,21 +1535,20 @@ async function saveMijoz(data) {
     }
 }
 
-/* ============ МИЖОЗЛАР РЎЙХАТИ ============ */
+/* ============ МИЖОЗЛАР ============ */
 function renderMijozlar() {
     const el = $('mijozlarList');
     if (!el) return;
 
     const search = ($('mijozSearch')?.value || '').toLowerCase();
 
-    const filtered = mijozlar.filter(m => 
+    const filtered = mijozlar.filter(m =>
         (m.name || '').toLowerCase().includes(search) ||
         (m.phone || '').includes(search) ||
         (m.number || '').toLowerCase().includes(search) ||
         (m.model || '').toLowerCase().includes(search)
     );
 
-    // Статистика
     const total = mijozlar.length;
     const totalSpent = mijozlar.reduce((s, m) => s + Number(m.total_spent || 0), 0);
     const totalOrders = mijozlar.reduce((s, m) => s + Number(m.orders_count || 0), 0);
@@ -1380,7 +1607,6 @@ function renderMijozlar() {
                         Қўнғироқ
                     </button>
                     <button class="btn gray" onclick="showMijozDetails('${m.phone}')">
-                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="12" y1="16" x2="12" y2="12"/><line x1="12" y1="8" x2="12.01" y2="8"/></svg>
                         Батафсил
                     </button>
                 </div>
@@ -1418,7 +1644,6 @@ function sendSms() {
     toast('SMS илова очилмоқда...');
     setTimeout(() => {
         closeSms();
-        go('s-mijozlar', document.querySelectorAll('nav button')[2]);
     }, 700);
 }
 
@@ -1436,18 +1661,20 @@ function getFiltered() {
     const today = new Date();
     const todayStr = today.toISOString().split('T')[0];
 
-    if (period === 'today') return orders.filter(o => o.dateStr === todayStr);
+    const confirmed = orders.filter(o => o.status === 'confirmed');
+
+    if (period === 'today') return confirmed.filter(o => o.dateStr === todayStr);
     if (period === 'week') {
         const d = new Date(today);
         d.setDate(d.getDate() - 7);
-        return orders.filter(o => o.dateStr >= d.toISOString().split('T')[0]);
+        return confirmed.filter(o => o.dateStr >= d.toISOString().split('T')[0]);
     }
     if (period === 'month') {
         const d = new Date(today);
         d.setDate(d.getDate() - 30);
-        return orders.filter(o => o.dateStr >= d.toISOString().split('T')[0]);
+        return confirmed.filter(o => o.dateStr >= d.toISOString().split('T')[0]);
     }
-    return orders;
+    return confirmed;
 }
 
 function renderDash() {
@@ -1455,6 +1682,7 @@ function renderDash() {
     const total = f.reduce((s, o) => s + Number(o.dagavor || 0), 0);
     const mgr = f.reduce((s, o) => s + Number(o.mgr || 0), 0);
     const ust = f.reduce((s, o) => s + Number(o.ust || 0), 0);
+    const pendingCount = orders.filter(o => o.status === 'pending').length;
 
     const periodNames = { today: 'Бугун', week: 'Охирги 7 кун', month: 'Охирги 30 кун', all: 'Барча вақт' };
     $('periodText').textContent = periodNames[period];
@@ -1467,9 +1695,9 @@ function renderDash() {
                 <div class="stat-sub">сўм</div>
             </div>
             <div class="stat dark">
-                <div class="stat-label">Буюртмалар</div>
+                <div class="stat-label">Тасдиқланган</div>
                 <div class="stat-value">${f.length}</div>
-                <div class="stat-sub">та</div>
+                <div class="stat-sub">та буюртма</div>
             </div>
             <div class="stat blue">
                 <div class="stat-label">Менежер 30%</div>
@@ -1482,6 +1710,18 @@ function renderDash() {
                 <div class="stat-sub">сўм</div>
             </div>
         </div>
+        ${pendingCount > 0 ? `
+            <div class="card" style="background: linear-gradient(135deg, #fef3c7, #fde68a); border-left: 5px solid var(--yellow); padding:14px;">
+                <div style="display:flex; align-items:center; gap:10px;">
+                    <div style="font-size:24px;">⏳</div>
+                    <div style="flex:1;">
+                        <div style="font-weight:800; color:#92400e;">Жараёнда ${pendingCount} та буюртма</div>
+                        <div style="font-size:12px; color:#78350f; margin-top:2px;">Тасдиқлашни кутиб турибди</div>
+                    </div>
+                    <button class="btn yellow" style="width:auto; min-height:38px; padding:8px 14px; font-size:12px; margin:0;" onclick="go('s-jarayonda', document.querySelectorAll('nav button')[2])">Кўриш</button>
+                </div>
+            </div>
+        ` : ''}
     `;
 
     const ustaMap = {};
@@ -1495,15 +1735,15 @@ function renderDash() {
 
     const entries = Object.entries(ustaMap).sort((a, b) => b[1].share - a[1].share);
 
-    let html = '<h2 style="margin-top:24px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Усталар иш ҳаққи</h2>';
+    let html = '<h2 style="margin-top:24px;">👨‍🔧 Усталар иш ҳаққи</h2>';
 
     if (entries.length === 0) {
-        html += '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg><div>Маълумот йўқ</div></div></div>';
+        html += '<div class="card"><div class="empty">Маълумот йўқ</div></div>';
     } else {
         html += '<div class="card">';
         entries.forEach(([name, d]) => {
             html += `
-                <div class="usta-stat-row">
+                <div class="usta-stat-row usta-card" onclick="showUstaDetail('${name}', '${d.spec}')" style="cursor:pointer;">
                     <div>
                         <div class="usta-stat-name">👨‍🔧 ${name}</div>
                         <div class="usta-stat-spec">${d.spec} • ${d.count} та буюртма</div>
@@ -1518,7 +1758,7 @@ function renderDash() {
         html += '</div>';
     }
 
-    html += '<h2 style="margin-top:24px;"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>Менежер иш ҳаққи</h2>';
+    html += '<h2 style="margin-top:24px;">💼 Менежер иш ҳаққи</h2>';
     html += `
         <div class="card">
             <div class="usta-stat-row">
@@ -1535,19 +1775,23 @@ function renderDash() {
     `;
 
     $('dashUstalar').innerHTML = html;
+    $('ustaDetail').innerHTML = '';
 }
 
 /* ============ ТАРИХ ============ */
 function renderHistory() {
     const el = $('historyList');
     if (!el) return;
-    if (orders.length === 0) {
+
+    const confirmed = orders.filter(o => o.status === 'confirmed');
+
+    if (confirmed.length === 0) {
         el.innerHTML = '<div class="card"><div class="empty"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M12 8v4l3 3"/><circle cx="12" cy="12" r="10"/></svg><div>Буюртмалар йўқ</div></div></div>';
         return;
     }
 
-    el.innerHTML = '<div class="grid-2">' + orders.map(o => `
-        <div class="card" style="border-left:4px solid var(--red); margin-bottom:0;">
+    el.innerHTML = '<div class="grid-2">' + confirmed.map(o => `
+        <div class="card" style="border-left:4px solid var(--green); margin-bottom:0;">
             <div style="display:flex; justify-content:space-between; gap:10px; margin-bottom:10px;">
                 <div style="flex:1; min-width:0;">
                     <div style="font-weight:800; font-size:15px;">${o.name || 'Номаълум'}</div>
@@ -1615,13 +1859,71 @@ window.onload = async () => {
     console.log('✅ Дастур тайёр');
 };
 
-/* ============ SERVICE WORKER ============ */
+/* ============ SERVICE WORKER — AVTOMATIK YANGILANISH ============ */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
-            .then(() => console.log('✅ Service Worker registered'))
+            .then(registration => {
+                console.log('✅ Service Worker registered');
+
+                // Yangilanishni tekshirish — har 20 sekundda
+                setInterval(() => {
+                    registration.update();
+                }, 20000);
+
+                // Yangi Service Worker topilganda
+                registration.addEventListener('updatefound', () => {
+                    const newWorker = registration.installing;
+                    console.log('🔄 Yangi versiya topildi!');
+
+                    newWorker.addEventListener('statechange', () => {
+                        if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
+                            console.log('🎉 Yangi versiya tayyor!');
+                            showUpdateBanner();
+                        }
+                    });
+                });
+            })
             .catch(err => console.log('SW error:', err));
+
+        // Service Worker yangilanganda sahifani qayta yuklash
+        let refreshing = false;
+        navigator.serviceWorker.addEventListener('controllerchange', () => {
+            if (!refreshing) {
+                refreshing = true;
+                console.log('🔄 Sahifa yangilanmoqda...');
+                window.location.reload();
+            }
+        });
     });
+}
+
+function showUpdateBanner() {
+    // Mavjudini o'chirish
+    const old = document.getElementById('updateBanner');
+    if (old) old.remove();
+
+    const el = document.createElement('div');
+    el.id = 'updateBanner';
+    el.className = 'update-banner';
+    el.innerHTML = `
+        <div class="update-banner-icon">🎉</div>
+        <div class="update-banner-content">
+            <div class="update-banner-title">Янги версия тайёр!</div>
+            <div class="update-banner-sub">Янгилаш учун босинг</div>
+        </div>
+        <button class="update-banner-btn" onclick="reloadApp()">Янгилаш</button>
+    `;
+    document.body.appendChild(el);
+}
+
+function reloadApp() {
+    if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
+        navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
+    }
+    setTimeout(() => {
+        window.location.reload(true);
+    }, 100);
 }
 </script>
 
