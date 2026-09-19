@@ -645,7 +645,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     animation: slideIn 0.3s;
 }
 .usta-detail-title {
-    font-size: 15px;
+    font-size: 16px;
     font-weight: 900;
     text-align: center;
     margin-bottom: 16px;
@@ -661,7 +661,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .usta-day-row:last-child { border-bottom: none; }
 .usta-day-date { font-size: 12px; color: #ccc; }
 .usta-day-info { text-align: right; font-size: 12px; color: #888; }
-.usta-day-count { color: white; font-weight: 900; font-size: 14px; margin-bottom: 2px; }
+.usta-day-count { color: white; font-weight: 900; font-size: 13px; margin-bottom: 2px; }
 
 .confirm-modal {
     background: white;
@@ -881,6 +881,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     </div>
     <div id="dashStats"></div>
     <div id="dashUstalar"></div>
+    <div id="panelUstaDetail"></div>
 </div>
 
 <!-- ЯНГИ МИЖОЗ -->
@@ -998,7 +999,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         <span class="badge" id="ustalarCount">0 та</span>
     </div>
     <div id="ustalarList" class="card"></div>
-    <div id="ustaDetail"></div>
 </div>
 
 <!-- ТАРИХ -->
@@ -1294,16 +1294,29 @@ function renderUstalar() {
     }).join('');
 }
 
+/* ============ USTA TAFSILOTI (PANEL UCHUN) ============ */
 function showUstaDetail(name, spec) {
-    const el = $('ustaDetail');
+    const panelActive = document.getElementById('s-panel')?.classList.contains('active');
+    const el = panelActive ? $('panelUstaDetail') : $('ustaDetail');
+    
+    if (!el) return;
+
+    const todayStr = new Date().toISOString().split('T')[0];
+
+    const todayOrders = orders.filter(o =>
+        o.usta_name === name &&
+        o.status === 'confirmed' &&
+        o.dateStr === todayStr
+    );
 
     const dayMap = {};
     orders.filter(o => o.usta_name === name && o.status === 'confirmed').forEach(o => {
         const d = o.dateStr || 'unknown';
-        if (!dayMap[d]) dayMap[d] = { count: 0, total: 0, share: 0 };
+        if (!dayMap[d]) dayMap[d] = { count: 0, total: 0, share: 0, orders: [] };
         dayMap[d].count++;
         dayMap[d].total += Number(o.dagavor || 0);
         dayMap[d].share += Number(o.ust || 0);
+        dayMap[d].orders.push(o);
     });
 
     const days = Object.entries(dayMap)
@@ -1313,13 +1326,56 @@ function showUstaDetail(name, spec) {
     const totalAll = orders.filter(o => o.usta_name === name && o.status === 'confirmed')
         .reduce((s, o) => s + Number(o.ust || 0), 0);
 
+    const todaySum = todayOrders.reduce((s, o) => s + Number(o.ust || 0), 0);
+
     let html = `
         <div class="usta-detail">
             <div class="usta-detail-title">👨‍🔧 ${name} (${spec})</div>
-            <div style="text-align:center; padding:10px 0; border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:10px;">
-                <div style="font-size:11px; color:#888;">Умумий иш ҳаққи</div>
-                <div style="font-size:22px; font-weight:900; color:#4ade80;">${money(totalAll)} сўм</div>
+
+            <div style="background:linear-gradient(135deg,#1e40af,#1e3a8a); padding:14px; border-radius:12px; margin-bottom:14px;">
+                <div style="font-size:11px; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">📅 БУГУН</div>
+                <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
+                    <div>
+                        <div style="font-size:13px; color:#e0e7ff;">${todayOrders.length} та машина</div>
+                        <div style="font-size:11px; color:#93c5fd; margin-top:2px;">Иш ҳаққи</div>
+                    </div>
+                    <div style="text-align:right;">
+                        <div style="font-size:22px; font-weight:900; color:#4ade80;">${money(todaySum)} сўм</div>
+                    </div>
+                </div>
             </div>
+
+            <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:14px; margin-bottom:14px;">
+                <div style="font-size:12px; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">🚗 БУГУНГИ МАШИНАЛАР</div>
+    `;
+
+    if (todayOrders.length === 0) {
+        html += '<div style="text-align:center; color:#888; padding:20px; font-size:13px;">Бугун иш қилмаган</div>';
+    } else {
+        todayOrders.forEach(o => {
+            const time = o.date ? o.date.split(',')[1] || '' : '';
+            html += `
+                <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:8px; border-left:3px solid #4ade80;">
+                    <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
+                        <div style="font-weight:800; font-size:13px; color:white;">${o.name}</div>
+                        <div style="font-weight:900; font-size:13px; color:#4ade80;">${money(o.ust)} сўм</div>
+                    </div>
+                    <div style="font-size:11px; color:#ccc;">🚗 ${o.model} — ${o.number}</div>
+                    <div style="font-size:10px; color:#888; margin-top:2px;">Умумий: ${money(o.dagavor)} сўм${time ? ' • ' + time : ''}</div>
+                </div>
+            `;
+        });
+    }
+
+    html += `
+            </div>
+
+            <div style="text-align:center; padding:12px; border-top:1px solid rgba(255,255,255,0.1); border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:14px;">
+                <div style="font-size:11px; color:#888;">Умумий иш ҳаққи (барча вақт)</div>
+                <div style="font-size:24px; font-weight:900; color:#facc15; margin-top:4px;">${money(totalAll)} сўм</div>
+            </div>
+
+            <div style="font-size:12px; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">📊 КУНЛИК ТАРИХИ</div>
     `;
 
     if (days.length === 0) {
@@ -1330,15 +1386,16 @@ function showUstaDetail(name, spec) {
             const dayNames = ['Якшанба', 'Душанба', 'Сешанба', 'Чоршанба', 'Пайшанба', 'Жума', 'Шанба'];
             const dayName = dayNames[dateObj.getDay()] || date;
             const formatted = dateObj.toLocaleDateString('ru-RU');
+            const isToday = date === todayStr;
 
             html += `
-                <div class="usta-day-row">
+                <div class="usta-day-row" style="${isToday ? 'background:rgba(22,163,74,0.15); border-radius:8px; padding:10px; margin:2px 0;' : ''}">
                     <div>
-                        <div class="usta-day-date">${formatted} — ${dayName}</div>
+                        <div class="usta-day-date">${formatted} — ${dayName}${isToday ? ' 🟢' : ''}</div>
                     </div>
                     <div class="usta-day-info">
-                        <div class="usta-day-count">${d.count} та буюртма</div>
-                        <div>${money(d.share)} сўм</div>
+                        <div class="usta-day-count">${d.count} та машина</div>
+                        <div style="color:#4ade80; font-weight:700;">${money(d.share)} сўм</div>
                     </div>
                 </div>
             `;
@@ -1856,7 +1913,7 @@ function renderDash() {
     `;
 
     $('dashUstalar').innerHTML = html;
-    $('ustaDetail').innerHTML = '';
+    $('panelUstaDetail').innerHTML = '';
 }
 
 /* ============ ТАРИХ ============ */
