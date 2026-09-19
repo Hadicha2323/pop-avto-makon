@@ -424,59 +424,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
 .item-del svg { width: 16px; height: 16px; }
 .item-del:active { background: rgba(227,30,36,0.25); }
 
-.result {
-    background: linear-gradient(135deg, #1a1a2e, #0a0a0f);
-    color: white;
-    padding: 24px;
-    border-radius: 14px;
-    margin-top: 20px;
-    border: 2px solid var(--red);
-    box-shadow: 0 0 40px rgba(227,30,36,0.4);
-}
-.result-title {
-    text-align: center;
-    font-size: 14px;
-    font-weight: 800;
-    letter-spacing: 1px;
-    color: #888;
-    margin-bottom: 16px;
-    text-transform: uppercase;
-}
-.result-info {
-    background: rgba(255,255,255,0.05);
-    padding: 14px;
-    border-radius: 10px;
-    margin-bottom: 14px;
-    font-size: 14px;
-}
-.result-info div {
-    display: flex;
-    justify-content: space-between;
-    margin-bottom: 8px;
-    color: #ccc;
-}
-.result-info div:last-child { margin-bottom: 0; }
-.result-info strong { color: white; }
-.result-total {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 16px 0;
-    margin-top: 12px;
-    border-top: 2px solid var(--red);
-    font-size: 22px;
-    font-weight: 900;
-}
-.result-total span:last-child { color: var(--red); }
-.result-share { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-top: 14px; }
-.share-box { padding: 14px; border-radius: 10px; text-align: center; }
-.share-box.m { background: rgba(37,99,235,0.15); border: 1px solid rgba(37,99,235,0.3); }
-.share-box.u { background: rgba(22,163,74,0.15); border: 1px solid rgba(22,163,74,0.3); }
-.share-label { font-size: 11px; color: #888; letter-spacing: 0.5px; margin-bottom: 5px; }
-.share-value { font-size: 18px; font-weight: 900; }
-.share-box.m .share-value { color: #60a5fa; }
-.share-box.u .share-value { color: #4ade80; }
-
 .stats {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -712,23 +659,86 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     border-bottom: 1px solid rgba(255,255,255,0.1);
 }
 .usta-day-row:last-child { border-bottom: none; }
-.usta-day-date {
-    font-size: 12px;
-    color: #ccc;
+.usta-day-date { font-size: 12px; color: #ccc; }
+.usta-day-info { text-align: right; font-size: 12px; color: #888; }
+.usta-day-count { color: white; font-weight: 900; font-size: 14px; margin-bottom: 2px; }
+
+.confirm-modal {
+    background: white;
+    border-radius: 18px;
+    padding: 24px;
+    max-width: 460px;
+    width: 100%;
+    max-height: 90vh;
+    overflow-y: auto;
+    animation: slideIn 0.3s;
 }
-.usta-day-info {
-    text-align: right;
-    font-size: 12px;
-    color: #888;
-}
-.usta-day-count {
-    color: white;
+.confirm-title {
+    font-size: 18px;
     font-weight: 900;
+    text-align: center;
+    margin-bottom: 6px;
+    color: var(--text);
+}
+.confirm-sub {
+    text-align: center;
+    font-size: 13px;
+    color: var(--muted);
+    margin-bottom: 20px;
+}
+.confirm-info {
+    background: #f8f9fa;
+    padding: 14px;
+    border-radius: 12px;
+    margin-bottom: 16px;
     font-size: 14px;
-    margin-bottom: 2px;
+}
+.confirm-info div {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 8px;
+}
+.confirm-info div:last-child { margin-bottom: 0; }
+.confirm-info span { color: var(--muted); }
+.confirm-info strong { color: var(--text); }
+.confirm-amount-label {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    font-size: 12px;
+    font-weight: 700;
+    color: #444;
+    margin-bottom: 8px;
+    text-transform: uppercase;
+}
+.confirm-amount-input {
+    width: 100%;
+    padding: 16px;
+    border: 2px solid var(--red);
+    border-radius: 12px;
+    font-size: 22px;
+    font-weight: 900;
+    background: #fff;
+    color: var(--red);
+    outline: none;
+    text-align: center;
+    margin-bottom: 6px;
+}
+.confirm-amount-input:focus {
+    box-shadow: 0 0 0 4px rgba(227,30,36,0.15);
+}
+.confirm-hint {
+    text-align: center;
+    font-size: 12px;
+    color: var(--muted);
+    margin-bottom: 16px;
+}
+.confirm-buttons {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px;
 }
 
-/* ============ UPDATE NOTIFICATION ============ */
 .update-banner {
     position: fixed;
     top: 0;
@@ -761,9 +771,7 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     font-weight: 800;
     font-size: 13px;
     cursor: pointer;
-    transition: all 0.2s;
 }
-.update-banner-btn:active { transform: scale(0.95); }
 
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
@@ -785,7 +793,6 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     .logo-box { padding: 4px 8px; border-radius: 10px; }
     .logo-text h1 { font-size: 13px; }
     .stat-value { font-size: 18px; }
-    .result-total { font-size: 18px; }
 }
 </style>
 </head>
@@ -912,20 +919,16 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
                 </label>
                 <input type="text" id="oNumber" placeholder="Мисол: 50 A 555 AA">
             </div>
-            <div class="field">
+            <div class="field full">
                 <label>
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
                     Устани танланг
                 </label>
                 <select id="oUsta"><option value="">-- Устани танланг --</option></select>
             </div>
-            <div class="field">
-                <label>
-                    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
-                    Дагавор сумма (сўм)
-                </label>
-                <input type="number" id="oDagavor" placeholder="Мисол: 500000">
-            </div>
+        </div>
+        <div style="background:#fff8e1; border-left:4px solid var(--yellow); padding:12px; border-radius:8px; margin-top:8px; font-size:12px; color:#78350f;">
+            💡 <strong>Эслатма:</strong> Суммани кейинроқ — «Жараёнда» бўлимида, пул олинганидан кейин киритишингиз мумкин.
         </div>
     </div>
     <button class="btn black" onclick="addToJarayon()">
@@ -1007,6 +1010,36 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     <div id="historyList"></div>
 </div>
 
+<!-- TASDIQLASH MODAL -->
+<div class="modal-bg" id="confirmModal">
+    <div class="confirm-modal">
+        <div class="confirm-title">💰 Тўловни тасдиқлаш</div>
+        <div class="confirm-sub" id="confirmSub">Мижоздан пул олинганидан кейин суммани киритинг</div>
+
+        <div class="confirm-info">
+            <div><span>Мижоз:</span><strong id="confirmName">—</strong></div>
+            <div><span>Телефон:</span><strong id="confirmPhone">—</strong></div>
+            <div><span>Автомобиль:</span><strong id="confirmCar">—</strong></div>
+            <div><span>Уста:</span><strong id="confirmUsta">—</strong></div>
+        </div>
+
+        <label class="confirm-amount-label">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg>
+            Сумма (сўм)
+        </label>
+        <input type="number" class="confirm-amount-input" id="confirmAmount" placeholder="0" min="0" step="1000">
+        <div class="confirm-hint">Мисол: 500000</div>
+
+        <div class="confirm-buttons">
+            <button class="btn gray" style="margin:0;" onclick="closeConfirmModal()">Бекор</button>
+            <button class="btn green" style="margin:0;" onclick="confirmWithAmount()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
+                Тасдиқлаш
+            </button>
+        </div>
+    </div>
+</div>
+
 <!-- SMS МОДАЛ -->
 <div class="modal-bg" id="smsModal">
     <div class="modal">
@@ -1047,6 +1080,7 @@ let mijozlar = [];
 let specs = ["МОТОР", "ХОДОВОЙ", "КУЗОВ", "ВАКУМ", "ЭЛЕКТРИК", "ДИАГНОСТИКА", "МЕХАНИК", "БОШҚА"];
 let period = 'month';
 let lastSms = null;
+let currentConfirmOrderId = null;
 
 const $ = id => document.getElementById(id);
 const money = n => Math.round(Number(n) || 0).toLocaleString('uz-UZ');
@@ -1330,18 +1364,14 @@ async function addToJarayon() {
     const model = $('oModel').value.trim();
     const number = $('oNumber').value.trim();
     const ustaVal = $('oUsta').value;
-    const dagavor = Number($('oDagavor').value);
 
     if (!name) return toast('Мижоз исмини киритинг', true);
     if (!phone) return toast('Телефон рақамини киритинг', true);
     if (!model) return toast('Автомобиль моделини киритинг', true);
     if (!number) return toast('Автомобиль рақамини киритинг', true);
     if (!ustaVal) return toast('Устани танланг', true);
-    if (!dagavor || dagavor <= 0) return toast('Дагавор суммани киритинг', true);
 
     const [ustaName, ustaSpec] = ustaVal.split('|');
-    const mgr = dagavor * 0.30;
-    const ust = dagavor * 0.70;
 
     const now = new Date();
     const order = {
@@ -1352,10 +1382,10 @@ async function addToJarayon() {
         phone: phone,
         model: model,
         number: number,
-        dagavor: dagavor,
-        total: dagavor,
-        mgr: mgr,
-        ust: ust,
+        dagavor: 0,
+        total: 0,
+        mgr: 0,
+        ust: 0,
         usta_name: ustaName,
         usta_spec: ustaSpec,
         status: 'pending'
@@ -1372,10 +1402,9 @@ async function addToJarayon() {
         $('oModel').value = '';
         $('oNumber').value = '';
         $('oUsta').value = '';
-        $('oDagavor').value = '';
 
         renderJarayon();
-        toast('Жараёнга қўшилди! Пули олинганда тасдиқланади');
+        toast('Жараёнга қўшилди! Тасдиқлаш учун суммани киритинг');
 
         setTimeout(() => {
             go('s-jarayonda', document.querySelectorAll('nav button')[2]);
@@ -1399,7 +1428,12 @@ function renderJarayon() {
         return;
     }
 
-    el.innerHTML = pending.map(o => `
+    el.innerHTML = pending.map(o => {
+        const amountText = Number(o.dagavor) > 0 
+            ? `<div style="color:var(--red); font-weight:900; font-size:16px;">${money(o.dagavor)}</div><div style="font-size:10px; color:#888;">сўм</div>`
+            : `<div style="color:var(--muted); font-weight:700; font-size:13px;">Сумма киритилмаган</div>`;
+
+        return `
         <div class="card" style="border-left:5px solid var(--yellow);">
             <div class="mijoz-info">
                 <div style="flex:1; min-width:0;">
@@ -1410,13 +1444,12 @@ function renderJarayon() {
                     <div style="font-size:11px; color:#999; margin-top:4px;">${o.date}</div>
                 </div>
                 <div style="text-align:right; flex-shrink:0;">
-                    <div style="color:var(--red); font-weight:900; font-size:16px;">${money(o.dagavor)}</div>
-                    <div style="font-size:10px; color:#888;">сўм</div>
+                    ${amountText}
                     <div class="badge pending" style="margin-top:6px;">⏳ КУТИЛМОҚДА</div>
                 </div>
             </div>
             <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:14px;">
-                <button class="btn green" style="margin:0; min-height:46px; font-size:14px;" onclick="confirmOrder(${o.id})">
+                <button class="btn green" style="margin:0; min-height:46px; font-size:14px;" onclick="openConfirmModal(${o.id})">
                     <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
                     Тасдиқлаш
                 </button>
@@ -1426,21 +1459,67 @@ function renderJarayon() {
                 </button>
             </div>
         </div>
-    `).join('');
+        `;
+    }).join('');
 }
 
-async function confirmOrder(id) {
-    if (!confirm('Мижоздан пул олиндими? Тасдиқлайсизми?')) return;
-
+/* ============ TASDIQLASH MODAL ============ */
+function openConfirmModal(id) {
     const o = orders.find(x => x.id === id);
     if (!o) return;
 
+    currentConfirmOrderId = id;
+
+    $('confirmName').textContent = o.name || '—';
+    $('confirmPhone').textContent = o.phone || '—';
+    $('confirmCar').textContent = (o.model || '—') + ' — ' + (o.number || '—');
+    $('confirmUsta').textContent = (o.usta_name || '—') + ' (' + (o.usta_spec || '—') + ')';
+    $('confirmAmount').value = Number(o.dagavor) > 0 ? o.dagavor : '';
+
+    $('confirmModal').classList.add('show');
+
+    setTimeout(() => {
+        $('confirmAmount').focus();
+    }, 300);
+}
+
+function closeConfirmModal() {
+    $('confirmModal').classList.remove('show');
+    currentConfirmOrderId = null;
+}
+
+async function confirmWithAmount() {
+    const amount = Number($('confirmAmount').value);
+
+    if (!amount || amount <= 0) {
+        toast('Суммани киритинг', true);
+        $('confirmAmount').focus();
+        return;
+    }
+
+    const o = orders.find(x => x.id === currentConfirmOrderId);
+    if (!o) return;
+
+    const mgr = amount * 0.30;
+    const ust = amount * 0.70;
+
     try {
         const { error } = await supabaseClient.from('orders')
-            .update({ status: 'confirmed' })
-            .eq('id', id);
+            .update({
+                dagavor: amount,
+                total: amount,
+                mgr: mgr,
+                ust: ust,
+                status: 'confirmed'
+            })
+            .eq('id', o.id);
+
         if (error) throw error;
 
+        o.dagavor = amount;
+        o.total = amount;
+        o.mgr = mgr;
+        o.ust = ust;
         o.status = 'confirmed';
 
         await saveMijoz({
@@ -1448,10 +1527,12 @@ async function confirmOrder(id) {
             phone: o.phone,
             model: o.model,
             number: o.number,
-            dagavor: o.dagavor
+            dagavor: amount
         });
 
-        const smsText = `ҲУРМАТЛИ ${o.name.toUpperCase()}!\n\nСИЗНИНГ ${o.number} ${o.model.toUpperCase()} РУСУМЛИ АВТОМОБИЛИНГИЗГА КЎРСАТИЛГАН ХИЗМАТЛАР ${money(o.dagavor)} СЎМ БЎЛДИ.\n\nХИЗМАТИМИЗДАН ФОЙДАЛАНГАНИНГИЗ УЧУН МИННАТДОРМИЗ!`;
+        closeConfirmModal();
+
+        const smsText = `ҲУРМАТЛИ ${o.name.toUpperCase()}!\n\nСИЗНИНГ ${o.number} ${o.model.toUpperCase()} РУСУМЛИ АВТОМОБИЛИНГИЗГА КЎРСАТИЛГАН ХИЗМАТЛАР ${money(amount)} СЎМ БЎЛДИ.\n\nХИЗМАТИМИЗДАН ФОЙДАЛАНГАНИНГИЗ УЧУН МИННАТДОРМИЗ!`;
 
         lastSms = { phone: o.phone, text: smsText };
         $('smsTo').textContent = o.name;
@@ -1465,7 +1546,7 @@ async function confirmOrder(id) {
         renderMijozlar();
     } catch (err) {
         console.error(err);
-        toast('Тасдиқлашда хатолик', true);
+        toast('Тасдиқлашда хатолик: ' + err.message, true);
     }
 }
 
@@ -1859,26 +1940,18 @@ window.onload = async () => {
     console.log('✅ Дастур тайёр');
 };
 
-/* ============ SERVICE WORKER — AVTOMATIK YANGILANISH ============ */
+/* ============ SERVICE WORKER ============ */
 if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
         navigator.serviceWorker.register('/sw.js')
             .then(registration => {
                 console.log('✅ Service Worker registered');
+                setInterval(() => registration.update(), 20000);
 
-                // Yangilanishni tekshirish — har 20 sekundda
-                setInterval(() => {
-                    registration.update();
-                }, 20000);
-
-                // Yangi Service Worker topilganda
                 registration.addEventListener('updatefound', () => {
                     const newWorker = registration.installing;
-                    console.log('🔄 Yangi versiya topildi!');
-
                     newWorker.addEventListener('statechange', () => {
                         if (newWorker.state === 'installed' && navigator.serviceWorker.controller) {
-                            console.log('🎉 Yangi versiya tayyor!');
                             showUpdateBanner();
                         }
                     });
@@ -1886,12 +1959,10 @@ if ('serviceWorker' in navigator) {
             })
             .catch(err => console.log('SW error:', err));
 
-        // Service Worker yangilanganda sahifani qayta yuklash
         let refreshing = false;
         navigator.serviceWorker.addEventListener('controllerchange', () => {
             if (!refreshing) {
                 refreshing = true;
-                console.log('🔄 Sahifa yangilanmoqda...');
                 window.location.reload();
             }
         });
@@ -1899,7 +1970,6 @@ if ('serviceWorker' in navigator) {
 }
 
 function showUpdateBanner() {
-    // Mavjudini o'chirish
     const old = document.getElementById('updateBanner');
     if (old) old.remove();
 
@@ -1921,9 +1991,7 @@ function reloadApp() {
     if ('serviceWorker' in navigator && navigator.serviceWorker.controller) {
         navigator.serviceWorker.controller.postMessage({ type: 'SKIP_WAITING' });
     }
-    setTimeout(() => {
-        window.location.reload(true);
-    }, 100);
+    setTimeout(() => window.location.reload(true), 100);
 }
 </script>
 

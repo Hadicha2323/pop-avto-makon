@@ -1,8 +1,9 @@
-/* ============ SERVICE WORKER — AVTOMATIK YANGILANISH ============ */
+// ============================================================
+// POP-AVTO-MAKON — SERVICE WORKER
+// ============================================================
 
-// Har yangilanishda bu raqamni oshiring
-const CACHE_VERSION = 'pam-v3';
-const CACHE_NAME = `pop-avto-makon-${CACHE_VERSION}`;
+const CACHE_VERSION = 'pam-v5';
+const CACHE_NAME = 'pop-avto-makon-' + CACHE_VERSION;
 
 const urlsToCache = [
     './',
@@ -11,82 +12,92 @@ const urlsToCache = [
 ];
 
 // INSTALL
-self.addEventListener('install', event => {
-    console.log('📦 Service Worker: O\'rnatilmoqda...');
+self.addEventListener('install', function(event) {
+    console.log('[SW] O\'rnatilmoqda...');
     event.waitUntil(
-        caches.open(CACHE_NAME)
-            .then(cache => cache.addAll(urlsToCache).catch(err => console.warn('Kesh xato:', err)))
-            .then(() => {
-                console.log('✅ Service Worker o\'rnatildi');
-                return self.skipWaiting();
-            })
+        caches.open(CACHE_NAME).then(function(cache) {
+            return cache.addAll(urlsToCache).catch(function(err) {
+                console.warn('[SW] Kesh xato:', err);
+            });
+        }).then(function() {
+            console.log('[SW] O\'rnatildi');
+            return self.skipWaiting();
+        })
     );
 });
 
 // ACTIVATE
-self.addEventListener('activate', event => {
-    console.log('🚀 Service Worker: Faollashmoqda...');
+self.addEventListener('activate', function(event) {
+    console.log('[SW] Faollashmoqda...');
     event.waitUntil(
-        caches.keys().then(cacheNames => {
+        caches.keys().then(function(cacheNames) {
             return Promise.all(
-                cacheNames.map(cacheName => {
-                    if (cacheName.startsWith('pop-avto-makon-') && cacheName !== CACHE_NAME) {
-                        console.log('🗑️ Eski kesh o\'chirildi:', cacheName);
+                cacheNames.map(function(cacheName) {
+                    if (cacheName.indexOf('pop-avto-makon-') === 0 && cacheName !== CACHE_NAME) {
+                        console.log('[SW] Eski kesh o\'chirildi:', cacheName);
                         return caches.delete(cacheName);
                     }
                 })
             );
-        }).then(() => {
-            console.log('✅ Service Worker faollashdi');
+        }).then(function() {
+            console.log('[SW] Faollashdi');
             return self.clients.claim();
         })
     );
 });
 
-// FETCH — NETWORK FIRST (yangi versiya ustuvor)
-self.addEventListener('fetch', event => {
+// FETCH
+self.addEventListener('fetch', function(event) {
     if (event.request.method !== 'GET') return;
 
-    const url = new URL(event.request.url);
+    var url = new URL(event.request.url);
 
-    // Tashqi API'lar — tarmoqdan
-    if (url.hostname.includes('supabase') || 
-        url.hostname.includes('cdn.jsdelivr') ||
-        url.hostname.includes('unsplash') ||
-        url.hostname.includes('pngimg')) {
-        event.respondWith(fetch(event.request).catch(() => caches.match(event.request)));
+    // Tashqi API'lar
+    if (url.hostname.indexOf('supabase') !== -1 ||
+        url.hostname.indexOf('cdn.jsdelivr') !== -1 ||
+        url.hostname.indexOf('unsplash') !== -1 ||
+        url.hostname.indexOf('pngimg') !== -1) {
+        event.respondWith(
+            fetch(event.request).catch(function() {
+                return caches.match(event.request);
+            })
+        );
         return;
     }
 
-    // HTML — NETWORK FIRST (har doim yangi)
-    if (event.request.mode === 'navigate' || 
+    // HTML — NETWORK FIRST
+    if (event.request.mode === 'navigate' ||
         event.request.destination === 'document' ||
-        url.pathname.endsWith('.html') ||
+        url.pathname.indexOf('.html') !== -1 ||
         url.pathname === '/') {
         event.respondWith(
-            fetch(event.request)
-                .then(response => {
-                    const responseClone = response.clone();
-                    caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
-                    return response;
-                })
-                .catch(() => {
-                    return caches.match(event.request).then(cached => {
-                        return cached || caches.match('./index.html');
-                    });
-                })
+            fetch(event.request).then(function(response) {
+                var responseClone = response.clone();
+                caches.open(CACHE_NAME).then(function(cache) {
+                    cache.put(event.request, responseClone);
+                });
+                return response;
+            }).catch(function() {
+                return caches.match(event.request).then(function(cached) {
+                    return cached || caches.match('./index.html');
+                });
+            })
         );
         return;
     }
 
     // Boshqa fayllar — CACHE FIRST
     event.respondWith(
-        caches.match(event.request).then(cached => {
+        caches.match(event.request).then(function(cached) {
             if (cached) return cached;
-            return fetch(event.request).then(response => {
-                if (!response || response.status !== 200 || response.type !== 'basic') return response;
-                const responseClone = response.clone();
-                caches.open(CACHE_NAME).then(cache => cache.put(event.request, responseClone));
+            return fetch(event.request).then(function(response) {
+                if (!response || response.status !== 200 || response.type !== 'basic') {
+                    return response;
+                }
+                var responseClone = response.clone();
+                caches.open(CACHE_NAME).then(function(cache) {
+                    cache.put(event.request, responseClone);
+                });
                 return response;
             });
         })
@@ -94,7 +105,7 @@ self.addEventListener('fetch', event => {
 });
 
 // MESSAGE
-self.addEventListener('message', event => {
+self.addEventListener('message', function(event) {
     if (event.data && event.data.type === 'SKIP_WAITING') {
         self.skipWaiting();
     }
