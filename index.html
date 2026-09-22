@@ -773,6 +773,131 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
     cursor: pointer;
 }
 
+/* MIJOZ QIDIRUV NATIJASI */
+.mijoz-found-banner {
+    background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+    border: 2px solid var(--green);
+    border-radius: 12px;
+    padding: 14px;
+    margin-bottom: 16px;
+    display: none;
+    align-items: center;
+    gap: 12px;
+}
+.mijoz-found-banner.show { display: flex; }
+.mijoz-found-banner .icon {
+    font-size: 32px;
+    flex-shrink: 0;
+}
+.mijoz-found-banner .info {
+    flex: 1;
+    min-width: 0;
+}
+.mijoz-found-banner .name {
+    font-weight: 900;
+    color: #15803d;
+    font-size: 15px;
+}
+.mijoz-found-banner .sub {
+    font-size: 12px;
+    color: #166534;
+    margin-top: 3px;
+}
+.mijoz-found-banner .close-btn {
+    background: rgba(22,163,74,0.2);
+    border: none;
+    color: #15803d;
+    width: 30px;
+    height: 30px;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
+    flex-shrink: 0;
+}
+
+/* XIZMAT TARIXI - KUNLIK */
+.xizmat-tarix-item {
+    background: rgba(0,0,0,0.3);
+    padding: 12px;
+    border-radius: 10px;
+    margin-bottom: 8px;
+    border-left: 4px solid var(--green);
+}
+.xizmat-tarix-item .top {
+    display: flex;
+    justify-content: space-between;
+    gap: 8px;
+    margin-bottom: 6px;
+}
+.xizmat-tarix-item .mijoz {
+    font-weight: 800;
+    font-size: 13px;
+    color: white;
+}
+.xizmat-tarix-item .summa {
+    font-weight: 900;
+    font-size: 14px;
+    color: #facc15;
+}
+.xizmat-tarix-item .car {
+    font-size: 11px;
+    color: #ccc;
+    margin-bottom: 6px;
+}
+.xizmat-tarix-item .split {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-top: 8px;
+    padding-top: 8px;
+    border-top: 1px dashed rgba(255,255,255,0.15);
+}
+.xizmat-tarix-item .split .box {
+    background: rgba(255,255,255,0.05);
+    padding: 8px;
+    border-radius: 6px;
+    text-align: center;
+}
+.xizmat-tarix-item .split .box-label {
+    font-size: 9px;
+    color: #93c5fd;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    margin-bottom: 3px;
+}
+.xizmat-tarix-item .split .box-value {
+    font-size: 13px;
+    font-weight: 900;
+}
+.xizmat-tarix-item .split .box.mgr .box-value { color: #60a5fa; }
+.xizmat-tarix-item .split .box.usta .box-value { color: #4ade80; }
+
+.usta-day-row.clickable {
+    cursor: pointer;
+    border-radius: 8px;
+    padding: 10px 8px;
+    transition: all 0.2s;
+}
+.usta-day-row.clickable:active {
+    background: rgba(255,255,255,0.1);
+}
+.usta-day-row .expand-icon {
+    display: inline-block;
+    margin-left: 6px;
+    transition: transform 0.2s;
+    font-size: 10px;
+    color: #4ade80;
+}
+.usta-day-row.expanded .expand-icon {
+    transform: rotate(90deg);
+}
+.usta-day-orders {
+    display: none;
+    margin-top: 10px;
+    animation: slideIn 0.3s;
+}
+.usta-day-orders.show { display: block; }
+
 @media (max-width: 768px) {
     .grid-2 { grid-template-columns: 1fr 1fr; }
     .grid-3 { grid-template-columns: 1fr; }
@@ -890,6 +1015,29 @@ h2 svg { width: 20px; height: 20px; color: var(--red); }
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><path d="M5 17h14M5 17v-5l1.5-4.5A2 2 0 0 1 8.4 6h7.2a2 2 0 0 1 1.9 1.5L19 12v5M5 17v2M19 17v2"/><circle cx="7.5" cy="17" r="1.5"/><circle cx="16.5" cy="17" r="1.5"/></svg>
         Янги мижоз
     </h2>
+
+    <!-- MIJOZ QIDIRUV BO'LIMI -->
+    <div class="card" style="padding:16px; border-left:4px solid var(--blue);">
+        <label style="display:flex; align-items:center; gap:6px; font-size:12px; font-weight:700; color:#444; margin-bottom:8px; text-transform:uppercase;">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round" style="width:14px;height:14px;color:#2563eb;"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            Мижозни қидириш (телефон рақами бўйича)
+        </label>
+        <div style="display:flex; gap:8px;">
+            <input type="tel" id="searchMijozPhone" placeholder="+998 90 123 45 67" style="flex:1; padding:13px 14px; border:2px solid var(--blue); border-radius:10px; font-size:15px; font-weight:500; outline:none;">
+            <button class="btn blue" style="width:auto; margin:0; padding:0 18px; min-height:auto;" onclick="searchMijozByPhone()">
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+            </button>
+        </div>
+        <div id="mijozFoundBanner" class="mijoz-found-banner" style="margin-top:12px; margin-bottom:0;">
+            <div class="icon">✅</div>
+            <div class="info">
+                <div class="name" id="foundMijozName">—</div>
+                <div class="sub" id="foundMijozInfo">—</div>
+            </div>
+            <button class="close-btn" onclick="clearFoundMijoz()">✕</button>
+        </div>
+    </div>
+
     <div class="card">
         <div class="grid-form">
             <div class="field">
@@ -1081,6 +1229,7 @@ let specs = ["МОТОР", "ХОДОВОЙ", "КУЗОВ", "ВАКУМ", "ЭЛЕ
 let period = 'month';
 let lastSms = null;
 let currentConfirmOrderId = null;
+let foundMijoz = null;
 
 const $ = id => document.getElementById(id);
 const money = n => Math.round(Number(n) || 0).toLocaleString('uz-UZ');
@@ -1184,6 +1333,53 @@ function go(id, btn) {
     if (id === 's-mijozlar') renderMijozlar();
 
     window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+/* ============ MUJOZ QIDIRUV ============ */
+function searchMijozByPhone() {
+    const phoneInput = ($('searchMijozPhone').value || '').trim();
+    if (!phoneInput) {
+        toast('Телефон рақамини киритинг', true);
+        return;
+    }
+
+    // Normalize: remove all non-digits
+    const cleanInput = phoneInput.replace(/[^\d]/g, '');
+
+    // Search in mijozlar by phone (normalized)
+    const found = mijozlar.find(m => {
+        const mClean = (m.phone || '').replace(/[^\d]/g, '');
+        return mClean === cleanInput || mClean.endsWith(cleanInput) || cleanInput.endsWith(mClean);
+    });
+
+    if (found) {
+        foundMijoz = found;
+        // Auto-fill the fields
+        $('oName').value = found.name || '';
+        $('oPhone').value = found.phone || '';
+        $('oModel').value = found.model || '';
+        $('oNumber').value = found.number || '';
+
+        // Show banner
+        $('foundMijozName').textContent = found.name || 'Номаълум';
+        $('foundMijozInfo').textContent = `📞 ${found.phone} • 🚗 ${found.model || '—'} — ${found.number || '—'} • ${found.orders_count || 0} та буюртма • ${money(found.total_spent)} сўм`;
+        $('mijozFoundBanner').classList.add('show');
+
+        toast('✅ Мижоз топилди! Маълумотлар тўлдирилди');
+    } else {
+        // Not found - just fill phone
+        foundMijoz = null;
+        $('oPhone').value = phoneInput;
+        $('mijozFoundBanner').classList.remove('show');
+        toast('🆕 Янги мижоз — маълумотларни тўлдиринг');
+    }
+}
+
+function clearFoundMijoz() {
+    foundMijoz = null;
+    $('mijozFoundBanner').classList.remove('show');
+    $('searchMijozPhone').value = '';
+    // Don't clear the other fields - user may want to keep them
 }
 
 /* ============ МУТАХАССИСЛИКЛАР ============ */
@@ -1312,10 +1508,11 @@ function showUstaDetail(name, spec) {
     const dayMap = {};
     orders.filter(o => o.usta_name === name && o.status === 'confirmed').forEach(o => {
         const d = o.dateStr || 'unknown';
-        if (!dayMap[d]) dayMap[d] = { count: 0, total: 0, share: 0, orders: [] };
+        if (!dayMap[d]) dayMap[d] = { count: 0, total: 0, share: 0, mgrShare: 0, orders: [] };
         dayMap[d].count++;
         dayMap[d].total += Number(o.dagavor || 0);
         dayMap[d].share += Number(o.ust || 0);
+        dayMap[d].mgrShare += Number(o.mgr || 0);
         dayMap[d].orders.push(o);
     });
 
@@ -1326,7 +1523,11 @@ function showUstaDetail(name, spec) {
     const totalAll = orders.filter(o => o.usta_name === name && o.status === 'confirmed')
         .reduce((s, o) => s + Number(o.ust || 0), 0);
 
+    const totalMgrAll = orders.filter(o => o.usta_name === name && o.status === 'confirmed')
+        .reduce((s, o) => s + Number(o.mgr || 0), 0);
+
     const todaySum = todayOrders.reduce((s, o) => s + Number(o.ust || 0), 0);
+    const todayMgrSum = todayOrders.reduce((s, o) => s + Number(o.mgr || 0), 0);
 
     let html = `
         <div class="usta-detail">
@@ -1337,7 +1538,7 @@ function showUstaDetail(name, spec) {
                 <div style="display:flex; justify-content:space-between; align-items:center; gap:10px;">
                     <div>
                         <div style="font-size:13px; color:#e0e7ff;">${todayOrders.length} та машина</div>
-                        <div style="font-size:11px; color:#93c5fd; margin-top:2px;">Иш ҳаққи</div>
+                        <div style="font-size:11px; color:#93c5fd; margin-top:2px;">Уста: ${money(todaySum)} сўм • Менежер: ${money(todayMgrSum)} сўм</div>
                     </div>
                     <div style="text-align:right;">
                         <div style="font-size:22px; font-weight:900; color:#4ade80;">${money(todaySum)} сўм</div>
@@ -1345,37 +1546,13 @@ function showUstaDetail(name, spec) {
                 </div>
             </div>
 
-            <div style="background:rgba(255,255,255,0.05); border-radius:12px; padding:14px; margin-bottom:14px;">
-                <div style="font-size:12px; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">🚗 БУГУНГИ МАШИНАЛАР</div>
-    `;
-
-    if (todayOrders.length === 0) {
-        html += '<div style="text-align:center; color:#888; padding:20px; font-size:13px;">Бугун иш қилмаган</div>';
-    } else {
-        todayOrders.forEach(o => {
-            const time = o.date ? o.date.split(',')[1] || '' : '';
-            html += `
-                <div style="background:rgba(0,0,0,0.3); padding:10px; border-radius:8px; margin-bottom:8px; border-left:3px solid #4ade80;">
-                    <div style="display:flex; justify-content:space-between; gap:8px; margin-bottom:4px;">
-                        <div style="font-weight:800; font-size:13px; color:white;">${o.name}</div>
-                        <div style="font-weight:900; font-size:13px; color:#4ade80;">${money(o.ust)} сўм</div>
-                    </div>
-                    <div style="font-size:11px; color:#ccc;">🚗 ${o.model} — ${o.number}</div>
-                    <div style="font-size:10px; color:#888; margin-top:2px;">Умумий: ${money(o.dagavor)} сўм${time ? ' • ' + time : ''}</div>
-                </div>
-            `;
-        });
-    }
-
-    html += `
-            </div>
-
             <div style="text-align:center; padding:12px; border-top:1px solid rgba(255,255,255,0.1); border-bottom:1px solid rgba(255,255,255,0.1); margin-bottom:14px;">
                 <div style="font-size:11px; color:#888;">Умумий иш ҳаққи (барча вақт)</div>
                 <div style="font-size:24px; font-weight:900; color:#facc15; margin-top:4px;">${money(totalAll)} сўм</div>
+                <div style="font-size:11px; color:#93c5fd; margin-top:4px;">Менежер улуши: ${money(totalMgrAll)} сўм</div>
             </div>
 
-            <div style="font-size:12px; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">📊 КУНЛИК ТАРИХИ</div>
+            <div style="font-size:12px; color:#93c5fd; text-transform:uppercase; letter-spacing:1px; margin-bottom:10px;">📊 КУНЛИК ТАРИХИ (кунни босинг)</div>
     `;
 
     if (days.length === 0) {
@@ -1387,16 +1564,38 @@ function showUstaDetail(name, spec) {
             const dayName = dayNames[dateObj.getDay()] || date;
             const formatted = dateObj.toLocaleDateString('ru-RU');
             const isToday = date === todayStr;
+            const dayId = 'day-' + date.replace(/-/g, '');
 
             html += `
-                <div class="usta-day-row" style="${isToday ? 'background:rgba(22,163,74,0.15); border-radius:8px; padding:10px; margin:2px 0;' : ''}">
+                <div class="usta-day-row clickable" onclick="toggleUstaDay('${dayId}')">
                     <div>
-                        <div class="usta-day-date">${formatted} — ${dayName}${isToday ? ' 🟢' : ''}</div>
+                        <div class="usta-day-date">${formatted} — ${dayName}${isToday ? ' 🟢' : ''} <span class="expand-icon">▶</span></div>
                     </div>
                     <div class="usta-day-info">
                         <div class="usta-day-count">${d.count} та машина</div>
-                        <div style="color:#4ade80; font-weight:700;">${money(d.share)} сўм</div>
+                        <div style="color:#4ade80; font-weight:700;">${money(d.share)} сўм (уста)</div>
                     </div>
+                </div>
+                <div class="usta-day-orders" id="${dayId}">
+                    ${d.orders.map(o => `
+                        <div class="xizmat-tarix-item">
+                            <div class="top">
+                                <div class="mijoz">👤 ${o.name || 'Номаълум'}</div>
+                                <div class="summa">${money(o.dagavor || 0)} сўм</div>
+                            </div>
+                            <div class="car">🚗 ${o.model || '—'} — ${o.number || '—'} • 📞 ${o.phone || '—'}</div>
+                            <div class="split">
+                                <div class="box mgr">
+                                    <div class="box-label">Менежер 30%</div>
+                                    <div class="box-value">${money(o.mgr || 0)} сўм</div>
+                                </div>
+                                <div class="box usta">
+                                    <div class="box-label">Уста 70%</div>
+                                    <div class="box-value">${money(o.ust || 0)} сўм</div>
+                                </div>
+                            </div>
+                        </div>
+                    `).join('')}
                 </div>
             `;
         });
@@ -1405,6 +1604,12 @@ function showUstaDetail(name, spec) {
     html += '</div>';
     el.innerHTML = html;
     el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+}
+
+function toggleUstaDay(dayId) {
+    const el = document.getElementById(dayId);
+    if (!el) return;
+    el.classList.toggle('show');
 }
 
 /* ============ ЯНГИ МИЖОЗ ============ */
@@ -1459,6 +1664,9 @@ async function addToJarayon() {
         $('oModel').value = '';
         $('oNumber').value = '';
         $('oUsta').value = '';
+        $('searchMijozPhone').value = '';
+        $('mijozFoundBanner').classList.remove('show');
+        foundMijoz = null;
 
         renderJarayon();
         toast('Жараёнга қўшилди! Тасдиқлаш учун суммани киритинг');
